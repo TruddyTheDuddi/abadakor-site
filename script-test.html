@@ -5,49 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <title>Script testing</title>
+    <script src="js/script.js" defer></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
 </head>
 <body>
 
     <p>
         Delete later...
     </p>
-    
-    <script defer>
-        const data = "https://raw.githubusercontent.com/epfl-ada/ada-2023-project-abadakor/main/data/processed_data/name_by_movie_ordered_pvalue_10_5_df.csv";
-
-        let res = null;
-
-        // Import external csv file
-        d3.csv(data).then(function(data) {
-            console.log(data);
-            res = data;
-
-            console.log("loaded");
-    
-            // Count the number of "Mia" in the dataset ["wiki_ID", "char_words", "order" ...
-            const count = data.reduce((acc, cur) => {
-                if (cur.char_words === "Daniel") {
-                    acc++;
-                }
-                // Print
-                return acc;
-            }, 0);
-    
-            console.log(count);
-        });
-
-        function test(name){
-            const count = res.reduce((acc, cur) => {
-                if (cur.char_words === name) {
-                    acc++;
-                }
-                // Print
-                return acc;
-            }, 0);
-
-            console.log(count);
-        }
-    </script>
+    <div id="tester" style="width:600px;height:250px;"></div>
 
 </body>
 </html>
