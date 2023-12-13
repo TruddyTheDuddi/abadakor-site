@@ -48,7 +48,38 @@
 //     Plotly.restyle('myDiv', {'marker.size': [trace1.marker.size], 'marker.color': [trace1.marker.color]});
 //   });
 
-
+let introData = [
+    {
+        name: "Mia",
+        sex: "F",
+        movies: [
+            {
+                title: "Mamma Mia!",
+                year: 2008,
+                img: "1.jpg",
+                influence: "++"
+            },
+            {
+                title: "Star Wars: The Last Jedi",
+                year: 2017,
+                img: "2.jpg",
+                influence: "-"
+            },
+            {
+                title: "The Princess Bride",
+                year: 1987,
+                img: "3.jpg",
+                influence: "+"
+            },
+            {
+                title: "The Lord of the Rings: The Fellowship of the Ring",
+                year: 2001,
+                img: "4.jpg",
+                influence: "~"
+            }
+        ]
+    }
+];
 
 /**
  * Type the letters of a name one by one for the tag
@@ -93,3 +124,164 @@ function type_name(name, i = -1) {
         }
     }
 }
+
+/**
+ * Inject data into header
+ */
+function inject_header_data(data) {
+    type_name(data.name);
+}
+
+// DEBUG: Take one element from introData and inject it into the header
+setTimeout(() =>{
+    inject_header_data(introData[0]);
+}, 1000);
+
+
+// Search area
+let searchInput = document.getElementById("search_input");
+let searchButton = document.getElementById("search_button");
+
+// Trigger search when enter is pressed
+searchInput.addEventListener("keydown", function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        // Simulate click on search button
+        searchButton.classList.add("clicked");
+    }
+});
+
+let timeoutRef = null;
+searchInput.addEventListener("keyup", function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+
+        // Simulate click on search button
+        searchButton.classList.remove("clicked");
+        searchButton.click();
+    }
+});
+
+// Search button
+searchButton.addEventListener("click", function() {
+    // If empty, set error on field
+    let name = searchInput.value.trim();
+    if (name === "") {
+        // Set error shake on field
+        searchInput.classList.add("shake_error");
+
+        // Cancel any previous timeout
+        if (timeoutRef !== null) {
+            clearTimeout(timeoutRef);
+            // Reset animation
+            searchInput.style.animation = 'none';
+            searchInput.offsetHeight;
+            searchInput.style.animation = null;
+        }
+
+        // Remove error shake after 500ms
+        timeoutRef = setTimeout(function() {
+            searchInput.classList.remove("shake_error");
+        }, 300);
+    } else {
+        // Otherwise, trigger search
+        search_name(name);
+    }
+});
+
+/**
+ * Search for a name
+ */
+function search_name(name) {
+    // Remove input focus
+    // searchInput.blur();
+    
+    console.log("Searching for " + name);
+}
+
+// Generate a list of well known names
+let wellKnownNames = [
+    "Mia", "Trudy", "Emma", "Tom", "Bob", "Ada", "Elizabeth", "Mary", "Jane", 
+    "Alice", "Roxane", "Thomas", "Jonas", "Zoe", "Noel", "Andrew", "Peter", "Paul", 
+    "George", "John", "Max", "Ethan", "Isabella", "Mason", "Pascal", "Tiffany", "Lucas",
+    "Odile", "Leo", "Juniper", "Lou", "Lola", "Lilly", "Robert", "William", "David",
+    "Richard", "Tres", "Leutenant", "Gregory", "Christopher", "Daniel", "Linkai",
+    "Anthony", "Ian", "Donald", "Mark", "Didier", "Alison", "Phillipe", "Robin"
+];
+
+// CHAD VIP NAMES!! These names are so cool we'll add a special effect
+let specialNamesHehe = [
+    "Trudy", "Bob", "Daniel", "Ada", "Robert"
+]
+
+/**
+ * Take a random number of elements from an array
+ * @param {*} array 
+ * @param {*} count number of elements to take
+ * @returns 
+ */
+function takeRandom(array, count) {
+    let shuffled = array.slice();
+    let i = array.length, temp, index;
+
+    // While there remain elements to shuffle…
+    while (i--) {
+
+        // Pick a remaining element…
+        index = Math.floor(Math.random() * (i + 1));
+
+        // And swap it with the current element.
+        temp = shuffled[i];
+        shuffled[i] = shuffled[index];
+        shuffled[index] = temp;
+    }
+
+    // Return the first 'count' elements
+    return shuffled.slice(0, count);
+}
+
+// Create a list of a couple of random well known names
+inflate_suggestion_list();
+function inflate_suggestion_list(){
+    // Get list element
+    const inspList = document.getElementById("insp_list");
+
+    // Create a couple of random names
+    takeRandom(wellKnownNames, 6).forEach((name, idx) => {
+        // Create element
+        let a = document.createElement("a");
+        a.innerHTML = name;
+        inspList.appendChild(a);
+
+        // If this name is real chad
+        if (specialNamesHehe.includes(name)) {
+            a.title = "Jealous? This name is SWAG I made it better than the rest";
+            a.classList.add("chad");
+        }
+    
+        // Set delay
+        setTimeout(function() {
+            a.classList.add("in");
+            a.style.animationDelay = idx * 100 + "ms";
+        }, 10 + idx * 200);
+    
+        // Add click event
+        a.addEventListener("click", function() {
+            searchInput.value = name;
+            searchInput.focus();
+        });
+    
+    });
+
+    // After 8 seconds, reset
+    setTimeout(function() {
+        inspList.classList.add("out");
+        setTimeout(function() {
+            inspList.innerHTML = "";
+            inspList.classList.remove("out");
+            inflate_suggestion_list();
+        }, 2000);
+    }, 8000);
+}
+
+
