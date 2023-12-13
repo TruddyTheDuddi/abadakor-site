@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <!-- <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
-    <script src="js/script.js" defer></script> -->
+    <!-- <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script> -->
+    <script src="js/script.js" defer></script>
     <title>Document</title>
 </head>
 <body>
@@ -16,20 +16,31 @@
 
         <div class="container">
             <div class="hero">
-                <h1>How were <strong>naming trends</strong> in the U.S. impacted by <strong>cinema?</strong></h1>
-                <span>Our study connects the dots between movie releases and the popularity of baby names across the years.</span>
+                <h1>How were <strong>naming trends</strong> in the U.S.A. impacted by <strong>cinema?</strong></h1>
+                <span class="tagline"><span>Connecting the dots between <strong></strong>movie releases and the popularity of baby names across the years.</span></span>
+                <br>
                 <button>See it for yourself</button>
             </div>
             <div class="hero_asset" id="hero_asset">
 
                 <div class="movie_holder top">
-                    <div class="poster first">
+                    <div class="poster zeroth">
                         <div class="img">
                             <img src="img/poster/1.jpg" alt="">
                         </div>
                         <div class="data">
                             <span class="title">The Matrix</span>
                             <span class="year">1999</span>
+                        </div>
+                    </div>
+
+                    <div class="poster first">
+                        <div class="img">
+                            <img src="img/poster/4.jpg" alt="">
+                        </div>
+                        <div class="data">
+                            <span class="title">La Roue</span>
+                            <span class="year">1923</span>
                         </div>
                     </div>
                 </div>
@@ -40,7 +51,10 @@
                         
                         <div class="elval">
                             <span class="t_title">Name:</span>
-                            <span id="name" class="t_value">Mia</span>
+                            <span id="name" class="t_value">
+                                <span id="name_type">Miaahaha</span>
+                                <span class="separator" id="cursor"></span>
+                            </span>
                         </div>
                         <div class="bottom_line">
                             <div class="elval">
@@ -88,13 +102,32 @@
         
     </header>
 
+    <div class="search_area">
 
-    <div id="myDiv"></div>
-    
+        <div class="box">
+            <div>
+                <h2>Let's look at a <strong>name...</strong></h2>
+                <span>... and see what were the name trends over the years with the released movies in the same period.</span>
+            </div>
+            <div class="input_holder">
+                <input type="text" class="search_name" placeholder="eg: Bob">
+                <button>Search</button>
+            </div>
+            <small class="inspiration">
+                <span>No inspiration? Try with these names.</span>
+                <nav id="insp-list">
+                    <a>Bobert</a>
+                    <a>Truddy</a>
+                    <a>Jean-Baptiste</a>
+                    <a>Mozart</a>
+                </nav>
+            </small>
+        </div>
 
-    <div style="height: 100vh;">
-        Un truc interessant: graphiques temporelles (evolutions de 5 noms par exemple, evolutions de popularité des genrs de films, etc.)
     </div>
+
+
+    <!-- <div id="myDiv"></div> -->
 
 
 </body>
