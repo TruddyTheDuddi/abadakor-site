@@ -6,7 +6,11 @@
     --female: rgb(227, 195, 217);
 
     --bg_base: rgb(15, 9, 28);
+    --light_bg: #dd716d;
     --bg: rgb(225, 231, 234);
+
+    --action: #FF6F59;
+    --action-hover: #FF8F79;
 }
 
 /* Fonts */
@@ -47,8 +51,49 @@ strong{
     margin: 0 auto;
 }
 
-/* Header */
+button{
+    position: relative;
+    font: inherit;
+    color: var(--action);
+    padding: 0.75em 2em;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border: 2.5px solid var(--action);
+    transition: transform 0.15s;
+    outline: none;
+}
 
+button::before{
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--light_bg);
+    opacity: 0.35;
+    transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: -1;
+}
+
+button:hover{
+    color: white;
+}
+
+button:active{
+    transform: translate(2px, 3px);
+    transition: transform 0s;
+    background-color: var(--action);
+}
+
+button:hover::before{
+    top: 0;
+    left: 0;
+}
+
+
+/* Header */
 header{
     display: grid;
     background-position: center;
@@ -57,6 +102,7 @@ header{
     height: 100vh;
     color: var(--header-text);
     overflow: hidden;
+    z-index: 0; /* So that the elements inside can be positioned above */
 }
 
 /* header .container{
@@ -66,9 +112,23 @@ header{
 
 header h1{
     font-family: 'Poppins', sans-serif;
-    font-size: 2.5em;
+    font-size: 2.8em;
     margin: 0;
-    padding: 0;
+    line-height: 1.3;
+}
+
+header .hero{
+    display: grid;
+    gap: 2em;
+}
+
+header .hero-text{
+    display: grid;
+    gap: 1em;
+}
+
+header .hero button{
+    margin-right: auto;
 }
 
 header .container{
@@ -83,7 +143,7 @@ header .hero_asset{
     display: grid;
     position: relative;
     grid-template-rows: 1fr auto 1fr;
-    gap: 3em;
+    gap: 2em;
     max-width: 500px;
     margin: auto;
 }
@@ -110,7 +170,7 @@ header .hero_asset::before{
     font-size: 1.6em;
     gap: 1em;
     
-    background-color: var(--male);
+    background-color: var(--action);
     padding: 0em 0.5em;
     border-radius: 0.5em;
     
@@ -190,23 +250,51 @@ header .hero_asset::before{
 .hero_asset .movie_holder .poster{
     display: flex;
     align-items: flex-end;
-    filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.4));
-    gap: 1em;
+    filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.3));
+    gap: 1.5em;
+}
+
+.hero_asset .movie_holder .poster.first{
+    transform: scale(1.2) translate(0, -2em) rotate(-1deg);
+}
+
+.hero_asset .movie_holder .poster.second{
+    transform: scale(0.9) translate(0, 2em) rotate(1deg);
+}
+
+.hero_asset .movie_holder .poster.third{
+    transform: scale(1) translate(0, 0.5em) rotate(-5deg);
 }
 
 .hero_asset .movie_holder .poster .img{
     height: 8em;
     position: relative;
-    box-shadow: 4px 4px 0 var(--primary);
     z-index: 1;
     aspect-ratio: 182/268;
     background-color: rgb(42, 33, 47); /* for missing color */
 }
 
+.hero_asset .movie_holder .poster .img::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background-color: var(--primary);
+    z-index: -1;
+    transform: translate(0.75em, 0.75em) rotate(4deg);
+    /* border-radius: 0.5em; */
+}
+
+
 .hero_asset .movie_holder .poster .img img{
     height: 100%;
     width: auto;
     object-fit: cover;
+    box-shadow: 0.25em 0.25em 0 var(--bg_base);
+    /* border-radius: 0.25em; */
 }
 
 .hero_asset .movie_holder .poster .data{
