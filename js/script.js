@@ -229,32 +229,61 @@ function search_name(name) {
 
     // Get a list of percentage (y) for this name for all year (x)
     let nameData = dfs.name_per_year.filter(d => d.name === name);
-    console.log(nameData);
 
     // If no data, set error on field
     if (nameData.length === 0) {
         searchInput.setError("Sorry, this name doesn't exist in our database!");
         return;
     }
+
+    // Get the list of insignificant movies for this name
+    let insigMovies = dfs.insignificant_movies.filter(d => d.char_words === name);
+    insigMovies = insigMovies.map(d => {
+        // Merge with the movies dictionary
+        let movie = dfs.movies[d.wiki_ID];
+
+        // We need to double check ! Shouldn't really happen
+        if (movie == null) {
+            console.error("Movie not found for ID " + d.wiki_ID);
+            return null;
+        }
+        
+        // Otherwise, return the merged object
+        return {
+            mov_name: movie.mov_name,
+            year: movie.year,
+            averageRating: movie.averageRating,
+            numVotes: movie.numVotes,
+            poster_url: movie.poster_url,
+            percentage: nameData.find(e => e.year == movie.year).percentage // Get Y value from nameData, matched on year
+        }
+    });
+
+    // Remove null values
+    insigMovies = insigMovies.filter(d => d != null);
     
-    // Otherwise, draw plot
+    // Then draw the plot
     document.getElementById("graph-name-disp").innerHTML = name;
-    draw_plot(nameData);
+    draw_plot({
+        namePerYear: nameData,
+        insignificantMovies: insigMovies
+    });
 }
 
 // Generate a list of well known names
 let wellKnownNames = [
     "Mia", "Trudy", "Emma", "Tom", "Bob", "Murphy", "Elizabeth", "Mary", "Jane", 
-    "Alice", "Logan", "Thomas", "Jonas", "Zoe", "Noel", "Tracy", "Peter", "Paul", 
-    "George", "Trinity", "Max", "Ethan", "Isabella", "Ace", "Tiffany", "Lucas",
-    "Odile", "Leo", "Lou", "Lilly", "Robert", "William", "David", "Richard", 
+    "Alice", "Logan", "Thomas", "Jonas", "Zoe", "Noel", "Noah","Tracy", "Peter", "Paul", 
+    "George", "Trinity", "Max", "Ethan", "Isabella", "Ace", "Tiffany", "Luca",
+    "Odile", "Leo", "Lou", "Lilly", "Robert", "William", "David", "Richard", "Ryan",
     "Neo", "Maximus", "Gregory", "Christopher", "Daniel", "Link", "Arwen", "Remus", 
-    "Donald", "Luna", "Alison", "Robin", "John", 
+    "Donald", "Luna", "Alison", "Robin", "John", "Savannah", "Cara", "Cooper",
+    "Ariel", "Cinderella"
 ];
 
 // CHAD VIP NAMES!! These names are so cool we'll add a special effect
 let specialNamesHehe = [
-    "Trudy", "Bob", "Daniel", "Mia", 
+    "Trudy", "Bob", "Daniel", "Luca"
 ]
 
 /**
@@ -340,7 +369,9 @@ loadFiles();
 function loadFiles() {
     // List of files to load
     let promises = [
-        d3.csv("data/name_per_year.csv")
+        d3.csv("data/name_per_year.csv"),
+        d3.csv("data/insignificant_movies_for_names.csv"),
+        d3.csv("data/simplified_movie.csv")
         // d3.csv("https://raw.githubusercontent.com/epfl-ada/ada-2023-project-abadakor/get_data_for_website/data/processed_data/website/web_baby_name_df.csv")
     ];
 
@@ -348,23 +379,61 @@ function loadFiles() {
     Promise.all(promises).then(vals => {
         // Assign to dfs
         dfs.name_per_year = vals[0];
+        dfs.insignificant_movies = vals[1];
+        let tmpMovies = vals[2];
 
-        // Signal that data has loaded (do we use this?)
-        document.dispatchEvent(dataLoadedEvent);
+        // Since we use it a lot, let's create an easy way to access a movie by id
+        searchButton.innerHTML = "Chunking...";
+        
+        // Asynchronously create the movies dictionary
+        createMoviesDictionaryAsync(tmpMovies, () => {
+            // Re-enable the search button after dictionary creation is complete
+            loadedData = true;
+            searchButton.classList.remove("disabled", "loading");
+            searchButton.innerHTML = "Search";
 
-        // Set flag
-        loadedData = true;
-        searchButton.classList.remove("disabled", "loading");
-        searchButton.innerHTML = "Search";
-
-        // Test
-        search_name("mia");
+            console.log("Finished creating movies_by_id");
+            console.log(dfs);
+        });
 
     }).catch(error => {
         console.error("Error loading files:", error);
     });
+
+    /**
+     * Chunking trick to not freeze the browser
+     * (I trust chatGPT)
+     */
+    function createMoviesDictionaryAsync(movies, callback){
+        dfs.movies = {};
+
+        // Process a chunk of the movies array
+        function processChunk(startIndex, chunkSize) {
+            const endIndex = Math.min(startIndex + chunkSize, movies.length);
+    
+            for (let i = startIndex; i < endIndex; i++) {
+                dfs.movies[movies[i].wiki_ID] = movies[i];
+            }
+    
+            if (endIndex < movies.length) {
+                // Schedule the next chunk with requestAnimationFrame
+                requestAnimationFrame(() => processChunk(endIndex, chunkSize));
+            } else {
+                // All chunks processed, call the callback
+                callback();
+            }
+        }
+    
+        // Start processing the first chunk
+        requestAnimationFrame(() => processChunk(0, 500)); // Adjust chunk size as needed
+    }
 }
+
 function draw_plot(data){    
+    completeData();
+
+    console.log(data);
+
     // Define margins
     const margin = { top: 10, right: 20, bottom: 80, left: 20 };
     
@@ -387,29 +456,14 @@ function draw_plot(data){
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Fill in all the years form 1880 to 2020 that are missing with 0
-    let years = [];
-    for (let i = 1880; i <= 2020; i++) { years.push(i) }
-    data = years.map(year => {
-        let d = data.find(d => d.year == year);
-        if (d == null) {
-            return { name: data[0].name, year: year, percentage: 0 };
-        } else {
-            return d;
-        }
-    });
-
-    // Remove all years after 2020 for cleaner plot
-    data = data.filter(d => d.year <= 2020);
-
     // Add X scale
     const x = d3.scaleLinear()
-        .domain(d3.extent(data, d => d.year))
+        .domain(d3.extent(data.namePerYear, d => d.year))
         .range([ 0, width ]);
 
     // Add Y scale
     const y = d3.scaleLinear()
-        .domain([0, d3.max(data, d => parseFloat(d.percentage))])
+        .domain([0, d3.max(data.namePerYear, d => parseFloat(d.percentage))])
         .range([ height, 0 ]);
 
     // Add X axis
@@ -430,7 +484,7 @@ function draw_plot(data){
 
     // Add the line
     const path = svg.append("path")
-        .datum(data)
+        .datum(data.namePerYear)
         .attr("fill", "none")
         .attr("class", "path")
         .attr("stroke", "var(--primary)")
@@ -449,15 +503,42 @@ function draw_plot(data){
         .ease(d3.easeLinear) // The easing function
         .attr("stroke-dashoffset", 0);
 
+    // Draw dots for insignificant movies
+    let insigMovies = data.insignificantMovies;
+    console.log(insigMovies);
+    let insigMoviesX = insigMovies.map(d => x(d.year));
+    let insigMoviesY = insigMovies.map(d => y(d.percentage));
+
+    svg.selectAll("circle")
+        .data(insigMovies)
+        .enter()
+        .append("circle")
+        .attr("cx", (d, i) => insigMoviesX[i])
+        .attr("cy", (d, i) => insigMoviesY[i])
+        .attr("r", 5)
+        .attr("fill", "var(--action)")
+        .attr("stroke", "var(--bg_base)")
+        .attr("stroke-width", 2)
+        .attr("class", "insig-dot")
+        .style("animation-delay", (d, i) => i * 100 + "ms");
+
+    /**
+     * Just adapt the data so that it looks nice
+     */
+    function completeData(){
+        // Fill in all the years form 1880 to 2020 that are missing with 0
+        let years = [];
+        for (let i = 1880; i <= 2020; i++) { years.push(i) }
+        data.namePerYear = years.map(year => {
+            let d = data.namePerYear.find(d => d.year == year);
+            if (d == null) {
+                return { name: data.namePerYear[0].name, year: year, percentage: 0 };
+            } else {
+                return d;
+            }
+        });
+
+        // Remove all years after 2020 for cleaner plot
+        data.namePerYear = data.namePerYear.filter(d => d.year <= 2020);
+    }
 }
-
-
-// function hell(){
-//     dfs.name_per_year.data.then(data => {
-//         /// Select the name "Daniel"
-//         let name = "daniel";
-//         let nameData = data.filter(d => d.name === name);
-//         console.log(nameData);
-//     });
-// }
-
