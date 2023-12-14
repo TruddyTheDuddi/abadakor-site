@@ -147,9 +147,9 @@ searchInput.addEventListener("keydown", function(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
         // Simulate click on search button
-        if(loadedData){
+        // if(loadedData){
             searchButton.classList.add("clicked");
-        }
+        // }
     }
 });
 
@@ -159,34 +159,57 @@ searchInput.addEventListener("keyup", function(event) {
         event.preventDefault();
 
         // Simulate click on search button
-        if(loadedData){
+        // if(loadedData){
             searchButton.classList.remove("clicked");
             searchButton.click();
-        }
+        // }
     }
 });
+
+// Simulate input error
+searchInput.setError = (msg = null) => {
+    // Set error shake on field
+    searchInput.classList.add("shake_error");
+
+    // Cancel any previous timeout
+    if (timeoutRef !== null) {
+        clearTimeout(timeoutRef);
+        // Reset animation
+        searchInput.style.animation = 'none';
+        searchInput.offsetHeight;
+        searchInput.style.animation = null;
+    }
+
+    // Remove error shake after 500ms
+    timeoutRef = setTimeout(function() {
+        searchInput.classList.remove("shake_error");
+    }, 300);
+
+    // Set error message field
+    let errorField = document.getElementById("errorMsg");
+    if (msg != null) {
+        errorField.innerHTML = msg;
+        errorField.classList.add("show");
+
+        // Remove error message after 5s
+        setTimeout(function() {
+            errorField.classList.remove("show");
+        }, 5000);
+    }
+}
+
+searchInput.clearError = () => {
+    // Remove error message
+    let errorField = document.getElementById("errorMsg");
+    errorField.classList.remove("show");
+}
 
 // Search button
 searchButton.addEventListener("click", function() {
     // If empty, set error on field
     let name = searchInput.value.trim().toLowerCase();
     if (name === "") {
-        // Set error shake on field
-        searchInput.classList.add("shake_error");
-
-        // Cancel any previous timeout
-        if (timeoutRef !== null) {
-            clearTimeout(timeoutRef);
-            // Reset animation
-            searchInput.style.animation = 'none';
-            searchInput.offsetHeight;
-            searchInput.style.animation = null;
-        }
-
-        // Remove error shake after 500ms
-        timeoutRef = setTimeout(function() {
-            searchInput.classList.remove("shake_error");
-        }, 300);
+        searchInput.setError();
     } else {
         // Otherwise, trigger search
         search_name(name);
@@ -200,7 +223,7 @@ searchButton.addEventListener("click", function() {
 function search_name(name) {    
     console.log("Searching for " + name);
     if(!loadedData){
-        console.log("Data not loaded yet");
+        searchInput.setError("Data is still loading. Give it a bit!");
         return;
     }
 
@@ -208,6 +231,14 @@ function search_name(name) {
     let nameData = dfs.name_per_year.filter(d => d.name === name);
     console.log(nameData);
 
+    // If no data, set error on field
+    if (nameData.length === 0) {
+        searchInput.setError("Sorry, this name doesn't exist in our database!");
+        return;
+    }
+    
+    // Otherwise, draw plot
+    document.getElementById("graph-name-disp").innerHTML = name;
     draw_plot(nameData);
 }
 
@@ -310,6 +341,7 @@ function loadFiles() {
     // List of files to load
     let promises = [
         d3.csv("data/name_per_year.csv")
+        // d3.csv("https://raw.githubusercontent.com/epfl-ada/ada-2023-project-abadakor/get_data_for_website/data/processed_data/website/web_baby_name_df.csv")
     ];
 
     // Load all files
@@ -334,7 +366,7 @@ function loadFiles() {
 }
 function draw_plot(data){    
     // Define margins
-    const margin = { top: 20, right: 20, bottom: 80, left: 20 };
+    const margin = { top: 10, right: 20, bottom: 80, left: 20 };
     
     // Get the width of the parent element and account for margins
     const parentWidth = d3.select('#name-graph').node().parentNode.clientWidth;
@@ -354,6 +386,21 @@ function draw_plot(data){
         .attr("height", svgHeight)
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Fill in all the years form 1880 to 2020 that are missing with 0
+    let years = [];
+    for (let i = 1880; i <= 2020; i++) { years.push(i) }
+    data = years.map(year => {
+        let d = data.find(d => d.year == year);
+        if (d == null) {
+            return { name: data[0].name, year: year, percentage: 0 };
+        } else {
+            return d;
+        }
+    });
+
+    // Remove all years after 2020 for cleaner plot
+    data = data.filter(d => d.year <= 2020);
 
     // Add X scale
     const x = d3.scaleLinear()

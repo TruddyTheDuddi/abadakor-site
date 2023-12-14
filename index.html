@@ -114,9 +114,12 @@
                 <h2>Let's look at a <strong>name...</strong></h2>
                 <span>... and see what were the name trends over the years with the released movies in the same period.</span>
             </div>
-            <div class="input_holder">
-                <input id="search_input" type="text" class="search_name" placeholder="eg: Bob">
-                <button id="search_button" class="disabled loading">Prepping</button>
+            <div>
+                <div class="input_holder">
+                    <input id="search_input" type="text" class="search_name" placeholder="eg: Bob">
+                    <button id="search_button" class="disabled loading">Prepping</button>
+                </div>
+                <small class="error-msg" id="errorMsg">Error</small>
             </div>
             <small class="inspiration">
                 <span>No inspiration? Try with these random names:</span>
@@ -124,7 +127,10 @@
             </small>
         </div>
 
-        <svg id="name-graph" width="1200" height="400"></svg>
+        <div class="intro_graph">
+            <svg id="name-graph" width="1200" height="400"></svg>
+            <h3>Popularity of <strong id="graph-name-disp">Mia</strong> as baby name throughout years.</h3>
+        </div>
 
     </div>
 

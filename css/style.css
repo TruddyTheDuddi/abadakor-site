@@ -565,6 +565,29 @@ header .hero_asset::before{
     }
 }
 
+.search_area .error-msg{
+    color: var(--action);
+    opacity: 0;
+    transform: translateY(1em);
+    transition: 0.8s opacity;
+    margin-top: -0.5em;
+    display: block;
+}
+
+.search_area .error-msg.show{
+    opacity: 1;
+}
+
+.intro_graph{
+    display: grid;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.intro_graph #graph-name-disp{
+    text-transform: capitalize;
+}
+
 #name-graph .dot{
     cursor: pointer;
 }
@@ -594,3 +617,4 @@ header .hero_asset::before{
         transform: translateY(0);
     }
 }
+
