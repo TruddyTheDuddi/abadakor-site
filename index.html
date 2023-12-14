@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <!-- <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script> -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="js/script.js" defer></script>
+
+    <!-- <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>     -->
+
     <title>Document</title>
 </head>
 <body>
@@ -111,13 +116,15 @@
             </div>
             <div class="input_holder">
                 <input id="search_input" type="text" class="search_name" placeholder="eg: Bob">
-                <button id="search_button">Search</button>
+                <button id="search_button" class="disabled loading">Prepping</button>
             </div>
             <small class="inspiration">
                 <span>No inspiration? Try with these random names:</span>
                 <nav id="insp_list"></nav>
             </small>
         </div>
+
+        <svg id="name-graph" width="1200" height="400"></svg>
 
     </div>
 

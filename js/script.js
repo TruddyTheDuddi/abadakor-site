@@ -147,7 +147,9 @@ searchInput.addEventListener("keydown", function(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
         // Simulate click on search button
-        searchButton.classList.add("clicked");
+        if(loadedData){
+            searchButton.classList.add("clicked");
+        }
     }
 });
 
@@ -157,15 +159,17 @@ searchInput.addEventListener("keyup", function(event) {
         event.preventDefault();
 
         // Simulate click on search button
-        searchButton.classList.remove("clicked");
-        searchButton.click();
+        if(loadedData){
+            searchButton.classList.remove("clicked");
+            searchButton.click();
+        }
     }
 });
 
 // Search button
 searchButton.addEventListener("click", function() {
     // If empty, set error on field
-    let name = searchInput.value.trim();
+    let name = searchInput.value.trim().toLowerCase();
     if (name === "") {
         // Set error shake on field
         searchInput.classList.add("shake_error");
@@ -191,27 +195,35 @@ searchButton.addEventListener("click", function() {
 
 /**
  * Search for a name
+ * @param {*} name (make sure it's trimmed and lowercased)
  */
-function search_name(name) {
-    // Remove input focus
-    // searchInput.blur();
-    
+function search_name(name) {    
     console.log("Searching for " + name);
+    if(!loadedData){
+        console.log("Data not loaded yet");
+        return;
+    }
+
+    // Get a list of percentage (y) for this name for all year (x)
+    let nameData = dfs.name_per_year.filter(d => d.name === name);
+    console.log(nameData);
+
+    draw_plot(nameData);
 }
 
 // Generate a list of well known names
 let wellKnownNames = [
-    "Mia", "Trudy", "Emma", "Tom", "Bob", "Ada", "Elizabeth", "Mary", "Jane", 
-    "Alice", "Roxane", "Thomas", "Jonas", "Zoe", "Noel", "Andrew", "Peter", "Paul", 
-    "George", "John", "Max", "Ethan", "Isabella", "Mason", "Pascal", "Tiffany", "Lucas",
-    "Odile", "Leo", "Juniper", "Lou", "Lola", "Lilly", "Robert", "William", "David",
-    "Richard", "Tres", "Leutenant", "Gregory", "Christopher", "Daniel", "Linkai",
-    "Anthony", "Ian", "Donald", "Mark", "Didier", "Alison", "Phillipe", "Robin"
+    "Mia", "Trudy", "Emma", "Tom", "Bob", "Murphy", "Elizabeth", "Mary", "Jane", 
+    "Alice", "Logan", "Thomas", "Jonas", "Zoe", "Noel", "Tracy", "Peter", "Paul", 
+    "George", "Trinity", "Max", "Ethan", "Isabella", "Ace", "Tiffany", "Lucas",
+    "Odile", "Leo", "Lou", "Lilly", "Robert", "William", "David", "Richard", 
+    "Neo", "Maximus", "Gregory", "Christopher", "Daniel", "Link", "Arwen", "Remus", 
+    "Donald", "Luna", "Alison", "Robin", "John", 
 ];
 
 // CHAD VIP NAMES!! These names are so cool we'll add a special effect
 let specialNamesHehe = [
-    "Trudy", "Bob", "Daniel", "Ada", "Robert"
+    "Trudy", "Bob", "Daniel", "Mia", 
 ]
 
 /**
@@ -255,7 +267,7 @@ function inflate_suggestion_list(){
 
         // If this name is real chad
         if (specialNamesHehe.includes(name)) {
-            a.title = "Jealous? This name is SWAG I made it better than the rest";
+            a.title = "Jealous? This name is so SWAG I made it better than the rest";
             a.classList.add("chad");
         }
     
@@ -266,9 +278,13 @@ function inflate_suggestion_list(){
         }, 10 + idx * 200);
     
         // Add click event
-        a.addEventListener("click", function() {
+        a.addEventListener("mousedown", () => {
+            a.blur();
             searchInput.value = name;
-            searchInput.focus();
+            setTimeout(function() {
+                // Had to add delay because of the blur
+                searchInput.focus();
+            }, 10);
         });
     
     });
@@ -284,4 +300,117 @@ function inflate_suggestion_list(){
     }, 8000);
 }
 
+// Import data with D3
+const dataLoadedEvent = new Event('dataLoaded'); // Custom event for signaling that data has loaded
+let loadedData = false; // Flag to check if data has loaded
+let dfs = {};
+loadFiles();
+
+function loadFiles() {
+    // List of files to load
+    let promises = [
+        d3.csv("data/name_per_year.csv")
+    ];
+
+    // Load all files
+    Promise.all(promises).then(vals => {
+        // Assign to dfs
+        dfs.name_per_year = vals[0];
+
+        // Signal that data has loaded (do we use this?)
+        document.dispatchEvent(dataLoadedEvent);
+
+        // Set flag
+        loadedData = true;
+        searchButton.classList.remove("disabled", "loading");
+        searchButton.innerHTML = "Search";
+
+        // Test
+        search_name("mia");
+
+    }).catch(error => {
+        console.error("Error loading files:", error);
+    });
+}
+function draw_plot(data){    
+    // Define margins
+    const margin = { top: 20, right: 20, bottom: 80, left: 20 };
+    
+    // Get the width of the parent element and account for margins
+    const parentWidth = d3.select('#name-graph').node().parentNode.clientWidth;
+    const svgWidth = parentWidth;
+    const width = svgWidth - margin.left - margin.right;
+
+    // Define height and adjust for top and bottom margins
+    const svgHeight = 400;
+    const height = svgHeight - margin.top - margin.bottom;
+
+    // Clear previous plot
+    d3.select("#name-graph").selectAll("*").remove();
+
+    // Append the svg object to the body of the page
+    const svg = d3.select("#name-graph")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Add X scale
+    const x = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.year))
+        .range([ 0, width ]);
+
+    // Add Y scale
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => parseFloat(d.percentage))])
+        .range([ height, 0 ]);
+
+    // Add X axis
+    svg.append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x).tickFormat(d3.format("d"))) // Format as whole number
+    .selectAll("text")
+        .attr("dy", "1.5em")
+        .attr("font-size", "16px") // Increase font size
+        .attr("class", "axis-text")
+        .style("animation-delay", (d, i) => i * 100 + "ms");
+        
+    // Line generator
+    const lineGenerator = d3.line()
+        .x(d => x(d.year))
+        .y(d => y(d.percentage))
+        .curve(d3.curveMonotoneX); // Apply smoothing to the line
+
+    // Add the line
+    const path = svg.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("class", "path")
+        .attr("stroke", "var(--primary)")
+        .attr("stroke-width", 2)
+        .attr("d", lineGenerator);
+
+    // Calculate the length of the line
+    const totalLength = path.node().getTotalLength();
+
+    // Set the stroke-dasharray and stroke-dashoffset to the total length of the line
+    path.attr("stroke-dasharray", totalLength + " " + totalLength)
+        .attr("stroke-dashoffset", totalLength)
+        .transition() // Transition for the drawing effect
+        .delay(200) // Wait a bit before starting
+        .duration(2000) // Duration of the drawing in milliseconds
+        .ease(d3.easeLinear) // The easing function
+        .attr("stroke-dashoffset", 0);
+
+}
+
+
+// function hell(){
+//     dfs.name_per_year.data.then(data => {
+//         /// Select the name "Daniel"
+//         let name = "daniel";
+//         let nameData = data.filter(d => d.name === name);
+//         console.log(nameData);
+//     });
+// }
 
