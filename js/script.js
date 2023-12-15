@@ -1,3 +1,5 @@
+const FILE_PATH_TMDB = "https://image.tmdb.org/t/p/w185/"; // or w342
+
 // Intro data to move
 let introData = [
     {
@@ -197,7 +199,7 @@ function search_name(name) {
         b: {}, // Bottom
         i: {}  // Insignificant
     }
-    
+
     // Classify and complete the list of movies per category
     dfs.movie_impacts.filter(d => d.name === name).map(m => {
         // Merge with the movies dictionary
@@ -215,7 +217,7 @@ function search_name(name) {
             averageRating: movie_full.averageRating,
             numVotes: movie_full.numVotes,
             poster_url: movie_full.poster_url,
-            percentage: m.percentage // Get Y value from nameData, matched on year
+            percentage: nameData.find(d => d.year == movie_full.year).percentage // Get the percentage for this year for the Y position on graph
         }
 
         // Initialize the array for the year if it doesn't exist in the category
@@ -229,7 +231,7 @@ function search_name(name) {
     document.getElementById("graph-name-disp").innerHTML = name;
     draw_plot({
         namePerYear: nameData,
-        // insignificantMovies: insigMovies
+        selectedMovies: selectedMovs
     });
 }
 
@@ -336,25 +338,30 @@ suggester.inflate_suggestion_list();
 const dataLoadedEvent = new Event('dataLoaded'); // Custom event for signaling that data has loaded
 let loadedData = false; // Flag to check if data has loaded
 let dfs = {};
+let icons = {};
 loadFiles();
 
 function loadFiles() {
     // List of files to load
     let promises = [
         d3.csv("data/name_per_year.csv"),
-        d3.csv("data/insignificant_movies_for_names.csv"),
         d3.csv("data/simplified_movie.csv"),
         d3.csv("data/movie_impacts.csv"),
-        // d3.csv("https://raw.githubusercontent.com/epfl-ada/ada-2023-project-abadakor/get_data_for_website/data/processed_data/website/web_baby_name_df.csv")
+        // SVG files
+        d3.xml("img/top.svg"),
+        d3.xml("img/bot.svg"),
     ];
 
     // Load all files
     Promise.all(promises).then(vals => {
         // Assign to dfs
         dfs.name_per_year = vals[0];
-        dfs.insignificant_movies = vals[1];
-        let tmpMovies = vals[2];
-        dfs.movie_impacts = vals[3];
+        let tmpMovies = vals[1];
+        dfs.movie_impacts = vals[2];
+
+        // Assign icons
+        icons.top = vals[3];
+        icons.bot = vals[4];
 
         // Since we use it a lot, let's create an easy way to access a movie by id
         searchButton.innerHTML = "Chunking...";
@@ -468,7 +475,7 @@ function draw_plot(data){
     // Calculate the length of the line
     const totalLength = path.node().getTotalLength();
 
-    // Set the stroke-dasharray and stroke-dashoffset to the total length of the line
+    // Set properties of the line
     path.attr("stroke-dasharray", totalLength + " " + totalLength)
         .attr("stroke-dashoffset", totalLength)
         .transition() // Transition for the drawing effect
@@ -477,27 +484,53 @@ function draw_plot(data){
         .ease(d3.easeLinear) // The easing function
         .attr("stroke-dashoffset", 0);
 
-    // Draw dots for insignificant movies
-    let insigMovies = data.insignificantMovies;
-    console.log(insigMovies);
-    let insigMoviesX = insigMovies.map(d => x(d.year));
-    let insigMoviesY = insigMovies.map(d => y(d.percentage));
-
-    svg.selectAll("circle")
-        .data(insigMovies)
-        .enter()
-        .append("circle")
-        .attr("cx", (d, i) => insigMoviesX[i])
-        .attr("cy", (d, i) => insigMoviesY[i])
-        .attr("r", 5)
-        .attr("fill", "var(--action)")
-        .attr("stroke", "var(--bg_base)")
-        .attr("stroke-width", 2)
-        .attr("class", "insig-dot")
-        .style("animation-delay", (d, i) => i * 100 + "ms");
 
     /**
-     * Just adapt the data so that it looks nice
+     * We create a dot for all years in each category with
+     * the style indicating the category (top, bottom, insignificant)
+     */
+
+    // Impact movies
+    let impMovies = data.selectedMovies;
+
+    // For insignificant movies
+    Object.entries(impMovies.i).forEach(([year, movies]) => {
+        // Create a dot
+        svg.append("circle")
+            .attr("cx", x(year))
+            .attr("cy", y(movies[0].percentage))
+            .attr("r", 5)
+            .attr("class", "dot-insig")
+            .style("transform-origin", x(year) + "px " + y(movies[0].percentage) + "px");
+    });
+
+    // For significant movies
+    let appendImpactDot = (entries, icon, className) => {
+        let iconWidth = 26;
+        entries.forEach(([year, movies]) => {
+            // Create a group element to hold the imported SVG
+            let g = svg.append("g")
+                .attr("class", className)
+                .attr("transform", `translate(${x(year) - iconWidth / 2},${y(movies[0].percentage) - iconWidth / 2})`);
+    
+            // Import the external SVG node
+            let importedNode = document.importNode(icon.documentElement, true);
+    
+            // Append the imported SVG to the group element
+            g.node().appendChild(importedNode);
+    
+            // Apply additional styles or transformations if needed
+            d3.select(importedNode)
+                .attr("width", iconWidth)
+                .attr("height", iconWidth);
+        });
+    }
+
+    appendImpactDot(Object.entries(impMovies.t), icons.top, "dot-top"); // Top
+    appendImpactDot(Object.entries(impMovies.b), icons.bot, "dot-bot"); // Bottom
+
+    /**
+     * Just adapt the data overall so that it looks nice
      */
     function completeData(){
         // Fill in all the years form 1880 to 2020 that are missing with 0

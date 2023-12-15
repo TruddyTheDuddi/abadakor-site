@@ -13,6 +13,10 @@
 
     --action: #FF6F59;
     --action-hover: #FF8F79;
+
+    --mov-impact-i: grey;
+    --mov-impact-t: green;
+    --mov-impact-b: red;
 }
 
 /* Fonts */
@@ -467,6 +471,11 @@ header .hero_asset::before{
     transition: border-left-color 0s;
 }
 
+.search_name::placeholder{
+    color: var(--action);
+    opacity: 0.5;
+}
+
 .search_area .inspiration{
     display: grid;
     align-items: center;
@@ -618,3 +627,30 @@ header .hero_asset::before{
     }
 }
 
+#name-graph .dot-insig{
+    fill: rgb(84, 83, 98);
+    stroke: var(--bg_base);
+    stroke-width: 3px;
+    cursor: pointer;
+    transition: 0.2s;
+
+    background-image: url(../img/top.svg);
+    background-size: contain;
+}
+
+#name-graph .dot-insig:hover{
+    transition: 0s;
+    transform: scale(1.3);
+    stroke-width: 2px;
+}
+
+#name-graph .dot-top,
+#name-graph .dot-bot{
+    cursor: pointer;
+}
+
+#name-graph .dot-top:hover svg,
+#name-graph .dot-bot:hover svg{
+    transform-origin: 13px 13px; /* Center in terms of the viewbox coordinates */
+    transform: scale(1.2);
+}
