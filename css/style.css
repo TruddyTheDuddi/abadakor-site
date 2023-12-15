@@ -651,6 +651,7 @@ header .hero_asset::before{
 
 #name-graph .dot-top:hover svg,
 #name-graph .dot-bot:hover svg{
-    transform-origin: 13px 13px; /* Center in terms of the viewbox coordinates */
+    transform-origin: 12px 12px; /* Center in terms of the viewbox coordinates */
     transform: scale(1.2);
+    opacity: 0.5;
 }

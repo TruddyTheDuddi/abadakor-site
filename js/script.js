@@ -506,7 +506,7 @@ function draw_plot(data){
 
     // For significant movies
     let appendImpactDot = (entries, icon, className) => {
-        let iconWidth = 26;
+        let iconWidth = 24;
         entries.forEach(([year, movies]) => {
             // Create a group element to hold the imported SVG
             let g = svg.append("g")
