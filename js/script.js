@@ -1,53 +1,4 @@
-// var trace1 = {
-//     x: [1, 2, 3, 4],
-//     y: [10, 15, 13, 17],
-//     mode: 'markers',
-//     type: 'scatter',
-//     marker: {
-//       size: [10, 10, 10, 10], // Initialize as an array
-//       color: ['blue', 'blue', 'blue', 'blue'] // Initialize as an array
-//     },
-//     hoverinfo: 'none' // Disables the default hover labels
-//   };
-  
-//   var layout = {
-//     title: 'Custom Hover Effects on Dots with Plotly',
-//     xaxis: {
-//       range: [0, 5],
-//       fixedrange: true
-//     },
-//     yaxis: {
-//       range: [0, 20],
-//       fixedrange: true
-//     },
-//     hovermode: 'closest'
-//   };
-  
-//   var data = [trace1];
-  
-//   var config = {
-//     responsive: true,
-//     displayModeBar: false
-//   };
-  
-//   Plotly.newPlot('myDiv', data, layout, config);
-  
-//   var myPlot = document.getElementById('myDiv');
-  
-//   // Change style on hover
-//   myPlot.on('plotly_hover', function(eventData){
-//     var pointNumber = eventData.points[0].pointNumber;
-//     var newMarkerSize = trace1.marker.size.map((s, i) => i === pointNumber ? 20 : 10);
-//     var newMarkerColor = trace1.marker.color.map((c, i) => i === pointNumber ? 'red' : 'blue');
-  
-//     Plotly.restyle('myDiv', {'marker.size': [newMarkerSize], 'marker.color': [newMarkerColor]});
-//   });
-  
-//   // Revert to original style when no longer hovering
-//   myPlot.on('plotly_unhover', function(eventData){
-//     Plotly.restyle('myDiv', {'marker.size': [trace1.marker.size], 'marker.color': [trace1.marker.color]});
-//   });
-
+// Intro data to move
 let introData = [
     {
         name: "Mia",
@@ -132,13 +83,15 @@ function inject_header_data(data) {
     type_name(data.name);
 }
 
-// DEBUG: Take one element from introData and inject it into the header
 setTimeout(() =>{
+    // DEBUG: Take one element from introData and inject it into the header
     inject_header_data(introData[0]);
 }, 1000);
 
 
 // Search area
+
+// Input fields
 let searchInput = document.getElementById("search_input");
 let searchButton = document.getElementById("search_button");
 
@@ -146,44 +99,41 @@ let searchButton = document.getElementById("search_button");
 searchInput.addEventListener("keydown", function(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
-        // Simulate click on search button
-        // if(loadedData){
-            searchButton.classList.add("clicked");
-        // }
+        searchButton.classList.add("clicked");
     }
 });
 
-let timeoutRef = null;
 searchInput.addEventListener("keyup", function(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
-
-        // Simulate click on search button
-        // if(loadedData){
-            searchButton.classList.remove("clicked");
-            searchButton.click();
-        // }
+        searchButton.classList.remove("clicked");
+        searchButton.click();
     }
 });
 
 // Simulate input error
-searchInput.setError = (msg = null) => {
-    // Set error shake on field
-    searchInput.classList.add("shake_error");
+let shakeRef = null;
+let timeoutRef = null;
+searchInput.setError = (msg = null, shake = true) => {
+    // Shake the input field
+    if (shake) {
+        // Set error shake on field
+        searchInput.classList.add("shake_error");
 
-    // Cancel any previous timeout
-    if (timeoutRef !== null) {
-        clearTimeout(timeoutRef);
-        // Reset animation
-        searchInput.style.animation = 'none';
-        searchInput.offsetHeight;
-        searchInput.style.animation = null;
+        // Cancel any previous timeout for shake animation
+        if (shakeRef != null) {
+            clearTimeout(shakeRef);
+            // Reset animation
+            searchInput.style.animation = 'none';
+            searchInput.offsetHeight;
+            searchInput.style.animation = null;
+        }
+
+        // Remove error shake after 500ms
+        shakeRef = setTimeout(function() {
+            searchInput.classList.remove("shake_error");
+        }, 300);
     }
-
-    // Remove error shake after 500ms
-    timeoutRef = setTimeout(function() {
-        searchInput.classList.remove("shake_error");
-    }, 300);
 
     // Set error message field
     let errorField = document.getElementById("errorMsg");
@@ -191,17 +141,19 @@ searchInput.setError = (msg = null) => {
         errorField.innerHTML = msg;
         errorField.classList.add("show");
 
-        // Remove error message after 5s
-        setTimeout(function() {
-            errorField.classList.remove("show");
-        }, 5000);
-    }
-}
+        // Cancel any previous timeout for error message
+        if (timeoutRef != null) {
+            clearTimeout(timeoutRef);
+        }
 
-searchInput.clearError = () => {
-    // Remove error message
-    let errorField = document.getElementById("errorMsg");
-    errorField.classList.remove("show");
+        // Remove error message after 4s
+        timeoutRef = setTimeout(function() {
+            errorField.classList.remove("show");
+        }, 4000);
+    } else {
+        // Remove error message
+        errorField.classList.remove("show");
+    }
 }
 
 // Search button
@@ -209,7 +161,7 @@ searchButton.addEventListener("click", function() {
     // If empty, set error on field
     let name = searchInput.value.trim().toLowerCase();
     if (name === "") {
-        searchInput.setError();
+        searchInput.setError("Please enter a name");
     } else {
         // Otherwise, trigger search
         search_name(name);
@@ -236,129 +188,149 @@ function search_name(name) {
         return;
     }
 
-    // Get the list of insignificant movies for this name
-    let insigMovies = dfs.insignificant_movies.filter(d => d.char_words === name);
-    insigMovies = insigMovies.map(d => {
+    // Input ready
+    searchInput.setError(null, false);
+
+    // Get the list of movies for this name
+    let selectedMovs = {
+        t: {}, // Top
+        b: {}, // Bottom
+        i: {}  // Insignificant
+    }
+    
+    // Classify and complete the list of movies per category
+    dfs.movie_impacts.filter(d => d.name === name).map(m => {
         // Merge with the movies dictionary
-        let movie = dfs.movies[d.wiki_ID];
+        let movie_full = dfs.movies[m.movie_id];
 
-        // We need to double check ! Shouldn't really happen
-        if (movie == null) {
-            console.error("Movie not found for ID " + d.wiki_ID);
-            return null;
+        // We need to double check if movie exists! Shouldn't really happen. Warn user
+        if (movie_full == null) {
+            console.error("Movie not found for ID " + m.movie_id);
         }
-        
-        // Otherwise, return the merged object
-        return {
-            mov_name: movie.mov_name,
-            year: movie.year,
-            averageRating: movie.averageRating,
-            numVotes: movie.numVotes,
-            poster_url: movie.poster_url,
-            percentage: nameData.find(e => e.year == movie.year).percentage // Get Y value from nameData, matched on year
+
+        // Create a struct for the movie to add to the selectedMovs
+        let struct = {
+            mov_name: movie_full.mov_name,
+            year: movie_full.year,
+            averageRating: movie_full.averageRating,
+            numVotes: movie_full.numVotes,
+            poster_url: movie_full.poster_url,
+            percentage: m.percentage // Get Y value from nameData, matched on year
         }
+
+        // Initialize the array for the year if it doesn't exist in the category
+        if (!selectedMovs[m.status][movie_full.year]) {
+            selectedMovs[m.status][movie_full.year] = [];
+        }
+        selectedMovs[m.status][movie_full.year].push(struct);
     });
-
-    // Remove null values
-    insigMovies = insigMovies.filter(d => d != null);
     
     // Then draw the plot
     document.getElementById("graph-name-disp").innerHTML = name;
     draw_plot({
         namePerYear: nameData,
-        insignificantMovies: insigMovies
+        // insignificantMovies: insigMovies
     });
 }
 
-// Generate a list of well known names
-let wellKnownNames = [
-    "Mia", "Trudy", "Emma", "Tom", "Bob", "Murphy", "Elizabeth", "Mary", "Jane", 
-    "Alice", "Logan", "Thomas", "Jonas", "Zoe", "Noel", "Noah","Tracy", "Peter", "Paul", 
-    "George", "Trinity", "Max", "Ethan", "Isabella", "Ace", "Tiffany", "Luca",
-    "Odile", "Leo", "Lou", "Lilly", "Robert", "William", "David", "Richard", "Ryan",
-    "Neo", "Maximus", "Gregory", "Christopher", "Daniel", "Link", "Arwen", "Remus", 
-    "Donald", "Luna", "Alison", "Robin", "John", "Savannah", "Cara", "Cooper",
-    "Ariel", "Cinderella"
-];
-
-// CHAD VIP NAMES!! These names are so cool we'll add a special effect
-let specialNamesHehe = [
-    "Trudy", "Bob", "Daniel", "Luca"
-]
-
 /**
- * Take a random number of elements from an array
- * @param {*} array 
- * @param {*} count number of elements to take
- * @returns 
+ * Suggester for the search bar
  */
-function takeRandom(array, count) {
-    let shuffled = array.slice();
-    let i = array.length, temp, index;
+let suggester = {
+    // Generate a list of well known names
+    wellKnownNames : [
+        "Mia", "Trudy", "Emma", "Tom", "Bob", "Murphy", "Elizabeth", "Mary", "Jane", 
+        "Alice", "Logan", "Thomas", "Jonas", "Zoe", "Noel", "Noah","Tracy", "Peter", "Paul", 
+        "George", "Trinity", "Max", "Ethan", "Isabella", "Ace", "Tiffany", "Luca",
+        "Odile", "Leo", "Lou", "Lilly", "Robert", "William", "David", "Richard", "Ryan",
+        "Neo", "Maximus", "Gregory", "Christopher", "Daniel", "Link", "Arwen", "Remus", 
+        "Donald", "Luna", "Alison", "Robin", "John", "Savannah", "Cara", "Cooper",
+        "Ariel", "Cinderella"
+    ],
 
-    // While there remain elements to shuffle…
-    while (i--) {
+    // CHAD VIP NAMES!! These names are so cool we'll add a special effect
+    specialNamesHehe : [
+        "Trudy", "Bob", "Daniel", "Luca", "Max",
+    ],
 
-        // Pick a remaining element…
-        index = Math.floor(Math.random() * (i + 1));
+    /**
+     * Take a random number of elements from an array
+     * @param {*} array 
+     * @param {*} count number of elements to take
+     * @returns 
+     */
+    takeRandom: function(array, count) {
+        let shuffled = array.slice();
+        let i = array.length, temp, index;
+    
+        // While there remain elements to shuffle…
+        while (i--) {
+    
+            // Pick a remaining element…
+            index = Math.floor(Math.random() * (i + 1));
+    
+            // And swap it with the current element.
+            temp = shuffled[i];
+            shuffled[i] = shuffled[index];
+            shuffled[index] = temp;
+        }
+    
+        // Return the first 'count' elements
+        return shuffled.slice(0, count);
+    },
 
-        // And swap it with the current element.
-        temp = shuffled[i];
-        shuffled[i] = shuffled[index];
-        shuffled[index] = temp;
+    /**
+     * Inflate the suggestion list with random names
+     */
+    inflate_suggestion_list: function() {
+        // Get list element
+        const inspList = document.getElementById("insp_list");
+    
+        // Create a couple of random names
+        this.takeRandom(this.wellKnownNames, 6).forEach((name, idx) => {
+            // Create element
+            let a = document.createElement("a");
+            a.innerHTML = name;
+            inspList.appendChild(a);
+    
+            // If this name is real chad
+            if (this.specialNamesHehe.includes(name)) {
+                a.title = "Jealous? This name is so SWAG I made it better than the rest";
+                a.classList.add("chad");
+            }
+        
+            // Set delay
+            setTimeout(function() {
+                a.classList.add("in");
+                a.style.animationDelay = idx * 100 + "ms";
+            }, 10 + idx * 200);
+        
+            // Add click event
+            a.addEventListener("mousedown", () => {
+                a.blur();
+                searchInput.value = name;
+                setTimeout(function() {
+                    // Had to add delay because of the blur
+                    searchInput.focus();
+                }, 10);
+            });
+        
+        });
+    
+        // After 8 seconds, reset
+        setTimeout(() => {
+            inspList.classList.add("out");
+            setTimeout(() => {
+                inspList.innerHTML = "";
+                inspList.classList.remove("out");
+                this.inflate_suggestion_list();
+            }, 2000);
+        }, 8000);
     }
-
-    // Return the first 'count' elements
-    return shuffled.slice(0, count);
 }
 
 // Create a list of a couple of random well known names
-inflate_suggestion_list();
-function inflate_suggestion_list(){
-    // Get list element
-    const inspList = document.getElementById("insp_list");
-
-    // Create a couple of random names
-    takeRandom(wellKnownNames, 6).forEach((name, idx) => {
-        // Create element
-        let a = document.createElement("a");
-        a.innerHTML = name;
-        inspList.appendChild(a);
-
-        // If this name is real chad
-        if (specialNamesHehe.includes(name)) {
-            a.title = "Jealous? This name is so SWAG I made it better than the rest";
-            a.classList.add("chad");
-        }
-    
-        // Set delay
-        setTimeout(function() {
-            a.classList.add("in");
-            a.style.animationDelay = idx * 100 + "ms";
-        }, 10 + idx * 200);
-    
-        // Add click event
-        a.addEventListener("mousedown", () => {
-            a.blur();
-            searchInput.value = name;
-            setTimeout(function() {
-                // Had to add delay because of the blur
-                searchInput.focus();
-            }, 10);
-        });
-    
-    });
-
-    // After 8 seconds, reset
-    setTimeout(function() {
-        inspList.classList.add("out");
-        setTimeout(function() {
-            inspList.innerHTML = "";
-            inspList.classList.remove("out");
-            inflate_suggestion_list();
-        }, 2000);
-    }, 8000);
-}
+suggester.inflate_suggestion_list();
 
 // Import data with D3
 const dataLoadedEvent = new Event('dataLoaded'); // Custom event for signaling that data has loaded
@@ -371,7 +343,8 @@ function loadFiles() {
     let promises = [
         d3.csv("data/name_per_year.csv"),
         d3.csv("data/insignificant_movies_for_names.csv"),
-        d3.csv("data/simplified_movie.csv")
+        d3.csv("data/simplified_movie.csv"),
+        d3.csv("data/movie_impacts.csv"),
         // d3.csv("https://raw.githubusercontent.com/epfl-ada/ada-2023-project-abadakor/get_data_for_website/data/processed_data/website/web_baby_name_df.csv")
     ];
 
@@ -381,6 +354,7 @@ function loadFiles() {
         dfs.name_per_year = vals[0];
         dfs.insignificant_movies = vals[1];
         let tmpMovies = vals[2];
+        dfs.movie_impacts = vals[3];
 
         // Since we use it a lot, let's create an easy way to access a movie by id
         searchButton.innerHTML = "Chunking...";
