@@ -8,8 +8,8 @@
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="js/script.js" defer></script>
 
-    <!-- <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="https://unpkg.com/tippy.js@6"></script>     -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>    
 
     <title>Document</title>
 </head>
@@ -122,12 +122,45 @@
                 <small class="error-msg" id="errorMsg">Error</small>
             </div>
             <small class="inspiration">
-                <span>No inspiration? Try with these random names:</span>
+                <span>No inspiration? Try with these ones:</span>
                 <nav id="insp_list"></nav>
             </small>
         </div>
 
         <div class="intro_graph">
+            <div class="tooltip_movie" id="ttip">
+
+                <div class="movie_list">
+                    <div class="movie_item">
+                        <div class="poster">
+                            <img src="img/poster/1.jpg" alt="">
+                            <div class="title">The Matrix</div>
+                        </div>
+                        <div class="rating">
+                            <img src="img/star.svg" class="rating_icon">
+                            <div class="rate_data">
+                                <span class="rating_value">8.1<small>/10</small></span>
+                                <span class="rating_nb">18K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="movie_item">
+                        <div class="poster">
+                            <img src="img/poster/2.jpg" alt="">
+                            <div class="title">The Godfather</div>
+                        </div>
+                        <div class="rating">
+                            <img src="img/star.svg" class="rating_icon">
+                            <div class="rate_data">
+                                <span class="rating_value">9.2<small>/10</small></span>
+                                <span class="rating_nb">18K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
             <svg id="name-graph" width="1200" height="400"></svg>
             <h3>Popularity of <strong id="graph-name-disp">Mia</strong> as baby name in the U.S.A. throughout the years.</h3>
         </div>

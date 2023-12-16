@@ -247,12 +247,12 @@ let suggester = {
         "Odile", "Leo", "Lou", "Lilly", "Robert", "William", "David", "Richard", "Ryan",
         "Neo", "Maximus", "Gregory", "Christopher", "Daniel", "Link", "Arwen", "Remus", 
         "Donald", "Luna", "Alison", "Robin", "John", "Savannah", "Cara", "Cooper",
-        "Ariel", "Cinderella"
+        "Ariel", "Cinderella", "Sophie", "Maya", "Frank"
     ],
 
     // CHAD VIP NAMES!! These names are so cool we'll add a special effect
     specialNamesHehe : [
-        "Trudy", "Bob", "Daniel", "Luca", "Max",
+        "Trudy", "Bob", "Daniel", "Luca", "Max"
     ],
 
     /**
@@ -576,3 +576,12 @@ function draw_plot(data){
         console.log(data);
     }
 }
+
+let el = document.getElementById("ttip");
+//Create tooltip element with tippy.js
+tippy(searchInput, {
+    content: el.innerHTML,
+    allowHTML: true,
+    placement: "top",
+
+});
