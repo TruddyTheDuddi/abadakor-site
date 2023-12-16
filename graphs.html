@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <!-- Loading graphs javascript -->
+    <script src="js/graphs.js" defer></script>
+
+    <!-- Loading circular_packing javascript code to see whther it works -->
+    <!-- <script src="js/circular_packing_code.js" defer></script> -->
+
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+
+    <!-- Color palette -->
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+    <title>Graph Playground</title>
+
+</head>
+<body>
+    <h1>Graphe 1</h1>
+    <!-- Create a div where the graph will take place -->
+        <div id="my_dataviz"></div>
+
+    <style>
+    .node:hover{
+    stroke-width: 7px !important;
+    opacity: 1 !important;
+    }
+    </style>
+
+</body>
+</html>
