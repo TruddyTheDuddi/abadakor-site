@@ -593,6 +593,8 @@ header .hero_asset::before{
     display: grid;
     max-width: 1200px;
     margin: auto;
+    position: relative;
+    padding-top: 260px;
 }
 
 .intro_graph #graph-name-disp{
@@ -662,6 +664,9 @@ header .hero_asset::before{
 .tooltip_movie{
     display: grid;
     gap: 0.5em;
+    position: absolute;
+    top: 0;
+    z-index: 1;
 }
 
 .tooltip_movie .movie_list{
@@ -674,11 +679,11 @@ header .hero_asset::before{
     flex-direction: column;
     /* gap: 0.5em; */
     font-size: 0.9em;
-    width: 9em;
+    width: 8em;
     cursor: pointer;
     transition: 0.2s;
     box-shadow: 0.25em 0.25em 0 var(--bg_base), 0.5em 0.5em 0 var(--primary);
-    animation: mov-float-in 0.4s forwards cubic-bezier(0.215, 0.610, 0.355, 1);
+    animation: mov-float-in 0.6s forwards cubic-bezier(0.215, 0.610, 0.355, 1);
     opacity: 0;
 
     /* Cancel URL effect */
@@ -820,4 +825,27 @@ header .hero_asset::before{
 .tooltip_movie .rating_nb{
     font-size: 0.8em;
     font-weight: bold;
+}
+
+.intro_graph .connect_line{
+    position: absolute;
+    border: 2px solid var(--primary);
+    z-index: -1;
+    box-sizing: border-box;
+    border-style: dashed;
+    border-bottom: none;
+    opacity: 0;
+}
+
+.intro_graph .connect_line.in{
+    animation: connect-in 0.5s ease-in-out forwards;
+}
+
+@keyframes connect-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

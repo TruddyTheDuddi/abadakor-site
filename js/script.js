@@ -200,6 +200,27 @@ function search_name(name) {
         i: {}  // Insignificant
     }
 
+    // from year 1880 to 2020 create a dummy movie for each year and put it into i
+    // for (let i = 1880; i <= 2020; i++) {
+    //     let dummy = {
+    //         mov_name: "A movie name",
+    //         year: i,
+    //         averageRating: 0,
+    //         numVotes: 0,
+    //         poster_url: `img/poster/2.jpg`,
+    //         percentage: nameData.find(d => d.year == i).percentage // Get the percentage for this year for the Y position on graph
+    //     }
+
+    //     // Add the dummy movie to the list of movies from 1 to 3 times randomly
+    //     let numDummy = Math.floor(Math.random() * 3) + 1;
+    //     for (let j = 0; j < numDummy; j++) {
+    //         if (!selectedMovs.i[i]) {
+    //             selectedMovs.i[i] = [];
+    //         }
+    //         selectedMovs.i[i].push(dummy);
+    //     }
+    // }
+
     // Classify and complete the list of movies per category
     dfs.movie_impacts.filter(d => d.name === name).map(m => {
         // Merge with the movies dictionary
@@ -429,7 +450,7 @@ function draw_plot(data){
     const height = svgHeight - margin.top - margin.bottom;
 
     // Delays
-    const lineDrawingDuration = 2000;
+    const lineDrawingDuration = 200; //2000
     const lineDrawingDelay = 200;
 
     // Clear previous plot
@@ -497,6 +518,7 @@ function draw_plot(data){
 
     // Impact movies
     let impMovies = data.selectedMovies;
+    let lastTooltip = null;
 
     // Function to append dots after the line is drawn
     function appendDotsAfterLineDrawn(entries, icon, className, iconWidth, isIcon) {
@@ -543,7 +565,12 @@ function draw_plot(data){
                 let tooltipElement = document.getElementById('ttip');
 
                 // Fill the tooltip with the relevant movie data
-                tooltipper.generateTooltip(movies);
+                if(lastTooltip != year){
+                    lastTooltip = year;
+                    // Refine xPos and yPos if it's an icon
+                    let xPos = x(year);
+                    tooltipper.generateTooltip(movies, xPos + margin.left, yPos + margin.top);
+                }
     
             });
 
@@ -555,17 +582,6 @@ function draw_plot(data){
     appendDotsAfterLineDrawn(Object.entries(impMovies.t), icons.top, "dot-top", iconWidth, true); // Top significant movies
     appendDotsAfterLineDrawn(Object.entries(impMovies.b), icons.bot, "dot-bot", iconWidth, true); // Bottom significant movies
     appendDotsAfterLineDrawn(Object.entries(impMovies.i), null, "dot-insig", 5, false); // Insignificant movies
-
-    // // Add event listeners to dots for hover
-    // svg.selectAll(".dot-insig, .dot-top, .dot-bot")
-    // .on("mouseover", function(event, d) {
-    //     // Assuming 'this' is the dot, and 'list' is the id of the HTML element
-    //     let tooltipElement = document.getElementById('ttip');
-    //     let line = tooltipper.drawLineToTooltip(svg, this, tooltipElement);
-        
-    //     // Show tooltip with movie info
-    //     tooltipper.generateTooltip(d.movies);
-    // })
 
     /**
      * Just adapt the data overall so that it looks nice
@@ -586,7 +602,6 @@ function draw_plot(data){
         // Remove all years after 2020 for cleaner plot
         data.namePerYear = data.namePerYear.filter(d => d.year <= 2020);
     }
-
 }
 
 /**
@@ -611,13 +626,30 @@ function bigNumberHumanizer(number){
 // Does tooltip stuff
 let tooltipper = {
     IMDB_URL: "https://www.imdb.com/title/",
+    graphWidth: d3.select('#name-graph').node().parentNode.clientWidth,
     
     /**
      * Generate a tooltip for a set of movies (in the same year)
      * @param {*} data 
+     * @param {*} xPos the x pos of the dot
      */
-    generateTooltip: function(movies){
+    generateTooltip: function(movies, xPos, yPos){
         console.log(movies);
+        console.log(xPos, yPos, this.graphWidth);
+
+        let space = 100; // Spave between xPos and edge of tooltip
+
+        // Set position of tooltip
+        let isLeft = xPos < this.graphWidth / 2;
+        if(isLeft){
+            // Left side
+            document.getElementById('ttip').style.left = xPos + space + "px";
+            document.getElementById('ttip').style.right = "auto";
+        } else {
+            // Right side
+            document.getElementById('ttip').style.right = this.graphWidth - xPos + space + "px";
+            document.getElementById('ttip').style.left = "auto";
+        }
 
         // Get the tooltip element
         let tooltipElement = document.getElementById('ttip');
@@ -635,9 +667,6 @@ let tooltipper = {
             movieItem.href = this.IMDB_URL + movie.mov_id;
             movieItem.target = "_blank";
             movieItem.classList.add("movie_item");
-
-            // Set animation delay
-            movieItem.style.animationDelay = idx * 100 + "ms";
 
             // Poster section
             let poster = document.createElement("div");
@@ -676,44 +705,41 @@ let tooltipper = {
             movieItem.appendChild(rating);
             movieList.appendChild(movieItem);
         });
+
+        // Modify the line of the tooltip
+        const topStart = 100;
+        const padding = 260;
+        
+        let line = document.getElementById('intro_graph').querySelector(".connect_line");
+        line.classList.add("in");
+
+        // Reset animation
+        line.style.animation = 'none';
+        line.offsetHeight;
+        line.style.animation = null;
+
+        // Vertical
+        line.style.top = topStart + "px";
+        line.style.height = (yPos + padding - topStart) + "px";
+
+        // Horizontal
+        line.style.width = (space) + "px";
+        if(!isLeft){
+            line.style.left = (xPos - space + 1) + "px";
+            line.style.right = "auto";
+            
+            // Remove left and bottom border
+            line.style.borderLeft = "none";
+            line.style.borderRight = null;
+
+        } else {
+            line.style.right = (this.graphWidth - xPos - space + 1) + "px";
+            line.style.left = "auto";
+
+            // Remove right and bottom border
+            line.style.borderRight = "none";
+            line.style.borderLeft = null;
+        }
     },
 
-    /**
-     * Function to draw a line from the SVG to the tooltip
-     * @param {*} svg the container SVG
-     * @param {*} dot the dot element (or icon)
-     * @param {*} tooltipElement the tooltip element
-     * @returns 
-     */
-    drawLineToTooltip: function(svg, dot, tooltipElement) {
-        // Get SVG position
-        let svgRect = svg.node().getBoundingClientRect();
-        let dotPos = dot.getBoundingClientRect();
-
-        // Calculate start position (relative to the SVG)
-        let startPos = {
-            x: dotPos.left - svgRect.left + dotPos.width / 2,
-            y: dotPos.top - svgRect.top + dotPos.height / 2
-        };
-
-        // Get tooltip position
-        let tooltipRect = tooltipElement.getBoundingClientRect();
-
-        // Calculate end position (relative to the SVG)
-        let endPos = {
-            x: tooltipRect.left - svgRect.left,
-            y: tooltipRect.top - svgRect.top
-        };
-
-        // Draw a line in the SVG from the dot to the tooltip
-        let line = svg.append("line")
-            .attr("x1", startPos.x)
-            .attr("y1", startPos.y)
-            .attr("x2", endPos.x)
-            .attr("y2", endPos.y)
-            .attr("stroke", "yellow")
-            .attr("stroke-width", 2);
-
-        return line; // Return the line element for later removal if needed
-    }
 }
