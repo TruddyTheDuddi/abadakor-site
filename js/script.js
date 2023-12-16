@@ -212,6 +212,7 @@ function search_name(name) {
 
         // Create a struct for the movie to add to the selectedMovs
         let struct = {
+            imdb_id: movie_full.imdb_id,
             mov_name: movie_full.mov_name,
             year: movie_full.year,
             averageRating: movie_full.averageRating,
@@ -536,8 +537,15 @@ function draw_plot(data){
                 .style("opacity", 1); // Make dot/icon visible
 
 
-            // Create tooltip with movie info
-            generateTooltip(movies);
+            // Create tooltip with movie info on hover
+            let dot = isIcon ? g : g.select("circle");
+            dot.on("mouseenter", function(event) {
+                let tooltipElement = document.getElementById('ttip');
+
+                // Fill the tooltip with the relevant movie data
+                tooltipper.generateTooltip(movies);
+    
+            });
 
         });
     }
@@ -547,6 +555,17 @@ function draw_plot(data){
     appendDotsAfterLineDrawn(Object.entries(impMovies.t), icons.top, "dot-top", iconWidth, true); // Top significant movies
     appendDotsAfterLineDrawn(Object.entries(impMovies.b), icons.bot, "dot-bot", iconWidth, true); // Bottom significant movies
     appendDotsAfterLineDrawn(Object.entries(impMovies.i), null, "dot-insig", 5, false); // Insignificant movies
+
+    // // Add event listeners to dots for hover
+    // svg.selectAll(".dot-insig, .dot-top, .dot-bot")
+    // .on("mouseover", function(event, d) {
+    //     // Assuming 'this' is the dot, and 'list' is the id of the HTML element
+    //     let tooltipElement = document.getElementById('ttip');
+    //     let line = tooltipper.drawLineToTooltip(svg, this, tooltipElement);
+        
+    //     // Show tooltip with movie info
+    //     tooltipper.generateTooltip(d.movies);
+    // })
 
     /**
      * Just adapt the data overall so that it looks nice
@@ -568,20 +587,133 @@ function draw_plot(data){
         data.namePerYear = data.namePerYear.filter(d => d.year <= 2020);
     }
 
+}
+
+/**
+ * Add K, M, B, T, etc. to a big number with at most 1 digit after the decimal point
+ * @param {*} number
+ */
+function bigNumberHumanizer(number){
+    let abbreviations = {
+        "K": 1000,
+        "M": 1000000,
+        "B": 1000000000,
+        "T": 1000000000000
+    };
+
+    // Find the appropriate abbreviation
+    let abbr = Object.keys(abbreviations).reverse().find(abbr => Math.abs(number) >= abbreviations[abbr]);
+
+    // Return the number with the abbreviation
+    return (number / abbreviations[abbr]).toFixed(1) + abbr;
+}
+
+// Does tooltip stuff
+let tooltipper = {
+    IMDB_URL: "https://www.imdb.com/title/",
+    
     /**
      * Generate a tooltip for a set of movies (in the same year)
      * @param {*} data 
      */
-    function generateTooltip(data){
-        console.log(data);
+    generateTooltip: function(movies){
+        console.log(movies);
+
+        // Get the tooltip element
+        let tooltipElement = document.getElementById('ttip');
+        let movieList = tooltipElement.querySelector(".movie_list");
+
+        // Clear the tooltip
+        movieList.innerHTML = "";
+
+        // Sort movies by number of ratings
+        movies.sort((a, b) => b.numVotes - a.numVotes);
+        
+        // For each movie in the list:
+        movies.forEach((movie, idx) => {
+            let movieItem = document.createElement("a");
+            movieItem.href = this.IMDB_URL + movie.mov_id;
+            movieItem.target = "_blank";
+            movieItem.classList.add("movie_item");
+
+            // Set animation delay
+            movieItem.style.animationDelay = idx * 100 + "ms";
+
+            // Poster section
+            let poster = document.createElement("div");
+            poster.classList.add("poster");
+            let posterImg = document.createElement("img");
+            posterImg.src = movie.poster_url;
+            let title = document.createElement("div");
+            title.innerHTML = movie.mov_name;
+            title.classList.add("title");
+
+            poster.appendChild(posterImg);
+            poster.appendChild(title);
+
+            // On error poster
+            posterImg.addEventListener("error", function() {
+                // Set no img
+                poster.classList.add("no_img");
+            });
+
+            // Rating section
+            let rating = document.createElement("div");
+            rating.classList.add("rating");
+            let ratingImg = document.createElement("img");
+            ratingImg.src = "img/star.svg";
+            ratingImg.classList.add("rating_icon");
+            let rateData = document.createElement("div");
+            rateData.classList.add("rate_data");
+            rateData.innerHTML = `<span class="rating_value">${movie.averageRating}<small>/10</small></span>`;
+            rateData.innerHTML += `<span class="rating_nb">${bigNumberHumanizer(movie.numVotes)} votes</span>`;
+
+            rating.appendChild(ratingImg);
+            rating.appendChild(rateData);
+
+            // Append to movie item
+            movieItem.appendChild(poster);
+            movieItem.appendChild(rating);
+            movieList.appendChild(movieItem);
+        });
+    },
+
+    /**
+     * Function to draw a line from the SVG to the tooltip
+     * @param {*} svg the container SVG
+     * @param {*} dot the dot element (or icon)
+     * @param {*} tooltipElement the tooltip element
+     * @returns 
+     */
+    drawLineToTooltip: function(svg, dot, tooltipElement) {
+        // Get SVG position
+        let svgRect = svg.node().getBoundingClientRect();
+        let dotPos = dot.getBoundingClientRect();
+
+        // Calculate start position (relative to the SVG)
+        let startPos = {
+            x: dotPos.left - svgRect.left + dotPos.width / 2,
+            y: dotPos.top - svgRect.top + dotPos.height / 2
+        };
+
+        // Get tooltip position
+        let tooltipRect = tooltipElement.getBoundingClientRect();
+
+        // Calculate end position (relative to the SVG)
+        let endPos = {
+            x: tooltipRect.left - svgRect.left,
+            y: tooltipRect.top - svgRect.top
+        };
+
+        // Draw a line in the SVG from the dot to the tooltip
+        let line = svg.append("line")
+            .attr("x1", startPos.x)
+            .attr("y1", startPos.y)
+            .attr("x2", endPos.x)
+            .attr("y2", endPos.y)
+            .attr("stroke", "yellow")
+            .attr("stroke-width", 2);
+
+        return line; // Return the line element for later removal if needed
     }
 }
-
-let el = document.getElementById("ttip");
-//Create tooltip element with tippy.js
-tippy(searchInput, {
-    content: el.innerHTML,
-    allowHTML: true,
-    placement: "top",
-
-});
