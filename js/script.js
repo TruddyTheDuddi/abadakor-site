@@ -427,6 +427,10 @@ function draw_plot(data){
     const svgHeight = 400;
     const height = svgHeight - margin.top - margin.bottom;
 
+    // Delays
+    const lineDrawingDuration = 2000;
+    const lineDrawingDelay = 200;
+
     // Clear previous plot
     d3.select("#name-graph").selectAll("*").remove();
 
@@ -479,8 +483,8 @@ function draw_plot(data){
     path.attr("stroke-dasharray", totalLength + " " + totalLength)
         .attr("stroke-dashoffset", totalLength)
         .transition() // Transition for the drawing effect
-        .delay(200) // Wait a bit before starting
-        .duration(2000) // Duration of the drawing in milliseconds
+        .delay(lineDrawingDelay) // Wait a bit before starting
+        .duration(lineDrawingDuration) // Duration of the transition
         .ease(d3.easeLinear) // The easing function
         .attr("stroke-dashoffset", 0);
 
@@ -493,41 +497,56 @@ function draw_plot(data){
     // Impact movies
     let impMovies = data.selectedMovies;
 
-    // For insignificant movies
-    Object.entries(impMovies.i).forEach(([year, movies]) => {
-        // Create a dot
-        svg.append("circle")
-            .attr("cx", x(year))
-            .attr("cy", y(movies[0].percentage))
-            .attr("r", 5)
-            .attr("class", "dot-insig")
-            .style("transform-origin", x(year) + "px " + y(movies[0].percentage) + "px");
-    });
-
-    // For significant movies
-    let appendImpactDot = (entries, icon, className) => {
-        let iconWidth = 24;
+    // Function to append dots after the line is drawn
+    function appendDotsAfterLineDrawn(entries, icon, className, iconWidth, isIcon) {
         entries.forEach(([year, movies]) => {
-            // Create a group element to hold the imported SVG
+            // Calculate the position for the dot or icon
+            let xPos = x(year) - (isIcon ? iconWidth / 2 : 0);
+            let yPos = y(movies[0].percentage) - (isIcon ? iconWidth / 2 : 0);
+
+            // Create a group element to hold the imported SVG or circle
             let g = svg.append("g")
-                .attr("class", className)
-                .attr("transform", `translate(${x(year) - iconWidth / 2},${y(movies[0].percentage) - iconWidth / 2})`);
-    
-            // Import the external SVG node
-            let importedNode = document.importNode(icon.documentElement, true);
-    
-            // Append the imported SVG to the group element
-            g.node().appendChild(importedNode);
-    
-            // Apply additional styles or transformations if needed
-            d3.select(importedNode)
-                .attr("width", iconWidth)
-                .attr("height", iconWidth);
+                .style("opacity", 0); // Start with dot/icon hidden
+
+            if (isIcon) {
+                // Import the external SVG node for significant movies
+                let importedNode = document.importNode(icon.documentElement, true);
+                g.node().appendChild(importedNode);
+                d3.select(importedNode)
+                    .attr("width", iconWidth)
+                    .attr("height", iconWidth);
+                    
+                g.attr("class", className)
+                    .attr("transform", `translate(${xPos},${yPos})`);
+            } else {
+                // Append a circle for insignificant movies
+                g.append("circle")
+                    .attr("cx", isIcon ? iconWidth / 2 : 0)
+                    .attr("cy", isIcon ? iconWidth / 2 : 0)
+                    .attr("r", iconWidth)
+                    .attr("class", className);
+
+                g.attr("transform", `translate(${xPos},${yPos})`);
+            }
+
+            // Transition to make the dot/icon appear after the line is fully drawn
+            g.transition()
+                .delay(lineDrawingDelay + lineDrawingDuration) // Start after line animation
+                .duration(500) // Duration of dot/icon appearance
+                .style("opacity", 1); // Make dot/icon visible
+
+
+            // Create tooltip with movie info
+            generateTooltip(movies);
+
         });
     }
 
-    appendImpactDot(Object.entries(impMovies.t), icons.top, "dot-top"); // Top
-    appendImpactDot(Object.entries(impMovies.b), icons.bot, "dot-bot"); // Bottom
+    // Call the function for each category with a delay after the line drawing
+    let iconWidth = 24; // Width for both significant and insignificant dots/icons
+    appendDotsAfterLineDrawn(Object.entries(impMovies.t), icons.top, "dot-top", iconWidth, true); // Top significant movies
+    appendDotsAfterLineDrawn(Object.entries(impMovies.b), icons.bot, "dot-bot", iconWidth, true); // Bottom significant movies
+    appendDotsAfterLineDrawn(Object.entries(impMovies.i), null, "dot-insig", 5, false); // Insignificant movies
 
     /**
      * Just adapt the data overall so that it looks nice
@@ -547,5 +566,13 @@ function draw_plot(data){
 
         // Remove all years after 2020 for cleaner plot
         data.namePerYear = data.namePerYear.filter(d => d.year <= 2020);
+    }
+
+    /**
+     * Generate a tooltip for a set of movies (in the same year)
+     * @param {*} data 
+     */
+    function generateTooltip(data){
+        console.log(data);
     }
 }
