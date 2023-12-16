@@ -46,9 +46,6 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
     .domain(d3.extent(data, function (d) { return +d[currentDataKey]; }))
     .range([0.5, initialMaxSize]);  // initial circle size will be between 0.5 and 20 px wide
 
-
-
-
   // create a tooltip
   var Tooltip = d3.select("#CirclePacking")
     .append("div")
@@ -163,74 +160,4 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
     // Restart the simulation with the updated data
     simulation.nodes(data).alpha(0.3).restart();
   }
-
-
-  // -------------------------------------------
-  // Load data from CSV file for the second graph
-d3.csv("/data/web_data/movie_genre_per_year_significant.csv", function(error, secondGraphData) {
-  if (error) throw error;
-
-// Organize data by genre for easy access
-var secondGraphDataByGenre = d3.nest()
-.key(function(d) { return d.genre; })
-.entries(secondGraphData);
-  // Define the update function for the second graph
-  function updateSecondGraph(selectedGenre) {
-    // Clear existing second graph
-    d3.select("#DistributionPerYear").selectAll("*").remove();
-
-    // Filter data for the selected genre
-    var selectedGenreData = secondGraphDataByGenre.get(selectedGenre);
-
-    // Create a new SVG for the second graph
-    var secondGraphSvg = d3.select("#DistributionPerYear")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", 200);
-
-    // Set up scales for the line chart
-    var xScale = d3.scaleLinear()
-      .domain(d3.extent(selectedGenreData, function(d) { return +d.year; }))
-      .range([0, width]);
-
-    var yScale = d3.scaleLinear()
-      .domain(d3.extent(selectedGenreData, function(d) { return +d[currentDataKey]; }))
-      .range([200, 0]);
-
-    // Define a line function
-    var line = d3.line()
-      .x(function(d) { return xScale(+d.year); })
-      .y(function(d) { return yScale(+d[currentDataKey]); });
-
-    // Add the line chart
-    secondGraphSvg.append("path")
-        .datum(selectedGenreData)
-        .attr("class", "line")
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 2)
-        .attr("d", line);
-
-    // Add circles for each data point
-    secondGraphSvg.selectAll("circle")
-      .data(selectedGenreData)
-      .enter().append("circle")
-      .attr("fill", "steelblue")
-      .attr("cx", function(d) { return xScale(+d.year); })
-      .attr("cy", function(d) { return yScale(+d[currentDataKey]); })
-      .attr("r", 4);
-  }
-
-// What happens when a circle is hovered over?
-function mouseover(d) {
-  Tooltip.style("opacity", 1);
-
-  if (!d.children) {
-    // Update the second graph based on the hovered genre
-    updateSecondGraph(d.data.key);
-  }
-}
-})
-// -------------------------------------------
-
 });
