@@ -29,25 +29,25 @@
             <div class="hero_asset" id="hero_asset">
 
                 <div class="movie_holder top">
-                    <div class="poster zeroth">
+                    <a class="poster p0" id="poster_1" target="_blank">
                         <div class="img">
-                            <img src="img/poster/1.jpg" alt="">
+                            <img src="" alt="">
                         </div>
                         <div class="data">
                             <span class="title">The Matrix</span>
                             <span class="year">1999</span>
                         </div>
-                    </div>
+                    </a>
 
-                    <div class="poster first">
+                    <a class="poster p1" id="poster_2" target="_blank">
                         <div class="img">
-                            <img src="img/poster/4.jpg" alt="">
+                            <img src="" alt="">
                         </div>
                         <div class="data">
                             <span class="title">La Roue</span>
                             <span class="year">1923</span>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 
                 <div class="tag">
@@ -64,7 +64,7 @@
                         <div class="bottom_line">
                             <div class="elval">
                                 <span class="t_title">Sex:</span>
-                                <span id="sex" class="t_value">F</span>
+                                <span id="sex" class="t_value">M</span>
                             </div>
                             <div class="elval">
                                 <span class="t_title">Room:</span>
@@ -80,25 +80,25 @@
 
                 <div class="movie_holder bottom">
 
-                    <div class="poster second">
+                    <a class="poster p2" id="poster_3" target="_blank">
                         <div class="img">
-                            <img src="img/poster/3.jpg" alt="">
+                            <img src="" alt="">
                         </div>
                         <div class="data">
                             <span class="title">Star Wars</span>
                             <span class="year">1977</span>
                         </div>
-                    </div>
+                    </a>
 
-                    <div class="poster third">
+                    <a class="poster p3" id="poster_4" target="_blank">
                         <div class="img">
-                            <img src="img/poster/2.jpg" alt="">
+                            <img src="" alt="">
                         </div>
                         <div class="data">
                             <span class="title">The Godfather</span>
                             <span class="year">1972</span>
                         </div>
-                    </div>
+                    </a>
 
                 </div>
 
@@ -107,9 +107,9 @@
         
     </header>
 
-    <div class="search_area">
+    <div class="search_area" id="search_area">
 
-        <div class="box">
+        <div class="search_box">
             <div>
                 <h2>Let's look at a <strong>name...</strong></h2>
                 <span>... and see what were the name trends over the years with the released movies in the same period.</span>
@@ -128,6 +128,9 @@
         </div>
 
         <div class="intro_graph" id="intro_graph">
+
+            <div class="back_arrow" id="back_arrow"></div>
+
             <div class="connect_line"></div>
 
             <div class="tooltip_movie" id="ttip">
@@ -165,12 +168,32 @@
 
             <svg id="name-graph" width="1200" height="600"></svg>
             <h3>Popularity of <strong id="graph-name-disp">Mia</strong> as baby name in the U.S.A. throughout the years.</h3>
+            <small>Hover key moments with cursor to reveal movies that were released in that same period.</small>
+            <div class="label">
+                <div class="el">
+                    <img src="img/top.svg" alt="">
+                    <span>Significant increase</span>
+                </div>
+                <div class="el">
+                    <img src="img/bot.svg" alt="">
+                    <span>Significant decrease</span>
+                </div>
+                <div class="el flat">
+                    <img src="img/flat.svg" alt="">
+                    <span>Stable</span>
+                </div>
+                <small>(Significance with p-value of 0.1)</small>
+            </div>
         </div>
 
     </div>
 
 
-    <!-- <div id="myDiv"></div> -->
+    <div id="myDiv">
+        <h1>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae velit ea voluptatum culpa atque quos facere, quia, fugit cumque mollitia nihil quam corporis laudantium iste, quaerat vel? Qui cupiditate, voluptatibus voluptatum temporibus consectetur, rem maxime tempora quod minima dicta labore, aut placeat autem eveniet numquam blanditiis error assumenda vero alias? Laborum adipisci porro quasi numquam iure cupiditate sed officiis natus distinctio dicta iste, asperiores, odio nam corporis voluptatum fuga veniam amet enim minus explicabo illo repellat earum vel? Accusantium quia perferendis tempora tenetur non perspiciatis commodi. Labore illo alias dolorum odit nam excepturi soluta corporis quia, exercitationem totam nobis commodi?
+        </h1>
+    </div>
 
 
 </body>

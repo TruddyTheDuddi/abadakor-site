@@ -40,7 +40,7 @@
 }
 
 html{
-    /* scroll-snap-type: y mandatory; */
+    scroll-snap-type: y mandatory;
 }
 
 small{
@@ -65,7 +65,7 @@ body{
 
 body>*{
     margin: 3em !important;
-    /* scroll-snap-align: start; */
+    scroll-snap-align: center;
 }
 
 ::selection {
@@ -352,27 +352,40 @@ header .hero_asset::before{
     width: 90%;
 }
 
-
 .hero_asset .movie_holder .poster{
     display: flex;
     align-items: flex-end;
     filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.3));
     gap: 1.5em;
+    opacity: 0;
+    transform: scale(0.2);
+    transition: 1s opacity, 1.2s transform;
+    color: var(--text);
+    text-decoration: none;
 }
 
-.hero_asset .movie_holder .poster.zeroth{
+.hero_asset .movie_holder .poster.in:hover{
+    opacity: 0.6;
+    transition: 0.2s opacity, 1.2s transform;
+}
+
+.hero_asset .movie_holder .poster.in{
+    opacity: 1;
+}
+
+.hero_asset .movie_holder .poster.p0{
     transform: scale(1.1) translate(0, -2em) rotate(3deg);
 }
 
-.hero_asset .movie_holder .poster.first{
+.hero_asset .movie_holder .poster.p1{
     transform: scale(0.9) translate(0em, -3em) rotate(-2deg);
 }
 
-.hero_asset .movie_holder .poster.second{
+.hero_asset .movie_holder .poster.p2{
     transform: scale(1.1) translate(0, 4em) rotate(1deg);
 }
 
-.hero_asset .movie_holder .poster.third{
+.hero_asset .movie_holder .poster.p3{
     transform: scale(0.9) translate(0, 0em) rotate(-4deg);
 }
 
@@ -409,6 +422,10 @@ header .hero_asset::before{
 
 .hero_asset .movie_holder .poster .data{
     display: grid;
+    max-width: 10em;
+    max-width: 7em;
+    gap: 0.5em;
+    line-height: 1.2;
 }
 
 .hero_asset .movie_holder .poster .data .year{
@@ -420,18 +437,91 @@ header .hero_asset::before{
 /* Name seacrh box */
 .search_area{
     display: grid;
+    position: relative;
+    /* overflow: hidden; */
 }
 
 .search_area h2{
     font-size: 2em;
 }
 
-.search_area .box{
+.search_area .search_box{
     display: grid;
     gap: 2em;
     max-width: 500px;
     margin: auto;
 }
+
+.search_area.graph_p1 .search_box{
+    animation: gtr 0.5s ease-in-out forwards, fade 0.5s ease-in-out reverse forwards;
+}
+
+.search_area.graph_p2 .search_box{
+    display: none;
+}
+
+.search_area.graph_p3 .search_box{
+    display: none;
+}
+
+.search_area.graph_p4 .search_box{
+    animation: gtr 0.5s ease-in-out reverse, fade 0.5s ease-in-out forwards;
+}
+
+.search_area.graph_p1 .intro_graph{
+    display: none;
+}
+
+.search_area.graph_p2 .intro_graph{
+    display: grid;
+    animation: fade 0.5s ease-in-out forwards, gtl 0.5s ease-in-out reverse;
+}
+
+.search_area.graph_p3 .intro_graph{
+    display: grid;
+    animation: fade 0.5s ease-in-out reverse forwards, gtl 0.5s ease-in-out forwards;
+}
+
+.search_area.graph_p4 .intro_graph{
+    display: none;
+}
+
+.search_area.graph .intro_graph{
+    display: grid;
+}
+
+.search_area.graph .search_box{
+    display: none;
+}
+
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes gtl {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(2em);
+    }
+}
+
+@keyframes gtr {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-2em);
+    }
+}
+
 
 .search_area .input_holder{
     display: grid;
@@ -595,6 +685,10 @@ header .hero_asset::before{
     margin: auto;
     position: relative;
     padding-top: 260px;
+
+    width: 100%;
+
+    display: none;
 }
 
 .intro_graph #graph-name-disp{
@@ -848,4 +942,56 @@ header .hero_asset::before{
     100% {
         opacity: 1;
     }
+}
+
+.intro_graph .back_arrow{
+    height: 1.8em;
+    aspect-ratio: 1/1;
+    background-image: url(../img/back.svg);
+    background-size: 2em;
+    background-repeat: no-repeat;
+    background-position: 40% 50%;
+    background-color: transparent;
+    transition: 0.3s background-color, 0.3s box-shadow;
+
+    top: 0;
+    position: absolute;
+
+    border-radius: 100%;
+
+    padding: 0.5em;
+
+    cursor: pointer;
+}
+
+.intro_graph .back_arrow:hover{
+    background-color: var(--light_bg);
+    box-shadow: 4px 4px 0 var(--light_bg_opac);
+}
+
+.intro_graph .back_arrow:active{
+    opacity: 0.8;
+}
+
+.intro_graph .label{
+    display: gird;
+    position: absolute;
+    top: 0;
+    right: 0;
+    gap: 1em;
+    font-size: 0.8em;
+}
+
+.intro_graph .label .el{
+    display: flex;
+    gap: 0.5em;
+}
+
+.intro_graph .label .el img{
+    height: 1.5em;
+    width: auto;
+}
+
+.intro_graph .label .el.flat img{
+    transform: scale(0.6);
 }

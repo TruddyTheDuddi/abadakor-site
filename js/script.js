@@ -7,88 +7,235 @@ let introData = [
         sex: "F",
         movies: [
             {
-                title: "Mamma Mia!",
-                year: 2008,
-                img: "1.jpg",
-                influence: "++"
+                title: "Pulp Fiction",
+                year: 1994,
+                id: "tt0232500",
+                img: "/on5fMsjLKMJX6ic4anPKwVnuExu.jpg",
             },
             {
-                title: "Star Wars: The Last Jedi",
-                year: 2017,
-                img: "2.jpg",
-                influence: "-"
-            },
-            {
-                title: "The Princess Bride",
-                year: 1987,
-                img: "3.jpg",
-                influence: "+"
-            },
-            {
-                title: "The Lord of the Rings: The Fellowship of the Ring",
+                title: "The Fast and the Furious",
                 year: 2001,
-                img: "4.jpg",
-                influence: "~"
+                id: "tt0232500",
+                img: "/iN8fyCyp4pZmnnNYtOThSdYFksT.jpg",
+            },
+            {
+                title: "The Seventh Seal",
+                year: 1957,
+                id: "tt0050976",
+                img: "/qXccllVX06srox8WLp58rVA9Szr.jpg",
+            }
+        ]
+    },
+    {
+        name: "Sophie",
+        sex: "F",
+        movies: [
+            {
+                title: "The Da Vinci Code",
+                year: 2006,
+                id: "tt0382625",
+                img: "/nVW0aHF9vUOhxuCYqTyEgfI7XzO.jpg",
+            },
+            {
+                title: "The Illusionist",
+                year: 2006,
+                id: "tt0443543",
+                img: "/s3SsTCHXjdnqvW2G9kH0lzyC6eS.jpg",
+            },
+            {
+                title: "The Holiday",
+                year: 2006,
+                id: "tt0457939",
+                img: "/fZfdq0zlERNBAWRVJgkQFWmo17H.jpg",
+            },
+            {
+                title: "The Burning",
+                year: 1981,
+                id: "tt0082118",
+                img: "/1wbVpQOMwKo7byO7SK4c10ksJFr.jpg",
+            }
+        ]
+    },
+    {
+        name: "Thomas",
+        sex: "M",
+        movies: [
+            {
+                title: "Project X",
+                year: 2012,
+                id: "tt1636826",
+                img: "/dl8FB79jt7hSfEy2EDfqQp5JbMN.jpg",
+            },
+            {
+                title: "Odd Thomas",
+                year: 2013,
+                id: "tt1767354",
+                img: "/qM7nYlDaZwk2giHMqZe8GEz41Vm.jpg",
+            },
+            {
+                title: "Being There",
+                year: 1979,
+                id: "tt0078841",
+                img: "/epFBw4IYJMELyNYEgrhLvNIr3fZ.jpg",
+            },
+            {
+                title: "The Manchurian Candidate",
+                year: 1962,
+                id: "tt0056218",
+                img: "/jKXKAmYj2gwp2SEEapF9OBkDMT7.jpg"
+            }
+        ]
+    },
+    {
+        name: "Ada",
+        sex: "F",
+        movies: [
+            {
+                title: "Resident Evil: Retribution",
+                year: 2012,
+                id: "tt1855325",
+                img: "/q88Ei4lIbSsEJq1jwz6SqF4vXGG.jpg"
+            },
+            {
+                title: "Cold Mountain",
+                year: 2003,
+                id: "tt0159365",
+                img: "/f97eNv6a2B0xJGADAcnf0EaBwr3.jpg"
+            },
+            {
+                title: "The Piano",
+                year: 1993,
+                id: "tt0107822",
+                img: "/lNDRISqbAQTSz14YbMShMvlh9lQ.jpg"
             }
         ]
     }
+
 ];
 
-/**
- * Type the letters of a name one by one for the tag
- */
-function type_name(name, i = -1) {
-    var speed = 120;
-    let name_area = document.getElementById("name_type");
+setTimeout(() => {
+    // I want peolpe to see the name Truddy :)
+    animateExamples();
+}, 400);
 
-    // Reset cursor animation timing
-    let cursor = document.getElementById("cursor");
-    cursor.style.animation = 'none';
-    cursor.offsetHeight;
-    cursor.style.animation = null;
+function animateExamples(index = 0){
+    // Wrap around the lenght of the array
+    let data = introData[index % introData.length];
 
-    // First pass: delete the content of name_area one by one
-    if (i === -1) {
-        if (name_area.innerHTML.length > 1) {
-            name_area.innerHTML = name_area.innerHTML.slice(0, -1);
-            setTimeout(type_name, speed, name, -1);
-        } else {
-            // Replace the last character with "-" and set opacity and width to 0
-            name_area.innerHTML = "-";
-            name_area.style.opacity = '0';
-            name_area.style.width = '0px';
-            // Once deletion is complete, wait a bit longer before starting typing
-            setTimeout(type_name, speed * 5, name, 0);
+    // Poster elements
+    let posters = [1,2,3,4].map(i => {
+        let p = document.getElementById("poster_" + i);
+
+        // Hide poster (remove in class)
+        p.classList.remove("in");
+        p.classList.remove("p"+ (i-1));
+
+        // Load the image if it exists
+        let movData = data.movies[i-1];
+        if(movData != null) {
+            setTimeout(() => {
+                p.querySelector("img").src = FILE_PATH_TMDB + data.movies[i-1].img;
+            }, 800);
         }
-    }
 
-    // Second pass: type the content of name_area one by one
-    else if (i < name.length) {
-        if (i === 0) {
-            name_area.innerHTML = ''; // Clear the name_area
-            name_area.style.opacity = '1'; // Reset opacity
-            name_area.style.width = 'auto'; // Reset width
-        }
-        name_area.innerHTML += name.charAt(i);
-        if (i < name.length - 1) {
-            setTimeout(type_name, speed, name, i + 1);
-        } else {
-            console.log("Hello World!");
-        }
-    }
-}
+        return p;
+    });
 
-/**
- * Inject data into header
- */
-function inject_header_data(data) {
+    let genderBox = document.getElementById("sex");
+    console.log(data);
+
     type_name(data.name);
-}
 
-setTimeout(() =>{
-    // DEBUG: Take one element from introData and inject it into the header
-    inject_header_data(introData[0]);
-}, 1000);
+    /**
+     * Type the letters of a name one by one for the tag
+    */
+    function type_name(name, i = -1) {
+        var speed = 120;
+        let name_area = document.getElementById("name_type");
+        
+        // Reset cursor animation timing
+        let cursor = document.getElementById("cursor");
+        cursor.style.animation = 'none';
+        cursor.offsetHeight;
+        cursor.style.animation = null;
+        
+        // First pass: delete the content of name_area one by one
+        if (i === -1) {
+            if (name_area.innerHTML.length > 1) {
+                name_area.innerHTML = name_area.innerHTML.slice(0, -1);
+                setTimeout(type_name, speed, name, -1);
+            } else {
+                // Replace the last character with "-" and set opacity and width to 0
+                name_area.innerHTML = "-";
+                name_area.style.opacity = '0';
+                name_area.style.width = '0px';
+                // Once deletion is complete, wait a bit longer before starting typing
+                setTimeout(type_name, speed * 5, name, 0);
+            }
+        }
+        
+        // Second pass: type the content of name_area one by one
+        else if (i < name.length) {
+            if (i === 0) {
+                name_area.innerHTML = ''; // Clear the name_area
+                name_area.style.opacity = '1'; // Reset opacity
+                name_area.style.width = 'auto'; // Reset width
+
+                // Set gender
+                genderBox.innerHTML = data.sex;
+            }
+            name_area.innerHTML += name.charAt(i);
+            if (i < name.length - 1) {
+                setTimeout(type_name, speed, name, i + 1);
+            } else {
+                set_movies(data.movies);
+                // Relaunch the text animation
+                setTimeout(() => {
+                    animateExamples(index + 1);
+                }, 5000);
+
+            }
+        }
+    }
+    
+    function set_movies(movies) {
+        console.log("Setting movies");
+        // Set the poster images
+        for (let i = 0; i < movies.length; i++) {
+            console.log(i);
+            posters[i].src = FILE_PATH_TMDB + movies[i].img;
+            posters[i].title = movies[i].title;
+            posters[i].alt = movies[i].title;
+
+            // Change the data in the poster
+            posters[i].querySelector(".title").innerHTML = movies[i].title;
+            posters[i].querySelector(".year").innerHTML = movies[i].year;
+
+            // Set the link to the movie
+            posters[i].href = "https://www.imdb.com/title/" + movies[i].id;
+
+            // Show the poster with a short delay
+            setTimeout(() => {
+                posters[i].classList.add("in");
+                posters[i].classList.add("p"+(i));
+            }, 100 + i * 200);
+        }
+    }   
+}
+// /**
+//  * Inject data into header
+// */
+// function inject_header_data(data) {
+//     type_name(data.name);
+// }
+    
+// setTimeout(() =>{
+//     // DEBUG: Take one element from introData and inject it into the header
+//     inject_header_data(introData[0]);
+// }, 1000);
+
+
+// 
 
 
 // Search area
@@ -96,6 +243,7 @@ setTimeout(() =>{
 // Input fields
 let searchInput = document.getElementById("search_input");
 let searchButton = document.getElementById("search_button");
+let backArrow = document.getElementById("back_arrow");
 
 // Trigger search when enter is pressed
 searchInput.addEventListener("keydown", function(event) {
@@ -170,6 +318,25 @@ searchButton.addEventListener("click", function() {
     }
 });
 
+// Back button
+backArrow.addEventListener("click", function() {
+    // Change the display
+    let searchArea = document.getElementById("search_area");
+    searchArea.classList.add("graph_p3");
+    searchArea.classList.remove("graph_p2");
+    searchArea.classList.remove("graph");
+    setTimeout(function() {
+        searchArea.classList.add("graph_p4");
+        searchArea.classList.remove("graph_p3");
+        searchArea.classList.remove("graph_p2");
+        searchArea.classList.remove("graph_p1");
+        setTimeout(function() {
+            searchArea.classList.remove("graph_p4");
+            searchArea.classList.remove("graph");
+        }, 500);
+    }, 500);
+});
+
 /**
  * Search for a name
  * @param {*} name (make sure it's trimmed and lowercased)
@@ -236,8 +403,8 @@ function search_name(name) {
             imdb_id: movie_full.imdb_id,
             mov_name: movie_full.mov_name,
             year: movie_full.year,
-            averageRating: movie_full.averageRating,
-            numVotes: movie_full.numVotes,
+            averageRating: movie_full.rating,
+            numVotes: movie_full.votes,
             poster_url: movie_full.poster_url,
             percentage: nameData.find(d => d.year == movie_full.year).percentage // Get the percentage for this year for the Y position on graph
         }
@@ -248,13 +415,29 @@ function search_name(name) {
         }
         selectedMovs[m.status][movie_full.year].push(struct);
     });
-    
-    // Then draw the plot
-    document.getElementById("graph-name-disp").innerHTML = name;
-    draw_plot({
-        namePerYear: nameData,
-        selectedMovies: selectedMovs
-    });
+
+    // Change the display
+    let searchArea = document.getElementById("search_area");
+    searchArea.classList.add("graph_p1");
+    searchArea.classList.remove("graph_p2");
+    setTimeout(function() {
+        searchArea.classList.remove("graph_p1");
+        searchArea.classList.add("graph_p2");
+
+        // Then draw the plot
+        document.getElementById("graph-name-disp").innerHTML = name;
+        draw_plot({
+            namePerYear: nameData,
+            selectedMovies: selectedMovs
+        });
+
+        // Set state to graph
+        setTimeout(function() {
+            searchArea.classList.add("graph");
+            searchArea.classList.remove("graph_p2");
+        }, 500);
+    }, 500);
+
 }
 
 /**
@@ -266,10 +449,10 @@ let suggester = {
         "Mia", "Trudy", "Emma", "Tom", "Bob", "Murphy", "Elizabeth", "Mary", "Jane", 
         "Alice", "Logan", "Thomas", "Jonas", "Zoe", "Noel", "Noah","Tracy", "Peter", "Paul", 
         "George", "Trinity", "Max", "Ethan", "Isabella", "Ace", "Tiffany", "Luca",
-        "Odile", "Leo", "Lou", "Lilly", "Robert", "William", "David", "Richard", "Ryan",
-        "Neo", "Maximus", "Gregory", "Christopher", "Daniel", "Link", "Arwen", "Remus", 
+        "Leo", "Andy", "Lilly", "Robert", "William", "David", "Richard", "Ryan",
+        "Neo", "Maximus", "Gregory", "Christopher", "Daniel",
         "Donald", "Luna", "Alison", "Robin", "John", "Savannah", "Cara", "Cooper",
-        "Ariel", "Cinderella", "Sophie", "Maya", "Frank"
+        "Sophie", "Maya", "Frank"
     ],
 
     // CHAD VIP NAMES!! These names are so cool we'll add a special effect
@@ -367,7 +550,7 @@ function loadFiles() {
     // List of files to load
     let promises = [
         d3.csv("data/name_per_year.csv"),
-        d3.csv("data/simplified_movie.csv"),
+        d3.csv("data/movies.csv"),
         d3.csv("data/movie_impacts.csv"),
         // SVG files
         d3.xml("img/top.svg"),
@@ -437,6 +620,9 @@ function draw_plot(data){
 
     console.log(data);
 
+    // Hide tooltip
+    tooltipper.clearTooltip();
+
     // Define margins
     const margin = { top: 10, right: 20, bottom: 80, left: 20 };
     
@@ -450,8 +636,8 @@ function draw_plot(data){
     const height = svgHeight - margin.top - margin.bottom;
 
     // Delays
-    const lineDrawingDuration = 200; //2000
-    const lineDrawingDelay = 200;
+    const lineDrawingDuration = 1600; //2000
+    const lineDrawingDelay = 500;
 
     // Clear previous plot
     d3.select("#name-graph").selectAll("*").remove();
@@ -610,6 +796,7 @@ function draw_plot(data){
  */
 function bigNumberHumanizer(number){
     let abbreviations = {
+        "":  1,
         "K": 1000,
         "M": 1000000,
         "B": 1000000000,
@@ -620,13 +807,16 @@ function bigNumberHumanizer(number){
     let abbr = Object.keys(abbreviations).reverse().find(abbr => Math.abs(number) >= abbreviations[abbr]);
 
     // Return the number with the abbreviation
-    return (number / abbreviations[abbr]).toFixed(1) + abbr;
+    if(abbr == ""){
+        return number;
+    } else {
+        return (number / abbreviations[abbr]).toFixed(1) + abbr;
+    }
 }
 
 // Does tooltip stuff
 let tooltipper = {
     IMDB_URL: "https://www.imdb.com/title/",
-    graphWidth: d3.select('#name-graph').node().parentNode.clientWidth,
     
     /**
      * Generate a tooltip for a set of movies (in the same year)
@@ -634,20 +824,24 @@ let tooltipper = {
      * @param {*} xPos the x pos of the dot
      */
     generateTooltip: function(movies, xPos, yPos){
-        console.log(movies);
-        console.log(xPos, yPos, this.graphWidth);
+        let graphWidth = d3.select('#name-graph').node().parentNode.clientWidth;
 
-        let space = 100; // Spave between xPos and edge of tooltip
+        console.log(movies);
+        console.log(xPos, yPos, graphWidth);
+
+        let space = 120; // Spave between xPos and edge of tooltip
 
         // Set position of tooltip
-        let isLeft = xPos < this.graphWidth / 2;
+        let isLeft = xPos < graphWidth / 2;
         if(isLeft){
             // Left side
-            document.getElementById('ttip').style.left = xPos + space + "px";
+            console.log("Left side");
+            document.getElementById('ttip').style.left = (xPos + space) + "px";
             document.getElementById('ttip').style.right = "auto";
         } else {
             // Right side
-            document.getElementById('ttip').style.right = this.graphWidth - xPos + space + "px";
+            console.log("Right side");
+            document.getElementById('ttip').style.right = (graphWidth - xPos + space) + "px";
             document.getElementById('ttip').style.left = "auto";
         }
 
@@ -664,7 +858,7 @@ let tooltipper = {
         // For each movie in the list:
         movies.forEach((movie, idx) => {
             let movieItem = document.createElement("a");
-            movieItem.href = this.IMDB_URL + movie.mov_id;
+            movieItem.href = this.IMDB_URL + movie.imdb_id;
             movieItem.target = "_blank";
             movieItem.classList.add("movie_item");
 
@@ -672,7 +866,11 @@ let tooltipper = {
             let poster = document.createElement("div");
             poster.classList.add("poster");
             let posterImg = document.createElement("img");
-            posterImg.src = movie.poster_url;
+            if(movie.poster_url == null){
+                poster.classList.add("no_img");
+            } else {
+                posterImg.src = FILE_PATH_TMDB + movie.poster_url;
+            }
             let title = document.createElement("div");
             title.innerHTML = movie.mov_name;
             title.classList.add("title");
@@ -733,7 +931,8 @@ let tooltipper = {
             line.style.borderRight = null;
 
         } else {
-            line.style.right = (this.graphWidth - xPos - space + 1) + "px";
+            console.log("Left side");
+            line.style.right = (graphWidth - xPos - space + 1) + "px";
             line.style.left = "auto";
 
             // Remove right and bottom border
@@ -741,5 +940,18 @@ let tooltipper = {
             line.style.borderLeft = null;
         }
     },
+
+    /**
+     * Clear the tooltip
+     */
+    clearTooltip: function(){
+        // Remove the line
+        let line = document.getElementById('intro_graph').querySelector(".connect_line");
+        line.classList.remove("in");
+
+        // Clear the content of the tooltip
+        let movieList = document.getElementById('ttip').querySelector(".movie_list");
+        movieList.innerHTML = "";
+    }
 
 }
