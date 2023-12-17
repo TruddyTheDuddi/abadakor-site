@@ -190,7 +190,7 @@ d3.csv("/data/web_data/movie_genre_per_year_significant.csv", function (data2){
 
 // Define scales
 var x = d3.scaleLinear().domain([1888, 2016]).range([0, width2]);
-var y = d3.scaleLinear().domain([-0.2, 0.2]).range([height2, 0]);
+var y = d3.scaleLinear().domain([-0.18, 0.18]).range([height2, 0]);
 
 
     // Append X and Y axes
