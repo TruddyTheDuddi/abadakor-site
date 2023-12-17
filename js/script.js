@@ -142,8 +142,6 @@ function animateExamples(index = 0){
     });
 
     let genderBox = document.getElementById("sex");
-    console.log(data);
-
     type_name(data.name);
 
     /**
@@ -199,10 +197,8 @@ function animateExamples(index = 0){
     }
     
     function set_movies(movies) {
-        console.log("Setting movies");
         // Set the poster images
         for (let i = 0; i < movies.length; i++) {
-            console.log(i);
             posters[i].src = FILE_PATH_TMDB + movies[i].img;
             posters[i].title = movies[i].title;
             posters[i].alt = movies[i].title;
@@ -222,20 +218,6 @@ function animateExamples(index = 0){
         }
     }   
 }
-// /**
-//  * Inject data into header
-// */
-// function inject_header_data(data) {
-//     type_name(data.name);
-// }
-    
-// setTimeout(() =>{
-//     // DEBUG: Take one element from introData and inject it into the header
-//     inject_header_data(introData[0]);
-// }, 1000);
-
-
-// 
 
 
 // Search area
@@ -367,35 +349,18 @@ function search_name(name) {
         i: {}  // Insignificant
     }
 
-    // from year 1880 to 2020 create a dummy movie for each year and put it into i
-    // for (let i = 1880; i <= 2020; i++) {
-    //     let dummy = {
-    //         mov_name: "A movie name",
-    //         year: i,
-    //         averageRating: 0,
-    //         numVotes: 0,
-    //         poster_url: `img/poster/2.jpg`,
-    //         percentage: nameData.find(d => d.year == i).percentage // Get the percentage for this year for the Y position on graph
-    //     }
-
-    //     // Add the dummy movie to the list of movies from 1 to 3 times randomly
-    //     let numDummy = Math.floor(Math.random() * 3) + 1;
-    //     for (let j = 0; j < numDummy; j++) {
-    //         if (!selectedMovs.i[i]) {
-    //             selectedMovs.i[i] = [];
-    //         }
-    //         selectedMovs.i[i].push(dummy);
-    //     }
-    // }
-
     // Classify and complete the list of movies per category
     dfs.movie_impacts.filter(d => d.name === name).map(m => {
+        let groupYear = m.group_year;
+        console.log(groupYear);
+
         // Merge with the movies dictionary
         let movie_full = dfs.movies[m.movie_id];
 
         // We need to double check if movie exists! Shouldn't really happen. Warn user
         if (movie_full == null) {
             console.error("Movie not found for ID " + m.movie_id);
+            return;
         }
 
         // Create a struct for the movie to add to the selectedMovs
@@ -406,14 +371,14 @@ function search_name(name) {
             averageRating: movie_full.rating,
             numVotes: movie_full.votes,
             poster_url: movie_full.poster_url,
-            percentage: nameData.find(d => d.year == movie_full.year).percentage // Get the percentage for this year for the Y position on graph
+            percentage: nameData.find(d => d.year == groupYear).percentage // Get the percentage for this group year for the Y position on graph
         }
 
         // Initialize the array for the year if it doesn't exist in the category
-        if (!selectedMovs[m.status][movie_full.year]) {
-            selectedMovs[m.status][movie_full.year] = [];
+        if (!selectedMovs[m.status][groupYear]) {
+            selectedMovs[m.status][groupYear] = [];
         }
-        selectedMovs[m.status][movie_full.year].push(struct);
+        selectedMovs[m.status][groupYear].push(struct);
     });
 
     // Change the display
@@ -449,15 +414,14 @@ let suggester = {
         "Mia", "Trudy", "Emma", "Tom", "Bob", "Murphy", "Elizabeth", "Mary", "Jane", 
         "Alice", "Logan", "Thomas", "Jonas", "Zoe", "Noel", "Noah","Tracy", "Peter", "Paul", 
         "George", "Trinity", "Max", "Ethan", "Isabella", "Ace", "Tiffany", "Luca",
-        "Leo", "Andy", "Lilly", "Robert", "William", "David", "Richard", "Ryan",
-        "Neo", "Maximus", "Gregory", "Christopher", "Daniel",
-        "Donald", "Luna", "Alison", "Robin", "John", "Savannah", "Cara", "Cooper",
-        "Sophie", "Maya", "Frank"
+        "Leo", "Andy", "Lilly", "Robert", "William", "David", "Richard", "Ryan", 
+        "Christopher", "Daniel", "Donald", "Luna", "Alison", "Robin", "Cooper",
+        "Sophie", "Frank", "Jack", "Oliver", "Maria", "Bella"
     ],
 
     // CHAD VIP NAMES!! These names are so cool we'll add a special effect
     specialNamesHehe : [
-        "Trudy", "Bob", "Daniel", "Luca", "Max"
+        "Trudy", "Bob", "Daniel", "Luca", "Max", "Maria", "Tracy", "Jack", "Mia"
     ],
 
     /**
@@ -872,7 +836,7 @@ let tooltipper = {
                 posterImg.src = FILE_PATH_TMDB + movie.poster_url;
             }
             let title = document.createElement("div");
-            title.innerHTML = movie.mov_name;
+            title.innerHTML = `<small class="year">(${movie.year})</small><br>`+movie.mov_name;
             title.classList.add("title");
 
             poster.appendChild(posterImg);

@@ -833,13 +833,10 @@ header .hero_asset::before{
     left: 0;
     right: 0;
     padding: 0.4em;
-    min-height: 2em;
 
     background: rgba(29, 15, 47, 0.5);
     backdrop-filter: blur(3px) brightness(0.8) contrast(0.5);
 
-    display: flex;
-    align-items: flex-end;
     z-index: 1;
 }
 
