@@ -3,11 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script> -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="js/script.js" defer></script>
+
+    <!-- <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>     -->
+
     <title>Document</title>
 </head>
 <body>
 
-    <h1>Hi</h1>
+    <!-- Yes this was all coded by hand, oldschool style. Perhpas we're a bit insane but it's all right :) -->
+
+    <header>
+
+        <div class="container">
+            <div class="hero">
+                <h1>How were <strong>naming trends</strong> in the U.S.A. impacted by <strong>cinema?</strong></h1>
+                <span class="tagline"><span>Connecting the dots between <strong></strong>movie releases and the popularity of baby names across the years.</span></span>
+                <br>
+                <button>See it for yourself</button>
+            </div>
+            <div class="hero_asset" id="hero_asset">
+
+                <div class="movie_holder top">
+                    <a class="poster p0" id="poster_1" target="_blank">
+                        <div class="img">
+                            <img src="" alt="">
+                        </div>
+                        <div class="data">
+                            <span class="title">The Matrix</span>
+                            <span class="year">1999</span>
+                        </div>
+                    </a>
+
+                    <a class="poster p1" id="poster_2" target="_blank">
+                        <div class="img">
+                            <img src="" alt="">
+                        </div>
+                        <div class="data">
+                            <span class="title">La Roue</span>
+                            <span class="year">1923</span>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="tag">
+
+                    <div class="tag_paper">
+                        
+                        <div class="elval">
+                            <span class="t_title">Name:</span>
+                            <span id="name" class="t_value">
+                                <span id="name_type">Truddy</span>
+                                <span class="separator" id="cursor"></span>
+                            </span>
+                        </div>
+                        <div class="bottom_line">
+                            <div class="elval">
+                                <span class="t_title">Sex:</span>
+                                <span id="sex" class="t_value">M</span>
+                            </div>
+                            <div class="elval">
+                                <span class="t_title">Room:</span>
+                                <span id="room" class="t_value">CS-401</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="tag_hole"></div>
+                
+                </div>
+
+                <div class="movie_holder bottom">
+
+                    <a class="poster p2" id="poster_3" target="_blank">
+                        <div class="img">
+                            <img src="" alt="">
+                        </div>
+                        <div class="data">
+                            <span class="title">Star Wars</span>
+                            <span class="year">1977</span>
+                        </div>
+                    </a>
+
+                    <a class="poster p3" id="poster_4" target="_blank">
+                        <div class="img">
+                            <img src="" alt="">
+                        </div>
+                        <div class="data">
+                            <span class="title">The Godfather</span>
+                            <span class="year">1972</span>
+                        </div>
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+        
+    </header>
+
+    <div class="search_area" id="search_area">
+
+        <div class="search_box">
+            <div>
+                <h2>Let's look at a <strong>name...</strong></h2>
+                <span>... and see what were the name trends over the years with the released movies in the same period.</span>
+            </div>
+            <div>
+                <div class="input_holder">
+                    <input id="search_input" type="text" class="search_name" placeholder="eg: Bob">
+                    <button id="search_button" class="disabled loading">Prepping</button>
+                </div>
+                <small class="error-msg" id="errorMsg">Error</small>
+            </div>
+            <small class="inspiration">
+                <span>No inspiration? Try with these ones:</span>
+                <nav id="insp_list"></nav>
+            </small>
+        </div>
+
+        <div class="intro_graph" id="intro_graph">
+
+            <div class="back_arrow" id="back_arrow"></div>
+
+            <div class="connect_line"></div>
+
+            <div class="tooltip_movie" id="ttip">
+
+                <div class="movie_list" id="movie_list">
+                    <a class="movie_item">
+                        <div class="poster">
+                            <img src="img/poster/1.jpg" alt="">
+                            <div class="title">The Matrix</div>
+                        </div>
+                        <div class="rating">
+                            <img src="img/star.svg" class="rating_icon">
+                            <div class="rate_data">
+                                <span class="rating_value">8.1<small>/10</small></span>
+                                <span class="rating_nb">18K</span>
+                            </div>
+                        </div>
+                    </a>
+                    <a class="movie_item">
+                        <div class="poster">
+                            <img src="img/poster/2.jpg" alt="">
+                            <div class="title">The Godfather</div>
+                        </div>
+                        <div class="rating">
+                            <img src="img/star.svg" class="rating_icon">
+                            <div class="rate_data">
+                                <span class="rating_value">9.2<small>/10</small></span>
+                                <span class="rating_nb">18K</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+
+            <svg id="name-graph" width="1200" height="600"></svg>
+            <h3>Popularity of <strong id="graph-name-disp">Mia</strong> as baby name in the U.S.A. throughout the years.</h3>
+            <small>Hover key stubs to reveal famous movies, which were released around that same period.</small>
+            <div class="label">
+                <div class="el">
+                    <img src="img/top.svg" alt="">
+                    <span>Significant increase</span>
+                </div>
+                <div class="el">
+                    <img src="img/bot.svg" alt="">
+                    <span>Significant decrease</span>
+                </div>
+                <div class="el flat">
+                    <img src="img/flat.svg" alt="">
+                    <span>Stable</span>
+                </div>
+                <small>(Significance with p-value of 0.1)</small>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="myDiv">
+        <h1>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae velit ea voluptatum culpa atque quos facere, quia, fugit cumque mollitia nihil quam corporis laudantium iste, quaerat vel? Qui cupiditate, voluptatibus voluptatum temporibus consectetur, rem maxime tempora quod minima dicta labore, aut placeat autem eveniet numquam blanditiis error assumenda vero alias? Laborum adipisci porro quasi numquam iure cupiditate sed officiis natus distinctio dicta iste, asperiores, odio nam corporis voluptatum fuga veniam amet enim minus explicabo illo repellat earum vel? Accusantium quia perferendis tempora tenetur non perspiciatis commodi. Labore illo alias dolorum odit nam excepturi soluta corporis quia, exercitationem totam nobis commodi?
+        </h1>
+    </div>
+
 
 </body>
 </html>
