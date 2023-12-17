@@ -1,6 +1,6 @@
 // set the dimensions and margins of the graph
 var width = 1000;
-var height = 1000;
+var height = 700;
 
 const DESC = {
   avg_slope_change_significant : {
@@ -23,7 +23,8 @@ var dataKeys = ["avg_slope_change_significant", "avg_mag_slope_change_significan
 var currentDataKey = dataKeys[currentDataKeyIndex];
 
 // append the svg object to the body of the page
-var svg = d3.select("#CirclePacking")
+var svg = d3
+  .select("#CirclePacking")
   .append("svg")
   .attr("width", width)
   .attr("height", height);
@@ -44,13 +45,10 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
   // Size scale for genres with adjusted range
   var size = d3.scaleLinear()
     .domain(d3.extent(data, function (d) { return +d[currentDataKey]; }))
-    .range([0.5, initialMaxSize]);  // initial circle size will be between 0.5 and 20 px wide
+    .range([0.01, initialMaxSize]);  // initial circle size will be between 0.5 and 20 px wide
 
-
-
-
-  // create a tooltip
-  var Tooltip = d3.select("#CirclePacking")
+  // Create a tooltip
+  var Tooltip1 = d3.select("#CirclePacking")
     .append("div")
     .style("opacity", 0)
     .attr("class", "tooltip")
@@ -60,22 +58,26 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
     .style("border-radius", "5px")
     .style("padding", "5px");
 
-  // Three functions that change the tooltip when the user hovers/moves/leaves a circle
-  var mouseover = function (d) {
-    Tooltip.style("opacity", 1);
+
+
+  // Three functions that change the tooltip when the user hovers/moves/leaves a circle –> !!!To display movie genre name + value!!!
+  var mouseover1 = function (d) {
+    Tooltip1.style("opacity", 1);
   };
-  var mousemove = function (d) {
-    Tooltip
+  var mousemove1 = function (d) {
+    Tooltip1
       .html('<u>' + d.genre + '</u>' + "<br>" + d[currentDataKey])
       .style("left", (d3.mouse(this)[0] + 20) + "px")
       .style("top", (d3.mouse(this)[1]) + "px");
   };
-  var mouseleave = function (d) {
-    Tooltip.style("opacity", 0);
+  var mouseleave1 = function (d) {
+    Tooltip1.style("opacity", 0);
   };
 
+  
+
   // Initialize the circle: all located at the center of the svg area
-  var node = svg.append("g")
+  var node1 = svg.append("g")
     .selectAll("circle")
     .data(data)
     .enter()
@@ -85,12 +87,14 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
     .attr("cx", width / 2)
     .attr("cy", height / 2)
     .style("fill", function (d) { return +d[currentDataKey] >= 0 ? "red" : "blue"; }) // Set fill color based on the sign
+    //.style("fill", function (d) { return "hsl(" + Math.random() * 360 + ",80%,50%)"; }) // Random fill color
+    .style("stroke", function (d) { return +d[currentDataKey] >= 0 ? "red" : "blue"; }) // Set stroke color based on the sign
     .style("fill-opacity", 0.8)
     .attr("stroke", "black")
     .style("stroke-width", 1)
-    .on("mouseover", mouseover)
-    .on("mousemove", mousemove)
-    .on("mouseleave", mouseleave)
+    .on("mouseover", mouseover1)
+    .on("mousemove", mousemove1)
+    .on("mouseleave", mouseleave1)
     .call(d3.drag()
       .on("start", dragstarted)
       .on("drag", dragged)
@@ -107,7 +111,7 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
   simulation
     .nodes(data)
     .on("tick", function (d) {
-      node
+      node1
         .attr("cx", function (d) { return d.x; })
         .attr("cy", function (d) { return d.y; });
     });
@@ -156,7 +160,7 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
     size.range([2, currentMaxSize]); // smaller initial size here
 
     // Update the circles with the new data
-    node
+    node1
       .attr("r", function (d) { return size(Math.abs(+d[currentDataKey])); })
       .style("fill", function (d) { return +d[currentDataKey] >= 0 ? "red" : "blue"; });
 
@@ -165,72 +169,128 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
   }
 
 
-  // -------------------------------------------
-  // Load data from CSV file for the second graph
-d3.csv("/data/web_data/movie_genre_per_year_significant.csv", function(error, secondGraphData) {
-  if (error) throw error;
+//-------------------Second Graph---------------
+// set the dimensions and margins of the graph
+var margin = { top: 10, right: 30, bottom: 30, left: 60 },
+width2 = 1000 - margin.left - margin.right,
+height2 = 600 - margin.top - margin.bottom;
 
-// Organize data by genre for easy access
-var secondGraphDataByGenre = d3.nest()
-.key(function(d) { return d.genre; })
-.entries(secondGraphData);
-  // Define the update function for the second graph
-  function updateSecondGraph(selectedGenre) {
-    // Clear existing second graph
-    d3.select("#DistributionPerYear").selectAll("*").remove();
+// append the svg object to the body of the page
+var svgDistributionPerYear = d3
+.select("#DistributionPerYear")
+.append("svg")
+.attr("width", width2 + margin.left + margin.right)
+.attr("height", height2 + margin.top + margin.bottom)
+.append("g")
+.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // Filter data for the selected genre
-    var selectedGenreData = secondGraphDataByGenre.get(selectedGenre);
 
-    // Create a new SVG for the second graph
-    var secondGraphSvg = d3.select("#DistributionPerYear")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", 200);
+// Read the data
+d3.csv("/data/web_data/movie_genre_per_year_significant.csv", function (data2){
 
-    // Set up scales for the line chart
-    var xScale = d3.scaleLinear()
-      .domain(d3.extent(selectedGenreData, function(d) { return +d.year; }))
-      .range([0, width]);
+// Define scales
+var x = d3.scaleLinear().domain([1888, 2016]).range([0, width2]);
+var y = d3.scaleLinear().domain([-0.2, 0.2]).range([height2, 0]);
 
-    var yScale = d3.scaleLinear()
-      .domain(d3.extent(selectedGenreData, function(d) { return +d[currentDataKey]; }))
-      .range([200, 0]);
 
-    // Define a line function
-    var line = d3.line()
-      .x(function(d) { return xScale(+d.year); })
-      .y(function(d) { return yScale(+d[currentDataKey]); });
+    // Append X and Y axes
+svgDistributionPerYear
+.append("g")
+.attr("transform", "translate(0," + height2 + ")")
+.call(d3.axisBottom(x));
 
-    // Add the line chart
-    secondGraphSvg.append("path")
-        .datum(selectedGenreData)
-        .attr("class", "line")
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 2)
-        .attr("d", line);
+svgDistributionPerYear.append("g").call(d3.axisLeft(y));
 
-    // Add circles for each data point
-    secondGraphSvg.selectAll("circle")
-      .data(selectedGenreData)
-      .enter().append("circle")
-      .attr("fill", "steelblue")
-      .attr("cx", function(d) { return xScale(+d.year); })
-      .attr("cy", function(d) { return yScale(+d[currentDataKey]); })
-      .attr("r", 4);
-  }
+// Initialize line and area
+var area = svgDistributionPerYear
+.append("path")
+.attr("fill", "#cce5df")
+.attr("stroke", "none");
 
-// What happens when a circle is hovered over?
-function mouseover(d) {
-  Tooltip.style("opacity", 1);
+var line = svgDistributionPerYear
+.append("path")
+.attr("fill", "none")
+.attr("stroke", "steelblue")
+.attr("stroke-width", 1.5);
 
-  if (!d.children) {
-    // Update the second graph based on the hovered genre
-    updateSecondGraph(d.data.key);
-  }
-}
+
+
+// Create a tooltip for the second graph
+var Tooltip2 = d3.select("#DistributionPerYear")
+.append("div")
+.style("opacity", 0)
+.attr("class", "tooltip")
+.style("background-color", "white")
+.style("border", "solid")
+.style("border-width", "2px")
+.style("border-radius", "5px")
+.style("padding", "5px");
+
+// Add event listeners to circles for hover
+svg.selectAll(".node")
+.on("mouseover", function (d) {
+  // Capture the genre associated with the hovered circle
+  var selectedGenre = d.genre;
+
+  // Filter data for the selected genre
+  var filteredData = data2.filter(function (entry) {
+    return entry.genre === selectedGenre;
+  });
+
+  // Update line and area based on the filtered data
+  updateLineChart(filteredData);
+
+  // Show tooltip
+  mouseover1.call(this, d);
 })
-// -------------------------------------------
+.on("mousemove", mousemove1)
+.on("mouseleave", function () {
+  // Restore the original line and area when the mouse leaves
+  //updateLineChart(data2);
 
+  // Hide tooltip
+  //mouseleave1.call(this);
+})
+.on("click", function (d) {
+  // Your existing click logic here, if needed
+});
+
+// Function to update line chart based on the provided data
+function updateLineChart(data2) {
+  //console.log("Data:", data2); // Add this line to log the data
+  // Clear existing data points
+  svgDistributionPerYear.selectAll(".node").remove();
+  
+  // Add new data points based on the provided data
+  svgDistributionPerYear.selectAll(".node")
+    .data(data2)
+    .enter()
+    .append("circle")
+    .attr("class", "node")
+    .attr("cx", function (d) { return x(d.year); })
+    .attr("cy", function (d) { return y(+d.avg_slope_change_significant); })
+    .attr("r", 1)  // Adjust the radius as needed
+    .style("fill", "blue")  // Adjust the fill color as needed
+    .datum(function (d) { return d; });  // Attach data to circles
+
+    // Update area path
+    area.datum(data2).attr("d", d3.area()
+        .x(function (d) { return x(d.year); })
+        .y0(function (d) {var lowerBound = (+d.avg_slope_change_significant-1.645*d.se_slope_change_significant);
+          return y(isFinite(lowerBound) ? lowerBound : 0); // Set the bottom of the filled region to the lower bound
+          })
+        .y1(function (d) {
+          var upperBound = (+d.avg_slope_change_significant+1.645*d.se_slope_change_significant);
+          return y(isFinite(upperBound) ? upperBound : 0); // Set the top of the filled region to the upper bound
+        })
+    );
+
+    // Update line path
+    line.datum(data2).attr("d", d3.line()
+        .x(function (d) { return x(d.year); })
+        .y(function (d) { return y(+d.avg_slope_change_significant); })
+    );
+}
+
+});
 });
