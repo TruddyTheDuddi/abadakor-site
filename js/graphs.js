@@ -268,7 +268,7 @@ function updateLineChart(data2) {
     .append("circle")
     .attr("class", "node")
     .attr("cx", function (d) { return x(d.year); })
-    .attr("cy", function (d) { return y(+d.avg_slope_change_significant); })
+    .attr("cy", function (d) { return y(+d.avg_mag_slope_change_significant); })
     .attr("r", 1)  // Adjust the radius as needed
     .style("fill", "blue")  // Adjust the fill color as needed
     .datum(function (d) { return d; });  // Attach data to circles
@@ -276,11 +276,11 @@ function updateLineChart(data2) {
     // Update area path
     area.datum(data2).attr("d", d3.area()
         .x(function (d) { return x(d.year); })
-        .y0(function (d) {var lowerBound = (+d.avg_slope_change_significant-1.645*d.se_slope_change_significant);
+        .y0(function (d) {var lowerBound = (+d.avg_mag_slope_change_significant-1.645*d.se_slope_change_magnitude_significant);
           return y(isFinite(lowerBound) ? lowerBound : 0); // Set the bottom of the filled region to the lower bound
           })
         .y1(function (d) {
-          var upperBound = (+d.avg_slope_change_significant+1.645*d.se_slope_change_significant);
+          var upperBound = (+d.avg_mag_slope_change_significant+1.645*d.se_slope_change_magnitude_significant);
           return y(isFinite(upperBound) ? upperBound : 0); // Set the top of the filled region to the upper bound
         })
     );
@@ -288,7 +288,7 @@ function updateLineChart(data2) {
     // Update line path
     line.datum(data2).attr("d", d3.line()
         .x(function (d) { return x(d.year); })
-        .y(function (d) { return y(+d.avg_slope_change_significant); })
+        .y(function (d) { return y(+d.avg_mag_slope_change_significant); })
     );
 }
 
