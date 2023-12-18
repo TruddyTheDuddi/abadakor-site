@@ -1,5 +1,20 @@
 const FILE_PATH_TMDB = "https://image.tmdb.org/t/p/w185/"; // or w342
 
+// Start the website
+const btnStart = document.getElementById("btnStart");
+btnStart.addEventListener("click", function() {
+    let targetElement = document.getElementById("search_area");
+    let elementRect = targetElement.getBoundingClientRect();
+    let absoluteElementTop = elementRect.top + window.scrollY;
+    let middle = absoluteElementTop - (window.innerHeight / 2) + (elementRect.height / 2);
+    
+    // Scroll to the element
+    window.scrollTo({
+      top: middle,
+      behavior: 'smooth' // Optional: defines smooth scrolling
+    });
+});
+
 // Intro data to move
 let introData = [
     {
@@ -352,7 +367,7 @@ function search_name(name) {
     // Classify and complete the list of movies per category
     dfs.movie_impacts.filter(d => d.name === name).map(m => {
         let groupYear = m.group_year;
-        console.log(groupYear);
+        console.log("Group year"+groupYear);
 
         // Merge with the movies dictionary
         let movie_full = dfs.movies[m.movie_id];
@@ -363,6 +378,12 @@ function search_name(name) {
             return;
         }
 
+        let nameDataThisYear = nameData.find(d => d.year == groupYear);
+        if(nameDataThisYear == null){
+            console.error("Name data not found for year " + groupYear + ", filling with 0");
+            nameDataThisYear = { percentage: 0 };
+        }
+
         // Create a struct for the movie to add to the selectedMovs
         let struct = {
             imdb_id: movie_full.imdb_id,
@@ -371,7 +392,7 @@ function search_name(name) {
             averageRating: movie_full.rating,
             numVotes: movie_full.votes,
             poster_url: movie_full.poster_url,
-            percentage: nameData.find(d => d.year == groupYear).percentage // Get the percentage for this group year for the Y position on graph
+            percentage: nameDataThisYear.percentage // Get the percentage for this group year for the Y position on graph
         }
 
         // Initialize the array for the year if it doesn't exist in the category
@@ -416,12 +437,12 @@ let suggester = {
         "George", "Trinity", "Max", "Ethan", "Isabella", "Ace", "Tiffany", "Luca",
         "Leo", "Andy", "Lilly", "Robert", "William", "David", "Richard", "Ryan", 
         "Christopher", "Daniel", "Donald", "Luna", "Alison", "Robin", "Cooper",
-        "Sophie", "Frank", "Jack", "Oliver", "Maria", "Bella"
+        "Sophie", "Frank", "Jack", "Oliver", "Maria", "Bella", "Rick"
     ],
 
     // CHAD VIP NAMES!! These names are so cool we'll add a special effect
     specialNamesHehe : [
-        "Trudy", "Bob", "Daniel", "Luca", "Max", "Maria", "Tracy", "Jack", "Mia"
+        "Trudy", "Bob", "Daniel", "Luca", "Max", "Maria", "Tracy", "Jack", "Mia", "Rick"
     ],
 
     /**
@@ -830,7 +851,7 @@ let tooltipper = {
             let poster = document.createElement("div");
             poster.classList.add("poster");
             let posterImg = document.createElement("img");
-            if(movie.poster_url == null){
+            if(movie.poster_url == ""){
                 poster.classList.add("no_img");
             } else {
                 posterImg.src = FILE_PATH_TMDB + movie.poster_url;
