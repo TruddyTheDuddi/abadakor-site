@@ -374,7 +374,7 @@ function search_name(name) {
 
         // We need to double check if movie exists! Shouldn't really happen. Warn user
         if (movie_full == null) {
-            console.error("Movie not found for ID " + m.movie_id);
+            console.log("Movie not found for ID " + m.movie_id);
             return;
         }
 
