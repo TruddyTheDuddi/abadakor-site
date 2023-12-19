@@ -19,7 +19,7 @@
     var svg = d3.select("#my_dataviz")
     .append("svg")
         .attr("width", 900)
-        .attr("height", 900)
+        .attr("height", 600)
 
     // Load data from external CSV file
     d3.csv("data/top10_name_top5_genre.csv", function(error, data) {
@@ -28,17 +28,27 @@
         // A scale that gives a X target position for each group
         var x = d3.scaleOrdinal()
             .domain(d3.map(data, function(d) { return d.genre; }).keys())
-            .range([50, 250, 400, 520, 630])
+            .range([200, 450, 550, 670, 780])
 
-        // Size scale for countries
+        // A scale that gives a X target position for each group
+        var y = d3.scaleOrdinal()
+            .domain(d3.map(data, function(d) { return d.genre; }).keys())
+            .range([420, 270, 520, 270, 470])
+
+        // Size scale for number of movies
         var size = d3.scaleLinear()
             .domain([103, 701])
             .range([12,90])  // circle will be between 7 and 55 px wide
 
-        // A color scale
-        var color = d3.scaleOrdinal()
+        // A color scale for genre
+        var color_genre = d3.scaleOrdinal()
             .domain(d3.map(data, function(d) { return d.genre; }).keys())
             .range(["#F8766D", "#00BA38", "#619CFF", "#1A281F", "#A18276"])
+
+        // // A color scale for gender
+        // var color_gender = d3.scaleOrdinal()
+        //     .domain(d3.map(data, function(d) { return d.gender; }).keys())
+        //     .range(["#619CFF", "#FC8EAC", "#A29C9B"])
 
         // Initialize the circle and text elements
         var group = svg.append("g");
@@ -54,7 +64,7 @@
         // Append circles to the nodes
         var circles = nodes.append("circle")
             .attr("r", function(d){ return size(d.nb_movies)})
-            .style("fill", function(d){ return color(d.genre)})
+            .style("fill", function(d){ return color_genre(d.genre)})
             .style("fill-opacity", 0.8)
             .attr("stroke", "black")
             .style("stroke-width", 4)
@@ -77,14 +87,36 @@
             .text(function(d) { return d.nb_movies; })
             .attr("text-anchor", "middle")
             .attr("dy", "2.0em")  // Adjust the vertical positioning
-            .style("fill", "white")
+            .style("fill", "black")
             .style("pointer-events", "none")
             .style("font-size", function(d) { return (d.nb_movies/30) + "px"; });
+
+            // Add legends
+        var legend = svg.selectAll(".legend")
+            .data(color_genre.domain())
+            .enter().append("g")
+            .attr("class", "legend")
+            .attr("transform", function(d, i) {
+                return "translate(380," + (i * 20 + 20) + ")";
+            });
+
+        legend.append("rect")
+            .attr("x", width - 18)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", color_genre);
+
+        legend.append("text")
+            .attr("x", width - 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "end")
+            .text(function(d) { return d; });
             
         // Features of the forces applied to the nodes:
         var simulation = d3.forceSimulation()
-            .force("x", d3.forceX().strength(0.5).x( function(d){ return x(d.genre) } ))
-            .force("y", d3.forceY().strength(0.1).y( height/2 ))
+            .force("x", d3.forceX().strength(0.2).x( function(d){ return x(d.genre) } ))
+            .force("y", d3.forceY().strength(0.1).y( function(d){ return y(d.genre) } ))
             .force("center", d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
             .force("charge", d3.forceManyBody().strength(1)) // Nodes are attracted one each other of value is > 0
             .force("collide", d3.forceCollide().strength(.1).radius(function(d){ return size(d.nb_movies)*1.1}).iterations(1)) // Force that avoids circle overlapping
@@ -192,14 +224,6 @@
         .attr("dy", ".35em")
         .style("fill", "white")
         .style("pointer-events", "none");
-    
-    // Append a second text label with adjusted positioning
-    var labels2 = nodes.append("text")
-        .text(function(d) { return d.name; })
-        .attr("text-anchor", "middle")
-        .attr("dy", "1.0em")  // Adjust the vertical positioning
-        .style("fill", "white")
-        .style("pointer-events", "none");
 
     // Features of the forces applied to the nodes:
     var simulation = d3.forceSimulation()
@@ -221,10 +245,6 @@
         labels
             .attr("x", function(d) { return d.x; })
             .attr("y", function(d) { return d.y; });
-
-        labels2
-          .attr("x", function(d) { return d.x; })
-          .attr("y", function(d) { return d.y; }); // Adjust the vertical positioning
         });
 
     // What happens when a circle is dragged?
@@ -245,6 +265,125 @@
 
 </script> -->
 
+
+<!-- <!DOCTYPE html>
+<meta charset="utf-8">
+
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<div id="my_dataviz"></div>
+
+<script>
+    var width = 225;
+    var height = 225;
+
+    var svg = d3.select("#my_dataviz")
+        .append("svg")
+        .attr("width", width*2)
+        .attr("height", height*2);
+
+    var data = [
+        { "name": "A", "group": 1 }, { "name": "B", "group": 1 }, { "name": "C", "group": 1 },
+        { "name": "D", "group": 1 }, { "name": "E", "group": 1 }, { "name": "F", "group": 1 },
+        { "name": "G", "group": 2 }, { "name": "H", "group": 2 }, { "name": "I", "group": 2 },
+        { "name": "J", "group": 2 }, { "name": "K", "group": 2 }, { "name": "L", "group": 2 },
+        { "name": "M", "group": 3 }, { "name": "N", "group": 3 }, { "name": "O", "group": 3 }
+    ];
+
+    var x = d3.scaleOrdinal()
+        .domain([1, 2, 3])
+        .range([50, 200, 340]);
+
+    var color = d3.scaleOrdinal()
+        .domain([1, 2, 3])
+        .range(["#F8766D", "#00BA38", "#619CFF"]);
+
+    var group = svg.append("g");
+
+    var nodes = group.selectAll("g")
+        .data(data)
+        .enter()
+        .append("g")
+        .attr("transform", function(d) {
+            return "translate(" + (width / 2) + "," + (height / 2) + ")";
+        });
+
+    var circles = nodes.append("circle")
+        .attr("r", 29)
+        .style("fill", function(d) { return color(d.group); })
+        .style("fill-opacity", 0.8)
+        .attr("stroke", "black")
+        .style("stroke-width", 4)
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var labels = nodes.append("text")
+        .text(function(d) { return d.name; })
+        .attr("text-anchor", "middle")
+        .attr("dy", ".35em")
+        .style("fill", "white")
+        .style("pointer-events", "none");
+
+    // Add legends
+    var legend = svg.selectAll(".legend")
+        .data(color.domain())
+        .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) {
+            return "translate(200," + i * 20 + ")";
+        });
+
+    legend.append("rect")
+        .attr("x", width - 18)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", color);
+
+    legend.append("text")
+        .attr("x", width - 24)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .text(function(d) { return "Group " + d; });
+
+    var simulation = d3.forceSimulation()
+        .force("x", d3.forceX().strength(0.5).x(function(d) { return x(d.group); }))
+        .force("y", d3.forceY().strength(0.1).y(height / 2))
+        .force("center", d3.forceCenter().x(width / 2).y(height / 2))
+        .force("charge", d3.forceManyBody().strength(1))
+        .force("collide", d3.forceCollide().strength(.1).radius(32).iterations(1));
+
+    simulation
+        .nodes(data)
+        .on("tick", function(d) {
+            circles
+                .attr("cx", function(d) { return d.x; })
+                .attr("cy", function(d) { return d.y; });
+
+            labels
+                .attr("x", function(d) { return d.x; })
+                .attr("y", function(d) { return d.y; });
+        });
+
+    function dragstarted(d) {
+        if (!d3.event.active) simulation.alphaTarget(.03).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) simulation.alphaTarget(.03);
+        d.fx = null;
+        d.fy = null;
+    }
+</script> -->
 
 
 
