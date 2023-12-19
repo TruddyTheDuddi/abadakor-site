@@ -38,7 +38,7 @@
         // A color scale
         var color = d3.scaleOrdinal()
             .domain(d3.map(data, function(d) { return d.genre; }).keys())
-            .range(["#F8766D", "#00BA38", "#619CFF", "#1A281F", "#635255"])
+            .range(["#F8766D", "#00BA38", "#619CFF", "#1A281F", "#A18276"])
 
         // Initialize the circle and text elements
         var group = svg.append("g");
@@ -69,8 +69,18 @@
             .attr("text-anchor", "middle")
             .attr("dy", ".35em")
             .style("fill", "white")
-            .style("pointer-events", "none");
+            .style("pointer-events", "none")
+            .style("font-size", function(d) { return (d.nb_movies/12) + "px"; }); // Set font size based on the radius
 
+        // Append a second text label with adjusted positioning
+        var labels2 = nodes.append("text")
+            .text(function(d) { return d.nb_movies; })
+            .attr("text-anchor", "middle")
+            .attr("dy", "2.0em")  // Adjust the vertical positioning
+            .style("fill", "white")
+            .style("pointer-events", "none")
+            .style("font-size", function(d) { return (d.nb_movies/30) + "px"; });
+            
         // Features of the forces applied to the nodes:
         var simulation = d3.forceSimulation()
             .force("x", d3.forceX().strength(0.5).x( function(d){ return x(d.genre) } ))
@@ -89,6 +99,10 @@
                 .attr("cy", function(d){ return d.y; });
 
             labels
+                .attr("x", function(d) { return d.x; })
+                .attr("y", function(d) { return d.y; });
+
+            labels2
                 .attr("x", function(d) { return d.x; })
                 .attr("y", function(d) { return d.y; });
             });
@@ -115,135 +129,122 @@
 
 
 <!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Script testing</title>
+<meta charset="utf-8">
 
-    <script src="https://d3js.org/d3.v4.js"></script>
-    <div id="my_dataviz"></div>    
-</head>
-<body>
+<script src="https://d3js.org/d3.v4.js"></script>
 
-    <script>
+<div id="my_dataviz"></div>
 
-        // set the dimensions and margins of the graph
-        var width = 900
-        var height = 450
+<script>
 
-        // append the svg object to the body of the page
-        var svg = d3.select("#my_dataviz")
-          .append("svg")
-            .attr("width", 900)
-            .attr("height", 450)    
+    // set the dimensions and margins of the graph
+    var width = 225
+    var height = 225
 
-        // Load data from external CSV file
-        d3.csv("data/top10_name_top5_genre.csv", function(error, data) {
-            if (error) throw error;
+    // append the svg object to the body of the page
+    var svg = d3.select("#my_dataviz")
+    .append("svg")
+        .attr("width", 450)
+        .attr("height", 450)
 
-            // A scale that gives an X target position for each genre
-            var x = d3.scaleOrdinal()
-                .domain(d3.map(data, function(d) { return d.genre; }).keys())
-                .range([50, 250, 400, 550, 700])
+    // create dummy data -> just one element per circle
+    var data = [{ "name": "A", "group": 1 }, { "name": "B", "group": 1 }, { "name": "C", "group": 1 }, { "name": "D", "group": 1 }, { "name": "E", "group": 1 }, { "name": "F", "group": 1 },
+                { "name": "G", "group": 2 }, { "name": "H", "group": 2 }, { "name": "I", "group": 2 }, { "name": "J", "group": 2 }, { "name": "K", "group": 2 }, { "name": "L", "group": 2 },
+                { "name": "M", "group": 3 }, { "name": "N", "group": 3 }, { "name": "O", "group": 3 }]
 
-            // Size scale for countries
-            var size = d3.scaleLinear()
-                .domain([103, 701])
-                .range([12,70])  // circle will be between 7 and 55 px wide
+    // A scale that gives a X target position for each group
+    var x = d3.scaleOrdinal()
+    .domain([1, 2, 3])
+    .range([50, 200, 340])
 
-            // A color scale
-            var color = d3.scaleOrdinal()
-                .domain(d3.map(data, function(d) { return d.genre; }).keys())
-                .range(["#F8766D", "#00BA38", "#619CFF", "#1A281F", "#635255"])
+    // A color scale
+    var color = d3.scaleOrdinal()
+    .domain([1, 2, 3])
+    .range([ "#F8766D", "#00BA38", "#619CFF"])
 
-            // Initialize the circle: all located at the center of the svg area
-            var node = svg.append("g")
-                .selectAll("circle")
-                .data(data)
-                .enter()
-                .append("circle")
-                    .attr("r", function(d){ return size(d.nb_movies)})
-                    .attr("cx", width / 2)
-                    .attr("cy", height / 2)
-                    .style("fill", function(d){ return color(d.genre)})
-                    .style("fill-opacity", 0.8)
-                    .attr("stroke", "black")
-                    .style("stroke-width", 4)
-                    .call(d3.drag() // call specific function when circle is dragged
-                        .on("start", dragstarted)
-                        .on("drag", dragged)
-                        .on("end", dragended));
+    // Initialize the circle and text elements
+    var group = svg.append("g");
 
-            // // Initialize the circle and text elements
-            // var group = svg.append("g");
+    var nodes = group.selectAll("g")
+    .data(data)
+    .enter()
+    .append("g")
+    .attr("transform", function(d) {
+        return "translate(" + (width / 2) + "," + (height / 2) + ")";
+    });
 
-            // var nodes = group.selectAll("g")
-            // .data(data)
-            // .enter()
-            // .append("g")
-            // .attr("transform", function(d) {
-            //     return "translate(" + (width / 2) + "," + (height / 2) + ")";
-            // });
+    // Append circles to the nodes
+    var circles = nodes.append("circle")
+        .attr("r", 29)
+        .style("fill", function(d){ return color(d.group)})
+        .style("fill-opacity", 0.8)
+        .attr("stroke", "black")
+        .style("stroke-width", 4)
+        .call(d3.drag() // call specific function when circle is dragged
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
 
-            // // Append circles to the nodes
-            // var circles = nodes.append("circle")
-            //     .attr("r", function(d){ return size(d.nb_movies)})
-            //     .style("fill", function(d){ return color(d.char_name)})
-            //     .style("fill-opacity", 0.8)
-            //     .attr("stroke", "black")
-            //     .style("stroke-width", 4)
-            //     .call(d3.drag() // call specific function when circle is dragged
-            //         .on("start", dragstarted)
-            //         .on("drag", dragged)
-            //         .on("end", dragended));
+    // Append text labels to the nodes
+    var labels = nodes.append("text")
+        .text(function(d) { return d.name; })
+        .attr("text-anchor", "middle")
+        .attr("dy", ".35em")
+        .style("fill", "white")
+        .style("pointer-events", "none");
+    
+    // Append a second text label with adjusted positioning
+    var labels2 = nodes.append("text")
+        .text(function(d) { return d.name; })
+        .attr("text-anchor", "middle")
+        .attr("dy", "1.0em")  // Adjust the vertical positioning
+        .style("fill", "white")
+        .style("pointer-events", "none");
 
-            // // Append text labels to the nodes
-            // var labels = nodes.append("text")
-            //     .text(function(d) { return d.char_name; })
-            //     .attr("text-anchor", "middle")
-            //     .attr("dy", ".35em")
-            //     .style("fill", "white")
-            //     .style("pointer-events", "none");
+    // Features of the forces applied to the nodes:
+    var simulation = d3.forceSimulation()
+        .force("x", d3.forceX().strength(0.5).x( function(d){ return x(d.group) } ))
+        .force("y", d3.forceY().strength(0.1).y( height/2 ))
+        .force("center", d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
+        .force("charge", d3.forceManyBody().strength(1)) // Nodes are attracted one each other of value is > 0
+        .force("collide", d3.forceCollide().strength(.1).radius(32).iterations(1)) // Force that avoids circle overlapping
 
-            // Features of the forces applied to the nodes:
-            var simulation = d3.forceSimulation()
-                .force("x", d3.forceX().strength(0.5).x( function(d){ return x(d.genre) } ))
-                .force("y", d3.forceY().strength(0.1).y( height/2 ))
-                .force("center", d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
-                .force("charge", d3.forceManyBody().strength(1)) // Nodes are attracted one each other of value is > 0
-                .force("collide", d3.forceCollide().strength(.1).radius(function(d){ return size(d.nb_movies)*1.1}).iterations(1)) // Force that avoids circle overlapping
+    // Apply these forces to the nodes and update their positions.
+    // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
+    simulation
+        .nodes(data)
+        .on("tick", function(d){
+        circles
+            .attr("cx", function(d){ return d.x; })
+            .attr("cy", function(d){ return d.y; });
 
-            // Apply these forces to the nodes and update their positions.
-            // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
-            simulation
-                .nodes(data)
-                .on("tick", function(d){
-                    node
-                        .attr("cx", function(d){ return d.x; })
-                        .attr("cy", function(d){ return d.y; })
-                });
+        labels
+            .attr("x", function(d) { return d.x; })
+            .attr("y", function(d) { return d.y; });
 
-            // What happens when a circle is dragged?
-            function dragstarted(d) {
-                if (!d3.event.active) simulation.alphaTarget(.03).restart();
-                d.fx = d.x;
-                d.fy = d.y;
-            }
-            function dragged(d) {
-                d.fx = d3.event.x;
-                d.fy = d3.event.y;
-            }
-            function dragended(d) {
-                if (!d3.event.active) simulation.alphaTarget(.03);
-                d.fx = null;
-                d.fy = null;
-            }
+        labels2
+          .attr("x", function(d) { return d.x; })
+          .attr("y", function(d) { return d.y; }); // Adjust the vertical positioning
         });
 
-    </script>
+    // What happens when a circle is dragged?
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(.03).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(.03);
+    d.fx = null;
+    d.fy = null;
+    }
 
-</body>
-</html> -->
+</script> -->
+
 
 
 
