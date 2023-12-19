@@ -37,18 +37,13 @@
 
         // Size scale for number of movies
         var size = d3.scaleLinear()
-            .domain([103, 701])
-            .range([12,90])  // circle will be between 7 and 55 px wide
+            .domain([0.0027, 0.007477])
+            .range([20,65])  // circle will be between 7 and 55 px wide
 
         // A color scale for genre
         var color_genre = d3.scaleOrdinal()
             .domain(d3.map(data, function(d) { return d.genre; }).keys())
             .range(["#F8766D", "#00BA38", "#619CFF", "#1A281F", "#A18276"])
-
-        // // A color scale for gender
-        // var color_gender = d3.scaleOrdinal()
-        //     .domain(d3.map(data, function(d) { return d.gender; }).keys())
-        //     .range(["#619CFF", "#FC8EAC", "#A29C9B"])
 
         // Initialize the circle and text elements
         var group = svg.append("g");
@@ -63,7 +58,7 @@
 
         // Append circles to the nodes
         var circles = nodes.append("circle")
-            .attr("r", function(d){ return size(d.nb_movies)})
+            .attr("r", function(d){ return size(d.percentage)})
             .style("fill", function(d){ return color_genre(d.genre)})
             .style("fill-opacity", 0.8)
             .attr("stroke", "black")
@@ -80,16 +75,16 @@
             .attr("dy", ".35em")
             .style("fill", "white")
             .style("pointer-events", "none")
-            .style("font-size", function(d) { return (d.nb_movies/12) + "px"; }); // Set font size based on the radius
+            .style("font-size", function(d) { return (size(d.percentage)*0.8) + "px"; }); // Set font size based on the radius
 
         // Append a second text label with adjusted positioning
         var labels2 = nodes.append("text")
             .text(function(d) { return d.nb_movies; })
             .attr("text-anchor", "middle")
             .attr("dy", "2.0em")  // Adjust the vertical positioning
-            .style("fill", "black")
+            .style("fill", "rgba(255, 255, 255, 0.6)")
             .style("pointer-events", "none")
-            .style("font-size", function(d) { return (d.nb_movies/30) + "px"; });
+            .style("font-size", function(d) { return (size(d.percentage)*0.3) + "px"; });
 
             // Add legends
         var legend = svg.selectAll(".legend")
@@ -119,7 +114,7 @@
             .force("y", d3.forceY().strength(0.1).y( function(d){ return y(d.genre) } ))
             .force("center", d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
             .force("charge", d3.forceManyBody().strength(1)) // Nodes are attracted one each other of value is > 0
-            .force("collide", d3.forceCollide().strength(.1).radius(function(d){ return size(d.nb_movies)*1.1}).iterations(1)) // Force that avoids circle overlapping
+            .force("collide", d3.forceCollide().strength(.1).radius(function(d){ return size(d.percentage)*1.1}).iterations(1)) // Force that avoids circle overlapping
 
         // Apply these forces to the nodes and update their positions.
         // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
