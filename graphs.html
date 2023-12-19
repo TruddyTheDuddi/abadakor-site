@@ -32,12 +32,34 @@
     <div id="CirclePacking"></div>
     <!-- Add a slider for variable selection -->
     <div>
-        <label for="variableSlider">Select Variable to display:</label>
+        <!-- Add this HTML code for the checkbox menu
+<div id="checkboxMenu">
+    <label>
+      <input type="checkbox" id="checkboxAvgSlope" onclick="updateDisplayedValue(0)">
+      Average Slope Change
+    </label>
+    <label>
+      <input type="checkbox" id="checkboxAvgMagSlope" onclick="updateDisplayedValue(1)">
+      Average Slope Change Magnitude
+    </label>
+    <label>
+      <input type="checkbox" id="checkboxPropNames" onclick="updateDisplayedValue(2)">
+      Names Significant per Movie Genre
+    </label>
+  </div> -->
+  <!-- Add this HTML code for the size range slider -->
+<!-- <div id="sizeRangeSlider">
+    <label for="sizeRange">Circle Size Range:</label>
+    <input type="range" id="sizeRange" min="1" max="100" value="50" oninput="updateSizeRange(this.value)">
+    <span id="sizeRangeValue">50</span>
+  </div> -->
         <input type="range" id="variableSlider" min="0" max="2" step="1" value="0" oninput="changeDisplayedValue(this.value)">
         <br>
         <span id="TitleSelectedVariable"></span>
         <br>
         <small id="DescriptionSelectedVariable"></small>
+
+
     </div>
 
     <style>

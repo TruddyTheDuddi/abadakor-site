@@ -1,6 +1,6 @@
 // set the dimensions and margins of the graph
-var width = 1000;
-var height = 700;
+var width = 750;
+var height = 750;
 
 const DESC = {
   avg_slope_change_significant : {
@@ -15,7 +15,7 @@ const DESC = {
     title: "Names significant per movie genre",
     desc: "Proportion of significantly impacted names in a given movie genre divided by the number of film in the corrresponding genre"
   }
-}
+} 
 
 // Global variable to store the current data key
 var currentDataKeyIndex = 0;
@@ -40,7 +40,7 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
 
 
   // Initial max size associated with the first data key
-  var initialMaxSize = 20;
+  var initialMaxSize = 50;
 
   // Size scale for genres with adjusted range
   var size = d3.scaleLinear()
@@ -86,7 +86,7 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
     .attr("r", function (d) { return size(Math.abs(+d[currentDataKey])); }) // Using Math.abs to get the absolute value
     .attr("cx", width / 2)
     .attr("cy", height / 2)
-    .style("fill", function (d) { return +d[currentDataKey] >= 0 ? "red" : "blue"; }) // Set fill color based on the sign
+    .style("fill", function (d) { return +d[currentDataKey] >= 0 ? "rgb(255, 160, 160)" : "lightblue"; }) // Set fill color based on the sign
     //.style("fill", function (d) { return "hsl(" + Math.random() * 360 + ",80%,50%)"; }) // Random fill color
     .style("stroke", function (d) { return +d[currentDataKey] >= 0 ? "red" : "blue"; }) // Set stroke color based on the sign
     .style("fill-opacity", 0.8)
@@ -100,11 +100,34 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
       .on("drag", dragged)
       .on("end", dragended));
 
+  var textLabels = svg.append("g")
+    .selectAll("text")
+    .data(data)
+    .enter()
+    .append("text")
+    .text(function (d) { return d.genre; })
+    .attr("x", function (d) { return width / 2; })
+    .attr("y", function (d) { return height / 2; })
+    .attr("text-anchor", "middle")
+    .attr("dy", ".35em")
+    .attr("font-size", 13)
+    .attr("fill", "black");
+
+
   // Features of the forces applied to the nodes:
   var simulation = d3.forceSimulation()
     .force("center", d3.forceCenter().x(width / 2).y(height / 2))
     .force("charge", d3.forceManyBody().strength(.1))
     .force("collide", d3.forceCollide().strength(.2).radius(function (d) { return (size(Math.abs(+d[currentDataKey])) + 3); }).iterations(1));
+
+// // Features of the forces applied to the nodes:
+// var simulation = d3.forceSimulation()
+//   .force("center", d3.forceCenter().x(width / 2).y(height / 2))
+//   .force("charge", d3.forceManyBody().strength(.1))
+//   .force("collide", d3.forceCollide().radius(function (d) {
+//     return (size(Math.abs(+d[currentDataKey])) + 3);
+//   }).iterations(1));
+
 
   // Apply these forces to the nodes and update their positions.
   // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
@@ -114,7 +137,13 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
       node1
         .attr("cx", function (d) { return d.x; })
         .attr("cy", function (d) { return d.y; });
+        // Update text label positions
+      textLabels
+        .attr("x", function (d) { return d.x; })
+        .attr("y", function (d) { return d.y; });
     });
+
+
 
   // What happens when a circle is dragged?
   function dragstarted(d) {
@@ -162,18 +191,55 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
     // Update the circles with the new data
     node1
       .attr("r", function (d) { return size(Math.abs(+d[currentDataKey])); })
-      .style("fill", function (d) { return +d[currentDataKey] >= 0 ? "red" : "blue"; });
+      .style("fill", function (d) { return +d[currentDataKey] >= 0 ? "rgb(255, 160, 160)" : "lightblue"; });
 
     // Restart the simulation with the updated data
     simulation.nodes(data).alpha(0.3).restart();
   }
+  // Function to update the size range of the circles
+  window.updateSizeRange = function(value) {
+    // Update the size range
+    var sizeRange = +value;
+  
+    // Update the circles with the new size range
+    node1.attr("r", function (d) { return size(Math.abs(+d[currentDataKey])) * sizeRange / 50; });
+  
+    // Restart the simulation
+    simulation.nodes(data).alpha(0.3).restart();
+  
+    // Update the displayed size range value
+    document.getElementById("sizeRangeValue").innerText = value;
+  };
+
+  // Function to change the displayed data for checkboxes
+  window.updateDisplayedValue = function(value) {
+    var checkboxId = "";
+    switch (value) {
+      case 0:
+        checkboxId = "checkboxAvgSlope";
+        break;
+      case 1:
+        checkboxId = "checkboxAvgMagSlope";
+        break;
+      case 2:
+        checkboxId = "checkboxPropNames";
+        break;
+    }
+  
+    // Update the data key based on checkbox status
+    currentDataKey = document.getElementById(checkboxId).checked ? dataKeys[value] : null;
+  
+    // Update the visualization
+    updateData();
+    updateSelectedVariableText();
+  };
 
 
 //-------------------Second Graph---------------
 // set the dimensions and margins of the graph
 var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-width2 = 1000 - margin.left - margin.right,
-height2 = 600 - margin.top - margin.bottom;
+width2 = 700 - margin.left - margin.right,
+height2 = 550 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svgDistributionPerYear = d3
@@ -214,18 +280,6 @@ var line = svgDistributionPerYear
 .attr("stroke-width", 1.5);
 
 
-
-// Create a tooltip for the second graph
-var Tooltip2 = d3.select("#DistributionPerYear")
-.append("div")
-.style("opacity", 0)
-.attr("class", "tooltip")
-.style("background-color", "white")
-.style("border", "solid")
-.style("border-width", "2px")
-.style("border-radius", "5px")
-.style("padding", "5px");
-
 // Add event listeners to circles for hover
 svg.selectAll(".node")
 .on("mouseover", function (d) {
@@ -260,6 +314,7 @@ function updateLineChart(data2) {
   //console.log("Data:", data2); // Add this line to log the data
   // Clear existing data points
   svgDistributionPerYear.selectAll(".node").remove();
+
   
   // Add new data points based on the provided data
   svgDistributionPerYear.selectAll(".node")
@@ -268,7 +323,7 @@ function updateLineChart(data2) {
     .append("circle")
     .attr("class", "node")
     .attr("cx", function (d) { return x(d.year); })
-    .attr("cy", function (d) { return y(+d.avg_mag_slope_change_significant); })
+    .attr("cy", function (d) { return y(+d.avg_slope_change_significant); })
     .attr("r", 1)  // Adjust the radius as needed
     .style("fill", "blue")  // Adjust the fill color as needed
     .datum(function (d) { return d; });  // Attach data to circles
@@ -276,11 +331,11 @@ function updateLineChart(data2) {
     // Update area path
     area.datum(data2).attr("d", d3.area()
         .x(function (d) { return x(d.year); })
-        .y0(function (d) {var lowerBound = (+d.avg_mag_slope_change_significant-1.645*d.se_slope_change_magnitude_significant);
+        .y0(function (d) {var lowerBound = (+d.avg_slope_change_significant-1.96*d.se_slope_change_significant);
           return y(isFinite(lowerBound) ? lowerBound : 0); // Set the bottom of the filled region to the lower bound
           })
         .y1(function (d) {
-          var upperBound = (+d.avg_mag_slope_change_significant+1.645*d.se_slope_change_magnitude_significant);
+          var upperBound = (+d.avg_slope_change_significant+1.96*d.se_slope_change_significant);
           return y(isFinite(upperBound) ? upperBound : 0); // Set the top of the filled region to the upper bound
         })
     );
@@ -288,9 +343,42 @@ function updateLineChart(data2) {
     // Update line path
     line.datum(data2).attr("d", d3.line()
         .x(function (d) { return x(d.year); })
-        .y(function (d) { return y(+d.avg_mag_slope_change_significant); })
+        .y(function (d) { return y(+d.avg_slope_change_significant); })
     );
 }
 
+// Create a tooltip for the second graph
+var TooltipLine = d3.select("#DistributionPerYear")
+.append("div")
+.style("opacity", 0)
+.attr("class", "tooltip")
+.style("background-color", "white")
+.style("border", "solid")
+.style("border-width", "2px")
+.style("border-radius", "5px")
+.style("padding", "5px");
+
+// Add event listeners to line for hover
+line.on("mouseover", function (d) {
+  TooltipLine.style("opacity", 1)
+      .html("Value: " + d.avg_slope_change_significant +
+          "<br>CI Lower: " + (d.avg_slope_change_significant - 1.96 * d.se_slope_change_significant) +
+          "<br>CI Upper: " + (d.avg_slope_change_significant + 1.96 * d.se_slope_change_significant));
+})
+.on("mousemove", function () {
+  // Calculate the tooltip position based on mouse cursor
+  var tooltipX = d3.event.pageX + 10; // 10px to the right of the cursor
+  var tooltipY = d3.event.pageY - 10; // 10px above the cursor
+
+  // Set the tooltip position
+  TooltipLine.style("left", tooltipX + "px")
+      .style("top", tooltipY + "px");
+})
+.on("mouseleave", function () {
+  TooltipLine.style("opacity", 0);
 });
+
+});
+
+
 });

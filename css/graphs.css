@@ -53,3 +53,12 @@
     fill: lightsteelblue;
     opacity: 0.7;
   }
+
+  /* Add styles for the new checkbox menu and size range slider */
+#checkboxMenu {
+  margin-top: 10px;
+}
+
+#sizeRangeSlider {
+  margin-top: 10px;
+}
