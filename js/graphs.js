@@ -1,6 +1,6 @@
 // set the dimensions and margins of the graph
-var width = 750;
-var height = 750;
+var width = 850;
+var height = 850;
 
 const DESC = {
   avg_slope_change_significant : {
@@ -33,6 +33,8 @@ var svg = d3
 d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
   if (error) throw error;
 
+  
+
   // Color palette for genres
   var color = d3.scaleOrdinal()
     .domain(data.map(function (d) { return d.genre; }))
@@ -45,7 +47,7 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
   // Size scale for genres with adjusted range
   var size = d3.scaleLinear()
     .domain(d3.extent(data, function (d) { return +d[currentDataKey]; }))
-    .range([0.01, initialMaxSize]);  // initial circle size will be between 0.5 and 20 px wide
+    .range([0.1, initialMaxSize]);  // initial circle size will be between 0.5 and 20 px wide
 
   // Create a tooltip
   var Tooltip1 = d3.select("#CirclePacking")
@@ -86,7 +88,19 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
     .attr("r", function (d) { return size(Math.abs(+d[currentDataKey])); }) // Using Math.abs to get the absolute value
     .attr("cx", width / 2)
     .attr("cy", height / 2)
-    .style("fill", function (d) { return +d[currentDataKey] >= 0 ? "rgb(255, 160, 160)" : "lightblue"; }) // Set fill color based on the sign
+    .style("fill", function (d) { 
+      if (currentDataKey === "avg_slope_change_significant") {
+        console.log("Setting color for avg_slope_change_significant");
+        return +d[currentDataKey] >= 0 ? "RGB(255, 171, 171)" : "RGB(146, 194, 204)";
+      } else if (currentDataKey === "avg_mag_slope_change_significant") {
+        console.log("Setting color for avg_mag_slope_change_significant");
+        return "white";
+      } else if (currentDataKey === "prop_names_signi_in_genre_per_total_film_in_genre") {
+        console.log("Setting color for prop_names_signi_in_genre_per_total_film_in_genre");
+        return "white";
+      }
+    })
+      //return +d[currentDataKey] >= 0 ? "rgb(255, 160, 160)" : "lightblue"; }) // Set fill color based on the sign
     //.style("fill", function (d) { return "hsl(" + Math.random() * 360 + ",80%,50%)"; }) // Random fill color
     .style("stroke", function (d) { return +d[currentDataKey] >= 0 ? "red" : "blue"; }) // Set stroke color based on the sign
     .style("fill-opacity", 0.8)
@@ -113,22 +127,38 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
     .attr("font-size", 13)
     .attr("fill", "black");
 
-
   // Features of the forces applied to the nodes:
   var simulation = d3.forceSimulation()
     .force("center", d3.forceCenter().x(width / 2).y(height / 2))
     .force("charge", d3.forceManyBody().strength(.1))
-    .force("collide", d3.forceCollide().strength(.2).radius(function (d) { return (size(Math.abs(+d[currentDataKey])) + 3); }).iterations(1));
+    .force("collide", d3.forceCollide().radius(function (d) {
+      return (size(Math.abs(+d[currentDataKey])) + 3);
+     }).iterations(1))
+     .force("x", d3.forceX().strength(0.2).x(function (d) {
+      if (currentDataKey === "avg_slope_change_significant") {
+        // Adjust the force strength based on the sign of the value
+        return +d.avg_slope_change_significant >= 0 ? width / 4 : 3 * width / 4;
+      } else if (currentDataKey === "avg_mag_slope_change_significant") {
+        return +d.avg_slope_change_significant >= 0 ? width / 4 : 3 * width / 4;
+      } else if (currentDataKey === "prop_names_signi_in_genre_per_total_film_in_genre") {
+        return +d.nb_films_in_genre >= 10000 ? width / 4 : 3 * width / 4;
+      }
+    }))
+    .force("y", d3.forceY().strength(0.1).y(function (d) {
+      if (currentDataKey === "avg_slope_change_significant") {
+        // Adjust the force strength based on the sign of the value
+        return +d.avg_slope_change_significant >= 0 ? height / 2 : height / 2;
+      } else if (currentDataKey === "avg_mag_slope_change_significant") {
+        return +d.avg_slope_change_significant >= 0 ? height / 2 : height / 2;
+      } else if (currentDataKey === "prop_names_signi_in_genre_per_total_film_in_genre") {
+        return +d.nb_films_in_genre >= 10000 ? height / 2 : height / 2;
+      }
+    }));
 
-// // Features of the forces applied to the nodes:
-// var simulation = d3.forceSimulation()
-//   .force("center", d3.forceCenter().x(width / 2).y(height / 2))
-//   .force("charge", d3.forceManyBody().strength(.1))
-//   .force("collide", d3.forceCollide().radius(function (d) {
-//     return (size(Math.abs(+d[currentDataKey])) + 3);
-//   }).iterations(1));
 
-
+// Initialize the circles with default data
+updateData();
+updateSelectedVariableText();
   // Apply these forces to the nodes and update their positions.
   // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
   simulation
@@ -188,51 +218,28 @@ d3.csv("/data/web_data/movie_genre_significant.csv", function(error, data) {
     // Update the maximum size while keeping it constant
     size.range([2, currentMaxSize]); // smaller initial size here
 
+
+
     // Update the circles with the new data
     node1
+      .transition() // Add transition for a smooth update
+      .duration(500) // Set the duration of the transition
       .attr("r", function (d) { return size(Math.abs(+d[currentDataKey])); })
-      .style("fill", function (d) { return +d[currentDataKey] >= 0 ? "rgb(255, 160, 160)" : "lightblue"; });
-
+      .style("fill", function (d) { 
+        if (currentDataKey === "avg_slope_change_significant") {
+          console.log("Setting color for avg_slope_change_significant");
+          return +d[currentDataKey] >= 0 ? "RGB(255, 171, 171)" : "RGB(146, 194, 204)";
+        } else if (currentDataKey === "avg_mag_slope_change_significant") {
+          console.log("Setting color for avg_mag_slope_change_significant");
+          return "white";
+        } else if (currentDataKey === "prop_names_signi_in_genre_per_total_film_in_genre") {
+          // Set fill color based on the number of films in genre
+          return +d.nb_films_in_genre > 10000 ? "lightgrey" : "white";
+        }
+      })
     // Restart the simulation with the updated data
     simulation.nodes(data).alpha(0.3).restart();
   }
-  // Function to update the size range of the circles
-  window.updateSizeRange = function(value) {
-    // Update the size range
-    var sizeRange = +value;
-  
-    // Update the circles with the new size range
-    node1.attr("r", function (d) { return size(Math.abs(+d[currentDataKey])) * sizeRange / 50; });
-  
-    // Restart the simulation
-    simulation.nodes(data).alpha(0.3).restart();
-  
-    // Update the displayed size range value
-    document.getElementById("sizeRangeValue").innerText = value;
-  };
-
-  // Function to change the displayed data for checkboxes
-  window.updateDisplayedValue = function(value) {
-    var checkboxId = "";
-    switch (value) {
-      case 0:
-        checkboxId = "checkboxAvgSlope";
-        break;
-      case 1:
-        checkboxId = "checkboxAvgMagSlope";
-        break;
-      case 2:
-        checkboxId = "checkboxPropNames";
-        break;
-    }
-  
-    // Update the data key based on checkbox status
-    currentDataKey = document.getElementById(checkboxId).checked ? dataKeys[value] : null;
-  
-    // Update the visualization
-    updateData();
-    updateSelectedVariableText();
-  };
 
 
 //-------------------Second Graph---------------
@@ -254,9 +261,10 @@ var svgDistributionPerYear = d3
 // Read the data
 d3.csv("/data/web_data/movie_genre_per_year_significant.csv", function (data2){
 
-// Define scales
-var x = d3.scaleLinear().domain([1888, 2016]).range([0, width2]);
-var y = d3.scaleLinear().domain([-0.18, 0.18]).range([height2, 0]);
+
+  // Define scales
+  var x = d3.scaleLinear().domain([1888, 2016]).range([0, width2]);
+  var y = d3.scaleLinear().domain([-0.24, 0.24]).range([height2, 0]);
 
 
     // Append X and Y axes
@@ -358,25 +366,25 @@ var TooltipLine = d3.select("#DistributionPerYear")
 .style("border-radius", "5px")
 .style("padding", "5px");
 
-// Add event listeners to line for hover
-line.on("mouseover", function (d) {
-  TooltipLine.style("opacity", 1)
-      .html("Value: " + d.avg_slope_change_significant +
-          "<br>CI Lower: " + (d.avg_slope_change_significant - 1.96 * d.se_slope_change_significant) +
-          "<br>CI Upper: " + (d.avg_slope_change_significant + 1.96 * d.se_slope_change_significant));
-})
-.on("mousemove", function () {
-  // Calculate the tooltip position based on mouse cursor
-  var tooltipX = d3.event.pageX + 10; // 10px to the right of the cursor
-  var tooltipY = d3.event.pageY - 10; // 10px above the cursor
+// // Add event listeners to line for hover
+// line.on("mouseover", function (d) {
+//   TooltipLine.style("opacity", 1)
+//       .html("Value: " + d.avg_slope_change_significant +
+//           "<br>CI Lower: " + (d.avg_slope_change_significant - 1.96 * d.se_slope_change_significant) +
+//           "<br>CI Upper: " + (d.avg_slope_change_significant + 1.96 * d.se_slope_change_significant));
+// })
+// .on("mousemove", function () {
+//   // Calculate the tooltip position based on mouse cursor
+//   var tooltipX = d3.event.pageX + 10; // 10px to the right of the cursor
+//   var tooltipY = d3.event.pageY - 10; // 10px above the cursor
 
-  // Set the tooltip position
-  TooltipLine.style("left", tooltipX + "px")
-      .style("top", tooltipY + "px");
-})
-.on("mouseleave", function () {
-  TooltipLine.style("opacity", 0);
-});
+//   // Set the tooltip position
+//   TooltipLine.style("left", tooltipX + "px")
+//       .style("top", tooltipY + "px");
+// })
+// .on("mouseleave", function () {
+//   TooltipLine.style("opacity", 0);
+// });
 
 });
 
