@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <!-- <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script> -->
+
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="js/script.js" defer></script>
+    <link rel="icon" type="image/x-icon" href="img/favicon2.svg">
 
     <!-- <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>     -->
 
-    <title>Document</title>
+    <title>abADAkor - Data Story</title>
 </head>
 <body>
 
@@ -24,7 +25,7 @@
                 <h1>How were <strong>naming trends</strong> in the U.S.A. impacted by <strong>cinema?</strong></h1>
                 <span class="tagline"><span>Connecting the dots between <strong></strong>movie releases and the popularity of baby names across the years.</span></span>
                 <br>
-                <button>See it for yourself</button>
+                <button id="btnStart">See it for yourself</button>
             </div>
             <div class="hero_asset" id="hero_asset">
 
@@ -34,8 +35,8 @@
                             <img src="" alt="">
                         </div>
                         <div class="data">
-                            <span class="title">The Matrix</span>
-                            <span class="year">1999</span>
+                            <span class="title">Title</span>
+                            <span class="year">Year</span>
                         </div>
                     </a>
 
@@ -44,8 +45,8 @@
                             <img src="" alt="">
                         </div>
                         <div class="data">
-                            <span class="title">La Roue</span>
-                            <span class="year">1923</span>
+                            <span class="title">Title</span>
+                            <span class="year">Year</span>
                         </div>
                     </a>
                 </div>
@@ -85,8 +86,8 @@
                             <img src="" alt="">
                         </div>
                         <div class="data">
-                            <span class="title">Star Wars</span>
-                            <span class="year">1977</span>
+                            <span class="title">Title</span>
+                            <span class="year">Year</span>
                         </div>
                     </a>
 
@@ -95,8 +96,8 @@
                             <img src="" alt="">
                         </div>
                         <div class="data">
-                            <span class="title">The Godfather</span>
-                            <span class="year">1972</span>
+                            <span class="title">Title</span>
+                            <span class="year">Year</span>
                         </div>
                     </a>
 
@@ -138,11 +139,11 @@
                 <div class="movie_list" id="movie_list">
                     <a class="movie_item">
                         <div class="poster">
-                            <img src="img/poster/1.jpg" alt="">
+                            <img src="" alt="">
                             <div class="title">The Matrix</div>
                         </div>
                         <div class="rating">
-                            <img src="img/star.svg" class="rating_icon">
+                            <img src="" class="rating_icon">
                             <div class="rate_data">
                                 <span class="rating_value">8.1<small>/10</small></span>
                                 <span class="rating_nb">18K</span>
@@ -151,7 +152,7 @@
                     </a>
                     <a class="movie_item">
                         <div class="poster">
-                            <img src="img/poster/2.jpg" alt="">
+                            <img src="" alt="">
                             <div class="title">The Godfather</div>
                         </div>
                         <div class="rating">
@@ -188,12 +189,198 @@
 
     </div>
 
+    <div class="datasets_present">
+        <h1>An introduction to our <strong>datasets:</strong></h1>
 
-    <div id="myDiv">
-        <h1>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae velit ea voluptatum culpa atque quos facere, quia, fugit cumque mollitia nihil quam corporis laudantium iste, quaerat vel? Qui cupiditate, voluptatibus voluptatum temporibus consectetur, rem maxime tempora quod minima dicta labore, aut placeat autem eveniet numquam blanditiis error assumenda vero alias? Laborum adipisci porro quasi numquam iure cupiditate sed officiis natus distinctio dicta iste, asperiores, odio nam corporis voluptatum fuga veniam amet enim minus explicabo illo repellat earum vel? Accusantium quia perferendis tempora tenetur non perspiciatis commodi. Labore illo alias dolorum odit nam excepturi soluta corporis quia, exercitationem totam nobis commodi?
-        </h1>
+        <div class="data_area">
+            <div class="text">
+                <div class="head">
+                    <h2>A cool title</h2>
+                    <div class="tags-list">
+                        <span class="tag">loremIpsum</span>
+                        <span class="tag">dolor</span>
+                        <span class="tag">sitAmet</span>
+                    </div>
+                </div>
+                <div class="desc">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, doloribus.</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam iure nemo possimus libero sed deleniti praesentium ut iste consequuntur laudantium?</p>
+                    <div class="links">
+                        <a class="link" href="">IMDB Dataset</a>
+                        <a class="link" href="">Another Link(ai)</a>
+                    </div>
+                </div>
+            </div>
+            <div class="graph">
+                <!-- <img src="img/poster/test.png" alt=""> -->
+                <iframe src="plots/CaracterRole_magnitude.html" style="width:100%; height:500px; border:none;"></iframe>
+            </div>
+        </div>
+
+        <div class="data_area reverse">
+            <div class="text">
+                <div class="head">
+                    <h2>Another epic title coming up.</h2>
+                    <div class="tags-list">
+                        <span class="tag">loremIpsum</span>
+                        <span class="tag">dolor</span>
+                        <span class="tag">too</span>
+                        <span class="tag">many</span>
+                        <span class="tag">tags</span>
+                        <span class="tag">holy</span>
+                        <span class="tag">crap</span>
+                        <span class="tag">insane!</span>
+                        <span class="tag">bobWest</span>
+                        <span class="tag">#abApasDAkor</span>
+                    </div>
+                </div>
+                <div class="desc">
+                    <p>This is a reversed layout</p>
+                    <p>Fuck'em ipsum dolor sit amet consectetur adipisicing elit. Libero, doloribus.</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam iure nemo possimus libero sed deleniti praesentium ut iste consequuntur laudantium?</p>
+                    <div class="links">
+                        <a class="link" href="">IMDB Dataset</a>
+                    </div>
+                </div>
+            </div>
+            <div class="graph">
+                <img src="img/poster/test.png" alt="">
+            </div>
+        </div>
+
     </div>
+
+    <div class="quote">
+        <div>
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi voluptate quaerat qui beatae aliquid?
+            <span class="credit">
+                - A random person
+            </span>
+        </div>
+    </div>
+
+    <div class="parallel_quest">
+        <div class="content">
+
+            <div class="section">
+                <h1>This is the main title</h1>
+                <p>The purpose is Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore quod eos maiores! Vel quo tenetur labore id nulla.</p>
+            </div>
+
+            <div class="section">
+                <h2>1. This is a section title which can be very long.</h2>
+                <p>This is a paragraph, very short. Every separated item should be in paragraphs.</p>
+                <h3>1.1 This is a subtitle (probably avoid using them to avoid an overload of titles).</h3>
+                <p>It's styling time. You can add <b>bold stuff</b> or also <strong>highlight</strong> other stuff, or the <strong class="woah">chad surligneur</strong> highlight. And finally <a href="">this is how</a> links (supposing they are all external), will appear. Although try not to overuse these lol. You can also use <code>code</code> like structure to emphasize code variables.</p> 
+                <p><small>You can also add very small stuff like so.</small></p>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Labore maiores veritatis ullam similique quas qui ut laudantium placeat, reiciendis sint quidem asperiores sunt laborum officiis eius natus nulla. Corrupti, dolore!</p>
+                <img src="img/poster/test.png" alt="">
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus tenetur ipsa repellendus, est delectus eius molestiae qui quibusdam voluptate minus.</p>
+                <p class="important">You can make a paragraph more important (bigger in font size) by adding the class <code>important</code> to it and it will stand out more. Use this only if it's very needed, or for the conclusion.</p>
+                <div class="minimizer">
+                    <h2>Woah, minimizer.</h2>
+                    <p>For whatever reason you'd like to make this look narrower, use the <code>minimizer</code> class.</p>
+                </div>
+                <p>Deserunt excepturi minima cupiditate reiciendis quis quae beatae, dolorem officiis corporis perspiciatis quidem delectus incidunt autem odio provident explicabo eligendi recusandae voluptate. Nesciunt, sed tempora rerum molestias tempore quidem ipsa reprehenderit eum excepturi laborum, ratione architecto libero obcaecati eius vero pariatur minus amet necessitatibus nostrum exercitationem deserunt! Quae, quis fugit.</p>
+                <iframe src="plots/CaracterRole_magnitude.html" style="width:100%; height:500px; border:none;"></iframe>
+            </div>
+        
+            <div class="section">
+                <h2>2. This is another section, and again it's the title.</h2>
+                <p>This is a paragraph, very short. But the next one will be longer</p>
+
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Labore maiores veritatis ullam similique quas qui ut laudantium placeat, reiciendis sint quidem asperiores sunt laborum officiis eius natus nulla. Corrupti, dolore!</p>
+                <img src="img/poster/test.png" alt="">
+                <p><b>Truddy</b> is a name that was popular in the 1920s, but then it became less popular. It was popular again in the 1990s, but then it became less popular. It was popular again in the 1990s, but then it became less popular. It was popular again in the 1990s, but then it became less popular. It was popular again in the 1990s, but then it became less popular. It was popular again in the 1990s, but then it became less popular. It was popular again in the 1990s, but then it became less popular. It was popular again in the 1990s, but then it became less popular. It was popular again in the 1990s, but then it became less popular.</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto facilis odio, ut obcaecati, aliquid totam deserunt quaerat amet cumque provident eligendi eum alias recusandae dolore laudantium doloribus quod quis ipsam ratione, laborum iste vero vel. Totam, reprehenderit eligendi obcaecati eaque fugiat deserunt magnam recusandae, tenetur id ratione cupiditate assumenda vel. Deserunt excepturi minima cupiditate reiciendis quis quae beatae, dolorem officiis corporis perspiciatis quidem delectus incidunt autem odio provident explicabo eligendi recusandae voluptate. Nesciunt, sed tempora rerum molestias tempore quidem ipsa reprehenderit eum excepturi laborum, ratione architecto libero obcaecati eius vero pariatur minus amet necessitatibus nostrum exercitationem deserunt! Quae, quis fugit.</p>
+            </div>
+
+            <hr>
+
+            <div class="section conclusion">
+                <h2>To conlude</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore maiores veritatis ullam similique quas qui ut laudantium placeat, reiciendis sint quidem asperiores sunt laborum officiis eius natus nulla. Corrupti, dolore!</p>
+            </div>
+        
+        </div>
+    </div>
+
+    <footer>
+
+        <h1>Cast & Crew</h1>
+
+        <div class="team-list">
+            <div>
+                <div class="avatar">
+                    <img src="img/team/luca.png" alt="">
+                </div>
+                <div class="name">
+                    <span>Luca</span>
+                    <small>Rosati</small>
+                </div>
+                <div class="role">Data analysis <br>& Graphs</div>
+            </div>
+            <div>
+                <div class="avatar">
+                    <img src="img/team/daniel.png" alt="">
+                </div>
+                <div class="name">
+                    <span>Daniel</span>
+                    <small>Demko</small>
+                </div>
+                <div class="role">Web Implementation <br>& Coordination</div>
+            </div>
+            <div>
+                <div class="avatar">
+                    <img src="img/team/linkai.png" alt="">
+                </div>
+                <div class="name">
+                    <span>Linkai</span>
+                    <small>Dai</small>
+                </div>
+                <div class="role">Data story <br>& Dataset Graphs</div>
+            </div>
+            <div>
+                <div class="avatar">
+                    <img src="img/team/thomas.png" alt="">
+                </div>
+                <div class="name">
+                    <span>Thomas</span>
+                    <small>Delacroix</small>
+                </div>
+                <div class="role">Data analysis <br>& Analysis Graphs</div>
+            </div>
+            <div>
+                <div class="avatar">
+                    <img src="img/team/maxime.png" alt="">
+                </div>
+                <div class="name">
+                    <span>Maxime</span>
+                    <small>Theurillat</small>
+                </div>
+                <div class="role">Web data processing <br>& Dataset Graphs</div>
+            </div>
+        </div>
+        
+        <br>
+
+        <div>
+            <h1>The End</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis dolores adipisci voluptatum deleniti quas necessitatibus ducimus iure magnam ut inventore?</p>
+        </div>
+        <div>
+            <p>© team <b>abADAkor</b> 2023</p>
+        </div>
+        <div class="last">
+            <img class="logo" src="img/logo_group.svg" alt="">
+            <nav>
+                <a href="https://github.com/epfl-ada/ada-2023-project-abadakor">Our Project</a>
+                <a href="https://github.com/TruddyTheDuddi/abadakor-site">Website Source Code</a>
+                <a href="https://epfl-ada.github.io/teaching/fall2023/cs401/projects/">ADA Course</a>
+            </nav>
+            <small>Created for <b>Applied Data Analysis (ADA)</b> at <b>EPFL</b></small>
+        </div>
+    </footer>
 
 
 </body>
