@@ -2,8 +2,7 @@ function renderCMU(el){
     let gender_colors = {m: '#5abdfa', f: '#fa5ad5'}
 
     // Load data from external CSV file
-    d3.csv("data/top10_name_top5_genre.csv", (error, data) => {
-        if (error) throw error;
+    d3.csv("data/top10_name_top5_genre.csv").then((data) => {
         
         // Set the dimensions and margins of the graph
         var width = document.getElementById(el).getBoundingClientRect().width;
@@ -18,12 +17,12 @@ function renderCMU(el){
         // A scale that gives a X target position for each group
         var x = d3.scaleOrdinal()
             .domain(d3.map(data, function(d) { return d.genre; }).keys())
-            .range([70, 350, 700, 200, 500])
+            .range([120, 380, 660, 200, 550])
         
         // A scale that gives a X target position for each group
         var y = d3.scaleOrdinal()
             .domain(d3.map(data, function(d) { return d.genre; }).keys())
-            .range([180, 200, 200, 480, 470])
+            .range([180, 280, 200, 510, 520])
         
         // Size scale for number of movies
         var size = d3.scaleLog()
@@ -35,13 +34,15 @@ function renderCMU(el){
             .domain(d3.map(data, function(d) { return d.genre; }).keys())
             .range([gender_colors.f, gender_colors.m])
         
-        var group = svg.append("g");
+        var group = svg.append("g")
+            .attr("transform", "scale(0.9) translate(50, 0)");
         
         // Initialize the circle and text elements
         var nodes = group.selectAll("g")
             .data(data)
             .enter()
-            .append("g");
+            .append("g")
+            // .attr("transform", "scale(0.9)")
         
         function get_node_radius(d) {
             if (d.is_genre == "True") {
@@ -89,10 +90,10 @@ function renderCMU(el){
                 }
             
             })
-            .call(d3.drag() // call specific function when circle is dragged
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended));
+            // .call(d3.drag() // call specific function when circle is dragged
+            //     .on("start", dragstarted)
+            //     .on("drag", dragged)
+            //     .on("end", dragended));
         
         function get_label_fontsize(d) {
             if (d.is_genre == "True") {
@@ -222,21 +223,28 @@ function renderCMU(el){
                 .attr("y", function(d) { return d.y; });
             });
         
+
         // What happens when a circle is dragged?
-        function dragstarted(d) {
-            if (!d3.event.active) simulation.alphaTarget(.03).restart();
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.03).restart();
             d.fx = d.x;
             d.fy = d.y;
         }
-        function dragged(d) {
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
         }
-        function dragended(d) {
-            if (!d3.event.active) simulation.alphaTarget(.03);
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0.03);
             d.fx = null;
             d.fy = null;
         }
+
+        circles.call(d3.drag() // call specific function when circle is dragged
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+            
     });
 }
 
