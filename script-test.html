@@ -18,8 +18,8 @@
     // append the svg object to the body of the page
     var svg = d3.select("#my_dataviz")
     .append("svg")
-        .attr("width", 900)
-        .attr("height", 600)
+        .attr("width", 1000)
+        .attr("height", 650)
 
     // Load data from external CSV file
     d3.csv("data/top10_name_top5_genre.csv", function(error, data) {
@@ -28,26 +28,67 @@
         // A scale that gives a X target position for each group
         var x = d3.scaleOrdinal()
             .domain(d3.map(data, function(d) { return d.genre; }).keys())
-            .range([200, 450, 550, 670, 780])
+            .range([50, 350, 700, 200, 600])
 
         // A scale that gives a X target position for each group
         var y = d3.scaleOrdinal()
             .domain(d3.map(data, function(d) { return d.genre; }).keys())
-            .range([420, 270, 520, 270, 470])
+            .range([180, 200, 200, 480, 500])
 
         // Size scale for number of movies
         var size = d3.scaleLinear()
             .domain([0.0027, 0.007477])
-            .range([20,65])  // circle will be between 7 and 55 px wide
+            .range([15,60])  // circle will be between 7 and 55 px wide
 
-        // A color scale for genre
-        var color_genre = d3.scaleOrdinal()
+        // // A color scale for genre
+        // var color_genre = d3.scaleOrdinal()
+        //     .domain(d3.map(data, function(d) { return d.genre; }).keys())
+        //     .range(["#F8766D", "#00BA38", "#619CFF", "#1A281F", "#A18276"])
+
+        // A color scale for gender
+        var color_gender = d3.scaleOrdinal()
             .domain(d3.map(data, function(d) { return d.genre; }).keys())
-            .range(["#F8766D", "#00BA38", "#619CFF", "#1A281F", "#A18276"])
+            .range(["#ff00e4", "#0036ff"])
 
-        // Initialize the circle and text elements
+        // // create the data for the label nodes
+        // var data_label_nodes = [{ genre: "Drama", total_nb_movie: 93752, x: 200, y: 200 },
+        //             { genre: "Comedy", total_nb_movie: 52944, x: 500, y: 200 },
+        //             { genre: "Thriller", total_nb_movie: 38968, x: 800, y: 200 },
+        //             { genre: "Romance ", total_nb_movie: 36701, x: 200, y: 500 },
+        //             { genre: "Action", total_nb_movie: 30904, x: 500, y: 500 }]
+
         var group = svg.append("g");
 
+        // // Append groups for static nodes
+        // var staticNodes = svg.selectAll(".static-nodes")
+        //     .data(data_label_nodes)
+        //     .enter()
+        //     .append("g")
+        //     .attr("class", "static-nodes")
+        //     .attr("transform", function(d) {
+        //         return "translate(" + d.x + "," + d.y + ")";
+        //     });
+
+        // // Append circles to static nodes
+        // var staticCircles = staticNodes.append("circle")
+        //     .attr("r", 29)
+        //     .style("fill", "gray")  // Set the fill color for static nodes
+        //     .call(d3.drag()
+        //         .on("start", dragstarted)
+        //         .on("drag", dragged)
+        //         .on("end", dragended));
+
+        // // Append text labels to static nodes
+        // var staticLabels = staticNodes.append("text")
+        //     .text(function(d) { return d.genre; })
+        //     .attr("text-anchor", "middle")
+        //     .attr("dy", ".35em")
+        //     .style("fill", "white")
+        //     .style("pointer-events", "none");
+
+        
+
+        // Initialize the circle and text elements
         var nodes = group.selectAll("g")
             .data(data)
             .enter()
@@ -56,11 +97,41 @@
                 return "translate(" + (width / 2) + "," + (height / 2) + ")";
             });
 
+        function get_node_radius(d) {
+            if (d.is_genre == "True") {
+                // If it's a genre node
+                return 60;
+            } else {
+                // If it's a data node
+                return size(d.percentage);
+            }
+        }
+
+        function get_node_fillcolor(d) {
+            if (d.is_genre == "True") {
+                // If it's a genre node
+                return "black";
+            } else {
+                // If it's a data node
+                return color_gender(d.gender);
+            }
+        }
+
+        function get_node_fillopacity(d) {
+            if (d.is_genre == "True") {
+                // If it's a genre node
+                return 0.8;
+            } else {
+                // If it's a data node
+                return 0.5;
+            }
+        }
+
         // Append circles to the nodes
         var circles = nodes.append("circle")
-            .attr("r", function(d){ return size(d.percentage)})
-            .style("fill", function(d){ return color_genre(d.genre)})
-            .style("fill-opacity", 0.8)
+            .attr("r", function(d){ return get_node_radius(d)})
+            .style("fill", function(d){ return get_node_fillcolor(d)})
+            .style("fill-opacity", function(d){ return get_node_fillopacity(d)})
             .attr("stroke", "black")
             .style("stroke-width", 4)
             .call(d3.drag() // call specific function when circle is dragged
@@ -68,53 +139,133 @@
                 .on("drag", dragged)
                 .on("end", dragended));
 
+        function get_label_fontsize(d) {
+            if (d.is_genre == "True") {
+                // If it's a genre node
+                return (60*0.5) + "px";
+            } else {
+                // If it's a data node
+                return (size(d.percentage)*0.7) + "px";
+            }
+        }
+
+        function get_label2_fontsize(d) {
+            if (d.is_genre == "True") {
+                // If it's a genre node
+                return (60*0.3) + "px";
+            } else {
+                // If it's a data node
+                return (size(d.percentage)*0.3) + "px";
+            }
+        }
+
+        function get_label2_verticalpos(d) {
+            if (d.is_genre == "True") {
+                // If it's a genre node
+                return "1.8em";
+            } else {
+                // If it's a data node
+                return "2.0em";
+            }
+        }
+
+        function get_label_fillcolor(d) {
+            if (d.is_genre == "True") {
+                // If it's a genre node
+                return "white";
+            } else {
+                // If it's a data node
+                return "black";
+            }
+        }
+
+        function get_label2_fillcolor(d) {
+            if (d.is_genre == "True") {
+                // If it's a genre node
+                return "rgba(255, 255, 255, 0.6)";
+            } else {
+                // If it's a data node
+                return "rgba(0, 0, 0, 0.6)";
+            }
+        }
+
         // Append text labels to the nodes
         var labels = nodes.append("text")
             .text(function(d) { return d.char_name; })
             .attr("text-anchor", "middle")
             .attr("dy", ".35em")
-            .style("fill", "white")
+            .style("fill", function(d) { return get_label_fillcolor(d); })
             .style("pointer-events", "none")
-            .style("font-size", function(d) { return (size(d.percentage)*0.8) + "px"; }); // Set font size based on the radius
+            .style("font-size", function(d) { return get_label_fontsize(d); }); // Set font size based on the radius
 
         // Append a second text label with adjusted positioning
         var labels2 = nodes.append("text")
             .text(function(d) { return d.nb_movies; })
             .attr("text-anchor", "middle")
-            .attr("dy", "2.0em")  // Adjust the vertical positioning
-            .style("fill", "rgba(255, 255, 255, 0.6)")
+            .attr("dy", function(d) { return get_label2_verticalpos(d); })  // Adjust the vertical positioning
+            .style("fill", function(d) { return get_label2_fillcolor(d); })
             .style("pointer-events", "none")
-            .style("font-size", function(d) { return (size(d.percentage)*0.3) + "px"; });
+            .style("font-size", function(d) { return get_label2_fontsize(d); });
 
-            // Add legends
-        var legend = svg.selectAll(".legend")
-            .data(color_genre.domain())
-            .enter().append("g")
-            .attr("class", "legend")
-            .attr("transform", function(d, i) {
-                return "translate(380," + (i * 20 + 20) + ")";
-            });
+        // // Add legends
+        // var legend = svg.selectAll(".legend")
+        //     .data(color_genre.domain())
+        //     .enter().append("g")
+        //     .attr("class", "legend")
+        //     .attr("transform", function(d, i) {
+        //         return "translate(380," + (i * 20 + 20) + ")";
+        //     });
 
-        legend.append("rect")
-            .attr("x", width - 18)
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", color_genre);
+        // legend.append("rect")
+        //     .attr("x", width - 18)
+        //     .attr("width", 18)
+        //     .attr("height", 18)
+        //     .style("fill", color_genre);
 
-        legend.append("text")
-            .attr("x", width - 24)
-            .attr("y", 9)
-            .attr("dy", ".35em")
-            .style("text-anchor", "end")
-            .text(function(d) { return d; });
+        // legend.append("text")
+        //     .attr("x", width - 24)
+        //     .attr("y", 9)
+        //     .attr("dy", ".35em")
+        //     .style("text-anchor", "end")
+        //     .text(function(d) { return d; });
+
+        function get_collide_radius(d) {
+            if (d.is_genre == "True") {
+                // If it's a genre node
+                return 60*1;
+            } else {
+                // If it's a data node
+                return size(d.percentage)*1;
+            }
+        }
+
+        function get_force_strength_x(d) {
+            if (d.is_genre == "True") {
+                // If it's a genre node
+                return 0.3;
+            } else {
+                // If it's a data node
+                return 0.3;
+            }
+        }
+
+        function get_force_strength_y(d) {
+            if (d.is_genre == "True") {
+                // If it's a genre node
+                return 0.3;
+            } else {
+                // If it's a data node
+                return 0.3;
+            }
+        }
             
         // Features of the forces applied to the nodes:
         var simulation = d3.forceSimulation()
-            .force("x", d3.forceX().strength(0.2).x( function(d){ return x(d.genre) } ))
-            .force("y", d3.forceY().strength(0.1).y( function(d){ return y(d.genre) } ))
+            .force("x", d3.forceX().strength(function(d){ return get_force_strength_x(d) }).x( function(d){ return x(d.genre) } ))
+            .force("y", d3.forceY().strength(function(d){ return get_force_strength_y(d) }).y( function(d){ return y(d.genre) } ))
             .force("center", d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
             .force("charge", d3.forceManyBody().strength(1)) // Nodes are attracted one each other of value is > 0
-            .force("collide", d3.forceCollide().strength(.1).radius(function(d){ return size(d.percentage)*1.1}).iterations(1)) // Force that avoids circle overlapping
+            .force("collide", d3.forceCollide().strength(.8).radius(function(d){ return get_collide_radius(d)}).iterations(1)) // Force that avoids circle overlapping
 
         // Apply these forces to the nodes and update their positions.
         // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
