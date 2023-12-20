@@ -1007,18 +1007,21 @@ header .tag .bottom_line .t_value{
 .datasets_present{
     display: grid;
     gap: 6em;
+    max-width: 1350px;
+    width: 100%;
+    padding: 1em;
 }
 
 .datasets_present .data_area{
     display: grid;
-    gap: 4em;
-    max-width: 1300px;
+    gap: 5em;
+    max-width: 1280px;
     grid-template-columns: 4fr 7fr;
     grid-template-areas: 
     "text graph";
     font-size: 1.1em;
     align-items: center;
-    margin: auto;
+    margin-left: auto;
 }
 
 .datasets_present .data_area.top{
@@ -1029,12 +1032,14 @@ header .tag .bottom_line .t_value{
     grid-template-columns: 7fr 4fr;
     grid-template-areas: 
         "graph text";
+    margin-right: auto;
 }
 
 .datasets_present h1{
     font-size: 3.8em;
     line-height: 1.2;
     max-width: 500px;
+    margin-left: 2em;
 }
 
 .datasets_present h2{
@@ -1123,28 +1128,26 @@ header .tag .bottom_line .t_value{
     /* box-shadow: 0.25em 0.25em 0 var(--primary); */
 }
 
-.datasets_present .graph.left{
-    grid-area: graph1;
-}
-
-.datasets_present .graph.right{
-    grid-area: graph2;
-}
-
 .datasets_present .graph_info{
     display: grid;
     gap: 0.25em;
     font-size: 0.7em;
-    text-align: center;
+    text-align: left;
+    opacity: 0.5;
+    user-select: none;
 }
 
 .datasets_present .graph_info .graph_title{
     font-size: 1.4em;
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 .datasets_present .graph_info .desc_title{
     opacity: 0.5;
+}
+
+.datasets_present .data_area.reverse .graph_info{
+    text-align: right;
 }
 
 .datasets_present .graph img{

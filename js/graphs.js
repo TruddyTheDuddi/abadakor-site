@@ -35,7 +35,7 @@ function renderCMU(el){
             .range([gender_colors.f, gender_colors.m])
         
         var group = svg.append("g")
-            .attr("transform", "scale(0.9) translate(50, 0)");
+            .attr("transform", "scale(0.9) translate(20, 0)");
         
         // Initialize the circle and text elements
         var nodes = group.selectAll("g")
