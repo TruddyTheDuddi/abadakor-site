@@ -436,8 +436,8 @@ let suggester = {
         "Alice", "Logan", "Thomas", "Jonas", "Zoe", "Noel", "Noah","Tracy", "Peter", "Paul", 
         "George", "Trinity", "Max", "Ethan", "Isabella", "Ace", "Tiffany", "Luca",
         "Leo", "Andy", "Lilly", "Robert", "William", "David", "Richard", "Ryan", 
-        "Christopher", "Daniel", "Donald", "Luna", "Alison", "Robin", "Cooper",
-        "Sophie", "Frank", "Jack", "Oliver", "Maria", "Bella", "Rick"
+        "Christopher", "Daniel", "Donald", "Luna", "Alison", "Robin",
+        "Sophie", "Frank", "Jack", "Oliver", "Maria", "Bella", "Rick", "Adam"
     ],
 
     // CHAD VIP NAMES!! These names are so cool we'll add a special effect
