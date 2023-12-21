@@ -1,0 +1,68 @@
+/* Add your existing styles here */
+:root{
+  --positive: #caf57e;
+  --negative: #ff8187;
+}
+
+/* Style for the dropdown menu */
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropbtn {
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    display: block;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: #ddd;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+
+  .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+  }
+  
+  .circle {
+    fill: steelblue;
+  }
+  
+  .confidence-area {
+    fill: lightsteelblue;
+    opacity: 0.7;
+  }
+
+  /* Add styles for the new checkbox menu and size range slider */
+#checkboxMenu {
+  margin-top: 10px;
+}
+
+#sizeRangeSlider {
+  margin-top: 10px;
+}
