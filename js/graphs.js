@@ -35,7 +35,7 @@ function renderCMU(el){
             .range([gender_colors.f, gender_colors.m])
         
         var group = svg.append("g")
-            .attr("transform", "scale(0.9) translate(50, 0)");
+            .attr("transform", "scale(0.9) translate(20, 0)");
         
         // Initialize the circle and text elements
         var nodes = group.selectAll("g")
@@ -70,7 +70,7 @@ function renderCMU(el){
                 return 1;
             } else {
                 // If it's a data node
-                return 0.5;
+                return 0.8;
             }
         }
         
@@ -90,10 +90,7 @@ function renderCMU(el){
                 }
             
             })
-            // .call(d3.drag() // call specific function when circle is dragged
-            //     .on("start", dragstarted)
-            //     .on("drag", dragged)
-            //     .on("end", dragended));
+
         
         function get_label_fontsize(d) {
             if (d.is_genre == "True") {
