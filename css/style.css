@@ -455,11 +455,11 @@ header .tag .bottom_line .t_value{
     max-width: 500px;
     margin: auto;
 
-    padding: 3em;
+    /* padding: 3em;
     border: 2px solid var(--bg_base-light-opac);
     border-radius: 1em;
     background-image: url('../img/tile.jpg');
-    background-size: 50em;
+    background-size: 50em; */
 }
 
 .search_area.graph_p1 .search_box{
@@ -1023,7 +1023,7 @@ header .tag .bottom_line .t_value{
     display: grid;
     gap: 5em;
     max-width: 1280px;
-    grid-template-columns: 3.5fr 7fr;
+    grid-template-columns: 4fr 7fr;
     grid-template-areas: 
     "text graph";
     font-size: 1.1em;
