@@ -1059,6 +1059,11 @@ header .tag .bottom_line .t_value{
     margin: 0;
 }
 
+.datasets_present a{
+    color: var(--text);
+    opacity: 0.7;
+}
+
 .datasets_present .text{
     grid-area: text;
     display: grid;
