@@ -432,17 +432,16 @@ function search_name(name) {
 let suggester = {
     // Generate a list of well known names
     wellKnownNames : [
-        "Mia", "Trudy", "Emma", "Tom", "Bob", "Murphy", "Elizabeth", "Mary", "Jane", 
-        "Alice", "Logan", "Thomas", "Jonas", "Zoe", "Noel", "Noah","Tracy", "Peter", "Paul", 
+        "Mia", "Trudy", "Bob", "Luke", "Elizabeth", "Mary", "Jane", 
+        "Alice", "Logan", "Thomas", "Noah", "Peter", "Paul", 
         "George", "Trinity", "Max", "Ethan", "Isabella", "Ace", "Tiffany", "Luca",
-        "Leo", "Andy", "Lilly", "Robert", "William", "David", "Richard", "Ryan", 
-        "Christopher", "Daniel", "Donald", "Luna", "Alison", "Robin", "Cooper",
-        "Sophie", "Frank", "Jack", "Oliver", "Maria", "Bella", "Rick"
+        "Andy", "William", "David", "Ryan", "Christopher", "Daniel", "Donald", "Luna",
+        "Sophie", "Frank", "Jack", "Oliver", "Maria", "Bella", "Rick", "Adam"
     ],
 
     // CHAD VIP NAMES!! These names are so cool we'll add a special effect
     specialNamesHehe : [
-        "Trudy", "Bob", "Daniel", "Luca", "Max", "Maria", "Tracy", "Jack", "Mia", "Rick"
+        "Trudy", "Bob", "Luke", "Adam", "Max", "Maria", "Jack", "Mia", "Rick"
     ],
 
     /**

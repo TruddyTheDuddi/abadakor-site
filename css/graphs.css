@@ -1,7 +1,19 @@
-/* Add your existing styles here */
+/* Define font import for graphs in <iframes> */
 :root{
     --positive: #caf57e;
     --negative: #ff8187;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../fonts/Poppins-Bold.ttf') format('truetype');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../fonts/Poppins-Regular.ttf') format('truetype');
+    font-weight: normal;
 }
 
 body{

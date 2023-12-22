@@ -1,5 +1,5 @@
 function renderCMU(el){
-    let gender_colors = {m: '#5abdfa', f: '#fa5ad5'}
+    let gender_colors = {m: 'var(--plot-man)', f: 'var(--plot-woman)'}
 
     // Load data from external CSV file
     d3.csv("data/top10_name_top5_genre.csv").then((data) => {
@@ -70,7 +70,8 @@ function renderCMU(el){
                 return 1;
             } else {
                 // If it's a data node
-                return 0.8;
+                // return 0.8;
+                return 1;
             }
         }
         
@@ -138,7 +139,7 @@ function renderCMU(el){
                 return "rgba(255, 255, 255, 0.6)";
             } else {
                 // If it's a data node
-                return "rgba(0, 0, 0, 0.6)";
+                return "rgba(255, 255, 255, 0.6)";
             }
         }
         

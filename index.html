@@ -193,45 +193,96 @@
     <div class="datasets_present">
         <h1>An introduction to our <strong>datasets:</strong></h1>
 
+        <!-- CMU -->
         <div class="data_area">
             <div class="text">
                 <div class="head">
-                    <h2>A cool title</h2>
+                    <h2><strong>CMU</strong> Movie Summary Corpus.</h2>
                     <div class="tags-list">
-                        <span class="tag">loremIpsum</span>
-                        <span class="tag">dolor</span>
-                        <span class="tag">sitAmet</span>
+                        <span class="tag">Movie ID</span>
+                        <span class="tag">Release Date</span>
+                        <span class="tag">Movie Genre</span>
+                        <span class="tag">Character Name</span>
                     </div>
                 </div>
                 <div class="desc">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, doloribus.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam iure nemo possimus libero sed deleniti praesentium ut iste consequuntur laudantium?</p>
+                    <p>
+                        A movie is “just” a fancy video. But more than that, a movie is a combination, a balance: a movie <b>tells</b> — a story, often with a message; a movie <b>shows</b> — another world, visible only through a camera lens; a movie <b>enriches</b> — both this other world, and that of our own.
+                    </p>
+                    <p>
+                        Our <strong>core dataset</strong> contains movies released up to 2012, featuring metadata like unique IDs used throughout our study, movie genre and release dates, alongside details on character names and their genders.
+                    </p>
                     <div class="links">
-                        <a class="link" href="">IMDB Dataset</a>
-                        <a class="link" href="">Another Link(ai)</a>
+                        <a class="link" target="_blank" href="https://www.cs.cmu.edu/~ark/personas/">CMU Movie Summary Corpus</a>
+                        <a class="link" target="_blank" href="https://www.cs.cmu.edu/~dbamman/pubs/pdf/bamman+oconnor+smith.acl13.pdf">CMU's Study</a>
                     </div>
                 </div>
             </div>
             <div class="graph">
-                <img src="img/poster/test.png" alt="">
+                <div id="graph_CMU"></div>
+
+                <div class="legend">
+                    <div class="item">
+                        <div class="name">Male</div>
+                        <div class="color" style="background-color: var(--plot-man);"></div>
+                    </div>
+                    <div class="item">
+                        <div class="name">Female</div>
+                        <div class="color" style="background-color: var(--plot-woman);"></div>
+                    </div>
+                    <div class="item">
+                        <div class="name">Movie Genre</div>
+                        <div class="color" style="background-color: var(--text);"></div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
+        <!-- IMDb -->
+        <div class="data_area reverse">
+            <div class="text">
+                <div class="head">
+                    <h2>How popular were each of the movies?</h2>
+                    <div class="tags-list">
+                        <span class="tag">Average Rating</span>
+                        <span class="tag">Number of Ratings</span>
+                    </div>
+                </div>
+                <div class="desc">
+                    <p>
+                        <strong>IMDb</strong> is a highly reliable source for user ratings and reviews of most movies in the main dataset, being the largest and most popular online movie database as of December 2023 with close to 1.8 million movie entries <a target="_blank" href="https://www.imdb.com/pressroom/stats/">(feature films, short movies and TV movies).</a> 
+                    </p>
+                    <p>
+                        Their data allow us to assess a movie's <b>popularity</b> and presence in its contemporary culture, which is key in our attempt to evaluate their <b>impact</b> on other aspects of society.
+                    </p>
+                    <div class="links">
+                        <a class="link" target="_blank" href="https://developer.imdb.com/documentation/api-documentation/">IMDB Dataset</a>
+                    </div>
+                </div>
+            </div>
+            <div class="graph">
+                <iframe src="plots/intro/imdb_heatmap.html" style="width:100%; height:450px; border:none;"></iframe>
+            </div>
+        </div>
+
+        <!-- TMDB -->
         <div class="group">
         
             <div class="data_area top">
                 <div class="text">
                     <div class="head">
-                        <h2>A cool title</h2>
+                        <h2>Determining character importance.</h2>
                         <div class="tags-list">
-                            <span class="tag">loremIpsum</span>
-                            <span class="tag">dolor</span>
-                            <span class="tag">sitAmet</span>
+                            <span class="tag">Character Order</span>
+                            <span class="tag">Movie Poster</span>
+                            <span class="tag">Better than IMDb</span>
                         </div>
                     </div>
                     <div class="desc">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, doloribus.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam iure nemo possimus libero sed deleniti praesentium ut iste consequuntur laudantium?</p>
+                        <p>
+                            <strong>TMDB</strong> is newer than IMDb and only features half its number of movies, <a target="_blank" href="https://www.themoviedb.org/about">about 900 thousand.</a> Nevertheless we use its poster links on this website for visualization purposes, because it provides an API that is faster, more accessible and <b>more reliable</b> than IMDb.
+                        </p>
                     </div>
                 </div>
 
@@ -247,11 +298,14 @@
             <div class="data_area reverse top">
                 <div class="text">
                     <div class="desc">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, doloribus.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam iure nemo possimus libero sed deleniti praesentium ut iste consequuntur laudantium?</p>
+                        <p>
+                            In any good story, there are <b>main</b> characters and <b>side</b> characters; it follows that they will not impact the audience in the same way.
+                        </p>
+                        <p>
+                            In IMDb, characters and actors are generally listed in order of creditation, which is often by order of appearance on-screen. <strong>TMDB</strong> encourages listing the cast <a target="_blank" href="https://www.themoviedb.org/bible/movie/59f3b16d9251414f20000003#59f73ca49251416e7100000e">by character importance,</a> separating the main cast from side and background characters, allowing us to define a measure of <b>“role importance”.</b>
+                        </p>
                         <div class="links">
-                            <a class="link" href="">IMDB Dataset</a>
-                            <a class="link" href="">Another Link(ai)</a>
+                            <a target="_blank" class="link" href="https://developer.themoviedb.org/docs">TMDB Dataset</a>
                         </div>
                     </div>
                 </div>
@@ -267,83 +321,26 @@
         
         </div>
 
+        <!-- Baby names -->
         <div class="data_area">
             <div class="text">
                 <div class="head">
-                    <h2>Another epic title coming up.</h2>
+                    <h2>A tale of movies and babies.</h2>
                     <div class="tags-list">
-                        <span class="tag">loremIpsum</span>
-                        <span class="tag">dolor</span>
-                        <span class="tag">too</span>
-                        <span class="tag">many</span>
-                        <span class="tag">tags</span>
-                        <span class="tag">holy</span>
-                        <span class="tag">crap</span>
-                        <span class="tag">insane!</span>
-                        <span class="tag">bobWest</span>
-                        <span class="tag">#abApasDAkor</span>
+                        <span class="tag">Names</span>
+                        <span class="tag">Gender</span>
+                        <span class="tag">Births per Year</span>
                     </div>
                 </div>
                 <div class="desc">
-                    <p>This is a reversed layout</p>
-                    <p>Fuck'em ipsum dolor sit amet consectetur adipisicing elit. Libero, doloribus.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam iure nemo possimus libero sed deleniti praesentium ut iste consequuntur laudantium?</p>
+                    <p>
+                        Every name has an origin and a meaning. Having an overview of given names over time in a population is peeking into a <b>reflection</b> of the changing culture and beliefs of its people, influenced by its leaders, its arts and its history.
+                    </p>
+                    <p>
+                        The <strong>Social Security Administration</strong> provides a list of the 1000 most popular names in the USA each year <b>between 1880 and today</b>; our goal is to determine whether or not the <b>movie culture</b> contributes a sigificant amount to the popularity of <b>baby names</b>, depending on the factors identified in the datasets listed above.
+                    </p>
                     <div class="links">
-                        <a class="link" href="">IMDB Dataset</a>
-                    </div>
-                </div>
-            </div>
-            <div class="graph">
-                <div id="graph_CMU"></div>
-            </div>
-        </div>
-
-        <div class="data_area reverse">
-            <div class="text">
-                <div class="head">
-                    <h2>IMDB stuff.</h2>
-                    <div class="tags-list">
-                        <span class="tag">loremIpsum</span>
-                        <span class="tag">dolor</span>
-                        <span class="tag">too</span>
-                        <span class="tag">many</span>
-                        <span class="tag">tags</span>
-                        <span class="tag">holy</span>
-                        <span class="tag">crap</span>
-                        <span class="tag">insane!</span>
-                        <span class="tag">bobWest</span>
-                        <span class="tag">#abApasDAkor</span>
-                    </div>
-                </div>
-                <div class="desc">
-                    <p>This is a reversed layout</p>
-                    <p>Fuck'em ipsum dolor sit amet consectetur adipisicing elit. Libero, doloribus.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam iure nemo possimus libero sed deleniti praesentium ut iste consequuntur laudantium?</p>
-                    <div class="links">
-                        <a class="link" href="">IMDB Dataset</a>
-                    </div>
-                </div>
-            </div>
-            <div class="graph">
-                <iframe src="plots/intro/imdb_heatmap.html" style="width:100%; height:450px; border:none;"></iframe>
-            </div>
-        </div>
-
-        <div class="data_area reverse">
-            <div class="text">
-                <div class="head">
-                    <h2>Baby race</h2>
-                    <div class="tags-list">
-                        <span class="tag">bruh</span>
-                        <span class="tag">moment</span>
-                    </div>
-                </div>
-                <div class="desc">
-                    <p>This is a reversed layout</p>
-                    <p>Fuck'em ipsum dolor sit amet consectetur adipisicing elit. Libero, doloribus.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam iure nemo possimus libero sed deleniti praesentium ut iste consequuntur laudantium?</p>
-                    <div class="links">
-                        <a class="link" href="">IMDB Dataset</a>
+                        <a target="_blank" class="link" href="https://www.ssa.gov/OACT/babynames/limits.html">SSA baby names</a>
                     </div>
                 </div>
             </div>
@@ -356,9 +353,9 @@
 
     <div class="quote">
         <div>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi voluptate quaerat qui beatae aliquid?
+            Après la pluie, le mauvais temps.
             <span class="credit">
-                - A random person
+                — Les malheurs d'Alfred
             </span>
         </div>
     </div>
