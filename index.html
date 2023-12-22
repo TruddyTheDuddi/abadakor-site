@@ -192,15 +192,6 @@
 
     </div>
 
-    <div class="quote">
-        <div>
-            The name's Bond. James Bond.
-            <span class="credit">
-                — James Bond, GoldenEye
-            </span>
-        </div>
-    </div>
-
     <div class="datasets_present">
         <h1>An introduction to our <strong>datasets:</strong></h1>
 
@@ -369,6 +360,48 @@
                 — Joseph Cooper, Interstellar
             </span>
         </div>
+    </div>
+
+    <div class="metrics">
+        <h1><strong>Measuring changes</strong> in baby name rates.</h1>
+        
+        <div class="text">
+            <p>
+                Let us plot the <b>popularity</b> time evolution curve for a given name, for example <strong>Mia.</strong>
+            </p> 
+        </div>
+
+        <div class="graph">
+            <iframe src="plots/metrics/popularity_curve.html" style="width:100%; height:255px; border:none;"></iframe>        
+        </div>
+    
+        <div class="plant">
+            <div class="text">
+                <h2>An "Influence metric"?</h2>
+                <p>
+                    We're interested in <strong>quantifying the change</strong> in incidence of Mia as a given name, around the release of Pulp Fiction in <b>1994.</b> To do so, let us zoom in around 1994 and <b>compare the slopes</b> between the datapoints before and after the release.
+                </p>
+                <p>
+                    We perform 2 separate linear regressions, one over <b>10 years prior</b> to the year of interest, and the other over <b>the year of interest and the 4 suceeding years.</b> Our metric is defined as the difference between the slopes computed by the two regressions: <strong>Δβ = β<sub>after</sub> - β<sub>before</sub>.</strong>
+                </p>
+                <p>
+                    In essence, we are computing a weighted 2nd-order finite difference, so we are measuring the <strong>local convexity</strong> of the curve.
+                </p>
+                <p>
+                    Because we are dealing with <b>real-world data,</b> convexity (or <b>acceleration</b>) is a better measure than slope itself for determining if changes are happening in the data — indeed, the increase or decrease in baby names is always <strong>gradual,</strong> which means just taking the tangent is not enough and we must look at the <b>change in tangents</b> over time around the year of interest.
+                </p>
+                <p>
+                    In our calculations, the following years are also <b>weighted more</b> than the preceding ones. The goal of such a weighting is to pick up more easily on <strong>sudden changes</strong> in the general direction of the slope.
+                </p>
+            </div>
+
+            <div class="graph">
+                <iframe src="plots/metrics/influence_regression.html" style="width:100%; height:450px; border:none;"></iframe>
+            </div>
+
+        </div>
+
+        
     </div>
 
     <div class="quote">

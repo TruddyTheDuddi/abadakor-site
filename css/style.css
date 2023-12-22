@@ -1225,6 +1225,41 @@ header .tag .bottom_line .t_value{
     margin-left: auto;
 }
 
+/* Metric present */
+.metrics{
+    display: grid;
+    gap: 2em;
+    max-width: 960px;
+    width: 100%;
+    padding: 1em;
+}
+
+.metrics .graph{
+    max-width: 820px;
+}
+
+.metrics h1{
+    font-size: 3em;
+    line-height: 1.2;
+    max-width: 540px;
+}
+
+.metrics h2{
+    font-size: 2em;
+    line-height: 1.2;
+}
+
+.metrics .plant{
+    display: grid;
+    gap: 1.5em;
+    grid-template-columns: 2fr 1.2fr;
+}
+
+.metrics .plant .text{
+    display: grid;
+    gap: 1em;
+}
+
 /* Quote design for break */
 .quote{
     font-size: 1.5em;
@@ -1232,9 +1267,15 @@ header .tag .bottom_line .t_value{
     color: black;
     width: 100%;
     display: grid;
-    clip-path: polygon(0 3%, 100% 0%, 100% 97%, 0% 100%);
+    clip-path: polygon(0 4%, 100% 0%, 100% 96%, 0% 100%);
     /* background-image: url(../img/tile_quote.png); */
     background-size: 16em;
+}
+
+.quote.reverse{
+    clip-path: polygon(0 0%, 100% 4%, 100% 100%, 0% 96%);
+    background-color: #31d6ff;
+    color: white;
 }
 
 .quote div{
