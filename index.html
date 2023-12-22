@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/graphs.css">
     <link rel="icon" type="image/x-icon" href="img/favicon2.svg">
 
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="js/script.js" defer></script>
+    <script src="js/graphs2.js" defer></script>
     <script src="js/graphs.js" defer></script>
 
     <!-- <script src="https://unpkg.com/@popperjs/core@2"></script>
@@ -362,6 +364,23 @@
 
     <div class="parallel_quest">
         <div class="content">
+
+            <div class="section">
+                <h2>The cursed graph.</h2>
+                <div class="cursed_af_graph" id="curser_af_graph">
+                    <div class="explorer_container">
+                        <div id="CirclePacking"></div>
+                        <div id="DistributionPerYear"></div>
+                    </div>
+                    <div class="input_area">
+                        <input type="range" id="variableSlider" min="0" max="2" step="1" value="0" oninput="changeDisplayedValue(this.value)">
+                        <div class="info">
+                            <span id="TitleSelectedVariable"></span>
+                            <small id="DescriptionSelectedVariable"></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="section">
                 <h1>This is the main title</h1>

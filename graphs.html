@@ -28,15 +28,19 @@
 </head>
 <body style="background-color: white;">
     <h1>Graphe 1</h1>
-    <div id="CirclePacking"></div>
-    <div>
-        <input type="range" id="variableSlider" min="0" max="2" step="1" value="0" oninput="changeDisplayedValue(this.value)">
-        <br>
-        <span id="TitleSelectedVariable"></span>
-        <br>
-        <small id="DescriptionSelectedVariable"></small>
+    <div class="cursed_af_graph" id="curser_af_graph">
+        <div class="explorer_container">
+            <div id="CirclePacking"></div>
+            <div id="DistributionPerYear"></div>
+        </div>
+        <div class="input_area">
+            <input type="range" id="variableSlider" min="0" max="2" step="1" value="0" oninput="changeDisplayedValue(this.value)">
+            <div class="info">
+                <span id="TitleSelectedVariable"></span>
+                <small id="DescriptionSelectedVariable"></small>
+            </div>
+        </div>
     </div>
-    <div id="DistributionPerYear"></div>
 
 </body>
 </html>
