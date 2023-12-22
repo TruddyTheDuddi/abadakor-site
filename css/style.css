@@ -7,7 +7,7 @@
     --female: rgb(227, 195, 217);
 
     --bg_base: rgb(15, 9, 28);
-    --bg_base-light: rgb(31, 23, 38);
+    --bg_base-light: rgb(39, 34, 51);
     --bg_base-light-opac: rgba(57, 45, 53, 0.4);
     --light_bg: #dd716d;
     --light_bg_opac: #dd716d49;
@@ -1191,6 +1191,38 @@ header .tag .bottom_line .t_value{
 
 .datasets_present .graph img{
     width: 100%;
+}
+
+.datasets_present .graph{
+    position: relative;
+}
+
+.datasets_present .graph .legend{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 0.65em;
+    display: grid;
+    min-width: 100px;
+
+    background-color: var(--bg_base-light);
+    padding: 0.5em 0.75em;
+    display: grid;
+    gap: 0.25em;
+    border-radius: 0.25em;
+}
+
+.datasets_present .graph .legend .item{
+    gap: 0.5em;
+    display: flex;
+    align-items: center;
+}
+
+.datasets_present .graph .legend .color{
+    height: 0.8em;
+    width: 0.8em;
+    border-radius: 1em;
+    margin-left: auto;
 }
 
 /* Quote design for break */
