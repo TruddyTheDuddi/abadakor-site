@@ -19,6 +19,9 @@
     --mov-impact-i: grey;
     --mov-impact-t: green;
     --mov-impact-b: red;
+
+    --plot-man: #0181b3;
+    --plot-woman: #13C4A3;
 }
 
 /* Fonts */
