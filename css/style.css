@@ -1541,13 +1541,16 @@ footer nav{
 }
 
 footer a{
-    padding: 0.1em 0.4em;
     color: white;
     text-decoration: none;
     font-weight: bold;
-    font-size: 0.9em;
     transition: 0.4s;
     text-decoration: underline;
+}
+
+footer nav a{
+    padding: 0.1em 0.4em;
+    font-size: 0.9em;
 }
 
 footer a:hover{
