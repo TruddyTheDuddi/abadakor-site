@@ -1,4 +1,9 @@
 /* Define font import for graphs in <iframes> */
+:root{
+    --positive: #caf57e;
+    --negative: #ff8187;
+}
+
 @font-face {
     font-family: 'Poppins';
     src: url('../fonts/Poppins-Bold.ttf') format('truetype');
@@ -9,4 +14,110 @@
     font-family: 'Poppins';
     src: url('../fonts/Poppins-Regular.ttf') format('truetype');
     font-weight: normal;
+}
+
+body{
+    font-family: Poppins;
+}
+
+.node{
+    transition: 0.2s stroke-width;
+}
+
+.node:hover{
+    cursor: pointer;
+    opacity: 0.8 !important;
+    stroke-width: 7px !important;
+}
+
+.cursed_af_graph{
+    position: relative;
+}
+
+.cursed_af_graph .explorer_container{
+    display: grid;
+    position: relative;
+}
+
+.cursed_af_graph .input_area{
+    display: grid;
+    gap: 0.5em;
+    max-width: 500px;
+    margin: auto;
+}
+
+.cursed_af_graph .input_area input{
+    max-width: 8em;
+    margin: auto;
+}
+
+.cursed_af_graph .info{
+    display: grid;
+    gap: 0.25em;
+    text-align: center;
+}
+
+.cursed_af_graph .info #TitleSelectedVariable{
+    font-weight: bold;
+}
+
+.cursed_af_graph .info #DescriptionSelectedVariable{
+    opacity: 0.5;
+}
+
+.cursed_af_graph .tooltip{
+    position: absolute;
+    background-color: white;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+    padding: 0.5em;
+    border-radius: 0.5em;
+    opacity: 0;
+    transition: 0.1s opacity;
+    pointer-events: none;
+    user-select: none;
+
+    font-size: 0.9em;
+    display: grid;
+}
+
+.cursed_af_graph .tooltip .genre_name{
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+.cursed_af_graph #DistributionPerYear{
+    display: grid;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.cursed_af_graph #DistributionPerYear>*{
+    margin: auto;
+    background-color: white;
+    border-radius: 0.5em;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+    padding: 2em 1em;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: 0.2s;
+
+}
+
+.cursed_af_graph.overlay #DistributionPerYear>*{
+    opacity: 1;
+    transform: scale(1);
+}
+
+
+.cursed_af_graph #CirclePacking{
+    transition: opacity 0.5s;
+}
+
+.cursed_af_graph.overlay #CirclePacking{
+    opacity: 0.5;
+    pointer-events: none;
 }
