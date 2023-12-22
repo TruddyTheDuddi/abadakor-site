@@ -1,6 +1,6 @@
 // set the dimensions and margins of the graph
-var width = 850;
-var height = 850;
+var width = 900;
+var height = 600;
 
 const DESC = {
     avg_slope_change_significant: {
@@ -32,7 +32,7 @@ var svg = d3
 // Load data from CSV file using callback-style syntax
 d3.csv("data/movie_genre_significant.csv").then(data => {
     // Initial max size associated with the first data key
-    var initialMaxSize = 50;
+    var initialMaxSize = 45;
 
     // Size scale for genres with adjusted range
     var size = d3.scaleLinear()
@@ -82,9 +82,8 @@ d3.csv("data/movie_genre_significant.csv").then(data => {
         .attr("r", function(d) {
             return size(Math.abs(+d[currentDataKey]));
         }) // Using Math.abs to get the absolute value
-        .attr("cx", width / 2)
-        .attr("cy", height / 2)
-        //return +d[currentDataKey] >= 0 ? "rgb(255, 160, 160)" : "lightblue"; }) // Set fill color based on the sign
+        // .attr("cx", width / 2)
+        // Set the initial x position of the data based on the sign of the value
         //.style("fill", function (d) { return "hsl(" + Math.random() * 360 + ",80%,50%)"; }) // Random fill color
         .style("stroke", function(d) {
             return +d[currentDataKey] >= 0 ? "red" : "blue";
@@ -120,7 +119,7 @@ d3.csv("data/movie_genre_significant.csv").then(data => {
         .attr("text-anchor", "middle")
         .attr("dy", ".35em")
         .attr("font-size", (d) =>
-            size(Math.abs(+d[currentDataKey])) / 3
+            Math.max(size(Math.abs(+d[currentDataKey])) / 3, 10)
         )
         .attr("fill", "rgb(56, 44, 43)")
         .attr("pointer-events", "none");
@@ -246,7 +245,7 @@ d3.csv("data/movie_genre_significant.csv").then(data => {
                     return "rgba(0,0,0,0.4)";
                 } else if (currentDataKey === "prop_names_signi_in_genre_per_total_film_in_genre") {
                     // Set fill color based on the number of films in genre
-                    return +d.nb_films_in_genre > 10000 ? "lightgrey" : "white";
+                    return +d.nb_films_in_genre > 10000 ? "rgba(0,0,0,0.4)" : "rgba(0,0,0,0.2)";
                 }
             })
         // Restart the simulation with the updated data
