@@ -468,7 +468,7 @@
                     One could think about romance movies, which are very sentimental and might impact strongly people's minds due to the emotional feelings they pass through the caracter. Or maybe comic or action movies — these are also strongly ingrained in the market and have their own set of associated feelings, although less on the compassion/feeling side but rather in the act of taking action or making people laugh, without especially giving the opportunity to the viewer to relate to a possible real life or dream love story which we might get through during our life.
                 </p>
                 <p>
-                    In this section, we try to capture whether some <strong>movie genres</strong> have significantly more influence on baby naming than others, both in term of <b>proportion</b> and <b>magnitude</b> influence.
+                    In this section, we try to capture whether some <strong>movie genres</strong> have significantly more influence on baby naming than others, both in term of <b>proportion</b> and <b>magnitude influence</b>. Furthermore, we plot the time series of these values for each genre: can we see <strong>historical trends</strong> within these data?
                 </p>
                 <div class="cursed_af_graph" id="curser_af_graph">
                     <div class="explorer_container">
@@ -487,28 +487,49 @@
                     <small class="inline"><img src="img/scroll-mouse.svg" alt="">Hover and click a genre to see the evolution of the plotted value between 1880 and 2022.</small>
                 </p>
 
-                <h3>Mean influence of genre on baby names</h3>
+                <h3>Tab 1 - Mean influence of genre on baby names.</h3>
 
                 <p>
                     The first panel shows the average (positive and negative) <b>convexity</b> of popularity evolution of baby names that are <b>associated to movies of the genre</b>. In other words: for each movie in the genre, we look at the character names and how the <b>baby name slopes changed</b> around the release of that movie; then, we take the <strong>mean value</strong> over all characters of all movies associated with the genre. On the left, genres associated with local <b>convex curves</b> for baby names; on the right, concave curves, i.e. genres associated with a <b>mean deceleration</b> of number of babies.
                 </p>
                 <p>
-                    Looking at the graph, overall movies seem to have a postive impact on nameing. We also notice that genres such as "Biographical", "Film adaptation", and other in the same category that are tied to real life events have a stronger impact. However these values seem to be very small (compared to the next values).
+                    Looking at the graph, overall movies seem to have a <b>postive impact</b> on naming. We also notice that genres such as "Biographical", "Film adaptation", and other in the same category that are tied to <b>real life events</b> have a stronger impact. However these values seem to be very small (compared to the next values).
+                </p>
+                <p>
+                    The much larger proportion of genres associated with a positive slope change may be attributed to the general idea and <i>a priori</i> that movies have a positive impact and that they <b>set off</b> trends, not that they end them.
                 </p>
 
                 <h3>
-                    Absolute influence on baby names by genres
+                    Tab 2 - Absolute influence on baby names by genres.
                 </h3>
                 <p>
                     The second panel also shows the <b>average convexity</b> of baby curves associated to movies of the genre; the difference is that we compute the <strong>absolute value</strong> of the convexity, which means negative and positive values don't cancel each other out and both count towards the total influence.
                 </p>
+                <p>
+                    Here, a few genres stand out, in particular the <code>Western</code>, <code>Detective</code> and <code>Black-and-white</code> bubbles: while all other bubbles shrink in size, these three grow significantly <b>despite the 10-fold change in scale</b> (in fact they are the ones causing the general shrinkage because their values are so large). If we click on the bubbles to look at the value over time, we see that names associated with these 3 genres underwent large <b>positive and negative</b> slope changes, which explains why they show small mean convexity but large mean absolute convexity.
+                </p>
+                <p>
+                    <code>Black-and-white</code> movies are of particular note: we see a large negative peak in 1948 and around, which marks the <strong>end of the black-and-white film era</strong> with the introduction and popularization of technologies such as Kodachrome, Agfacolor and Eastmancolor <a href="https://en.wikipedia.org/wiki/Color_motion_picture_film">(source)</a>. The presence of this peak is very interesting because it is quite <b>unexpected:</b> the number of black-and-white movies and characters obviously decreased, but it is surprising that the popularity of these character names as baby names <strong>also decreased.</strong> Maybe the audience realized that the names had become old <b>because</b> the movies stayed in black-and-white?
+                </p>
 
                 <h3>
-                    Percentage of affected names per genre
+                    Tab 3 - Percentage of affected names per genre.
                 </h3>
                 <p>
                     Finally, we look at the <b>proportion of names</b> that present a significant (<code>α = 0.1</code>) change in slope after the release of the movie. The genres are separated with respect to the number of movies that they contain, with large genres (<code>n > 10,000</code>) on the left and small ones on the right.
                 </p>
+                <p>
+                    In the separation of genres by size, we can see that apart from <code>Family Film</code>, genres that are associated with negative convexity are all <strong>relatively small genres.</strong> This is in line with what we stated earlier about the "positive impact only" of movies, the idea that what is observed is only due to the genres <b>not being popular enough</b> and thus not having enough "positive impact".
+                </p>
+                <p>
+                    There is not a lot of size variation between the bubbles and thus not much can be immediately said about the plot. Nonetheless we see that <code>Suspense</code>, <code>Psychological thriller</code>, <code>Romantic comedy</code> (and all other romance genres) present the largest <b>proportion of names</b> with a significant slope change, maybe because these are the genres where characters have <strong>the most heart-wrenching roles</strong> that viewers remember best. By contrast, other movie genres have significantly low impact percentage (<code>Black-and-white</code>, <code>World cinema</code>, <code>Bollywood</code>), which is probably because the character names are <b>very uncommon</b> in the U.S.A.; <code>Black-and-white</code> is once again very surpising, our hypothesis is that there are a select few characters that were <strong>extremely popular,</strong> and fell out of favor at the end of the black-and-white era.
+                </p>
+                <div class="minimizer">
+                    <h3>Overall...</h3>
+                    <p>
+                        ...there are <b>too many different genres</b> to draw general conclusions about their influence on or correlation with baby names, but there are sufficiently differring and interesting trends in the data to warrant <b>further study</b> to determine the exact impact of genre.
+                    </p>
+                </div>
             </div>
 
             <div class="section">
@@ -517,18 +538,17 @@
                 <h3>Matching on gender, character order, movie genre and year.</h3>
 
                 <p>
-                    We are exploring how the popularity of a film influences baby naming trends, considering various factors such as gender, character order, movie genre, and year of release. This comprehensive approach helps isolate the true impact of a film's popularity.
+                    Since capturing the effect of the popularity of a film can be quite challenging looking only at the variable sepresenting the <code>number of votes</code>, we try to isolate its true effect by discarding all potential effect of other observed variables possibly problematic. To do so, we perform <strong>exact matching</strong> on <b>the gender</b> (as people might relate more to a female in a given situational role in a movie genre rather than a man, or vice versa), <b>character order</b> (by intuition, the headliners in a film are often the ones that would impact the public the most by their large screen time), <b>movie genre</b> (as romance film might possible have wider impact than drama) and <b>year of release.</b>
                 </p>
 
-                <b>Step 1: Establishing Dataframe</b>
                 <p>
-                    Our initial step involves setting up a comprehensive dataframe that includes all the required movie characteristics, forming the foundation of our analysis.
+                    We create a <b>control</b> and a <b>treatment</b> group. This manoeuvre is set up in order to try to better isolate the effect of a treatment wihtout possibly confounding its effect with the one of other confounders if not balancing and matchiing the two groups. This is based on the number of votes given a threshold: we use the median of the data to tell which movie is "popular" or not.
                 </p>
 
-                <b>Step 2: Creating Treatment and Control Groups</b>
                 <p>
-                    We then divide the data into treatment and control groups, distinguishing them based on the number of votes a film has received. Through this, we separe for isolating the effects of a film's popularity.
+                    We investigate if changing the threshold alters the results. For this, we apply the 25th, 75th, and 90th percentiles as the thresholds.
                 </p>
+
             
                 <b>Step 3: Matching</b>
                 <p>
