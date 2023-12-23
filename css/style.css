@@ -1482,6 +1482,18 @@ header .tag .bottom_line .t_value{
     margin-top: 0.5em;
 }
 
+.parallel_quest .inline{
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+}
+
+.parallel_quest .inline img{
+    height: 1em;
+    width: auto;
+}
+
+
 /* Footer */
 footer{
     font-size: 0.9em;

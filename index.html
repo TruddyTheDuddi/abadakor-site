@@ -460,15 +460,15 @@
             </div>
 
             <div class="section">
-                <h2>Question 2: The cursed graph.</h2>
-                <p>
-                    By looking at movie genre, one could think about Romance film which are more sentimental and might impact strongly people's mind due to the emotional feelings they pass through the caracter.
+                <h2>2: Does the genre of a movie have an impact on the influence of a movie?</h2>
+                <p class="important">
+                    What a number of different movie genres there are, and how different they make each film!
                 </p>
                 <p>
-                    In the other hand, comic or action movies are also strongly implemented in the market and have their own set of sentiment, but maybe less on the compassion/feeling side but rather in the act of taking action or making people laugh, without especially giving the opportunity to the viewer to relate to a possible real life or dream love story which we might get through during our life.
+                    One could think about romance movies, which are very sentimental and might impact strongly people's minds due to the emotional feelings they pass through the caracter. Or maybe comic or action movies — these are also strongly ingrained in the market and have their own set of associated feelings, although less on the compassion/feeling side but rather in the act of taking action or making people laugh, without especially giving the opportunity to the viewer to relate to a possible real life or dream love story which we might get through during our life.
                 </p>
                 <p>
-                    In this section, we therefore try to capture whether some movie genre have significantly more influence on baby naming than other, both in term of proportion and magnitude influence.
+                    In this section, we try to capture whether some <strong>movie genres</strong> have significantly more influence on baby naming than others, both in term of <b>proportion</b> and <b>magnitude</b> influence.
                 </p>
                 <div class="cursed_af_graph" id="curser_af_graph">
                     <div class="explorer_container">
@@ -476,13 +476,39 @@
                         <div id="DistributionPerYear"></div>
                     </div>
                     <div class="input_area">
-                        <input type="range" id="variableSlider" min="0" max="2" step="1" value="0" oninput="changeDisplayedValue(this.value)">
+                        <input type="range" id="variableSlider" min="0" max="2" step="1" value="0" oninput="changeDisplayedValue(this.value)" autocomplete="off">
                         <div class="info">
                             <span id="TitleSelectedVariable"></span>
                             <small id="DescriptionSelectedVariable"></small>
                         </div>
                     </div>
                 </div>
+                <p>
+                    <small class="inline"><img src="img/scroll-mouse.svg" alt="">Hover and click a genre to see the evolution of the plotted value between 1880 and 2022.</small>
+                </p>
+
+                <h3>Mean influence of genre on baby names</h3>
+
+                <p>
+                    The first panel shows the average (positive and negative) <b>convexity</b> of popularity evolution of baby names that are <b>associated to movies of the genre</b>. In other words: for each movie in the genre, we look at the character names and how the <b>baby name slopes changed</b> around the release of that movie; then, we take the <strong>mean value</strong> over all characters of all movies associated with the genre. On the left, genres associated with local <b>convex curves</b> for baby names; on the right, concave curves, i.e. genres associated with a <b>mean deceleration</b> of number of babies.
+                </p>
+                <p>
+                    Looking at the graph, overall movies seem to have a postive impact on nameing. We also notice that genres such as "Biographical", "Film adaptation", and other in the same category that are tied to real life events have a stronger impact. However these values seem to be very small (compared to the next values).
+                </p>
+
+                <h3>
+                    Absolute influence on baby names by genres
+                </h3>
+                <p>
+                    The second panel also shows the <b>average convexity</b> of baby curves associated to movies of the genre; the difference is that we compute the <strong>absolute value</strong> of the convexity, which means negative and positive values don't cancel each other out and both count towards the total influence.
+                </p>
+
+                <h3>
+                    Percentage of affected names per genre
+                </h3>
+                <p>
+                    Finally, we look at the <b>proportion of names</b> that present a significant (<code>α = 0.1</code>) change in slope after the release of the movie. The genres are separated with respect to the number of movies that they contain, with large genres (<code>n > 10,000</code>) on the left and small ones on the right.
+                </p>
             </div>
 
             <div class="section">
