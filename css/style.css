@@ -1349,6 +1349,25 @@ header .tag .bottom_line .t_value{
     margin: 1em auto;
 }
 
+.parallel_quest .content .conclusion{
+    line-height: 1.5;
+    max-width: 800px;
+}
+
+.parallel_quest .content .inline{
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items:start;
+    gap: 2em;
+}
+
+.parallel_quest .content .eagle{
+    box-shadow: 3px 3px 0 white, 10px 10px 0 var(--primary);
+    width: 200px;
+    height: 200px;
+}
+
+
 .parallel_quest .content img{
     max-width: 100%;
 }
