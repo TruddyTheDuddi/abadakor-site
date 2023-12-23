@@ -67,7 +67,8 @@ body{
 
 .cursed_af_graph .tooltip{
     position: absolute;
-    background-color: white;
+    background-color: rgba(255,255,255,0.65);
+    backdrop-filter: blur(8px);
     box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
     padding: 0.5em;
     border-radius: 0.5em;
@@ -97,7 +98,7 @@ body{
 
 .cursed_af_graph #DistributionPerYear>*{
     margin: auto;
-    background-color: white;
+    background-color: rgba(255,255,255,0.6);
     border-radius: 0.5em;
     box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
     padding: 2em 1em;
@@ -110,14 +111,16 @@ body{
 .cursed_af_graph.overlay #DistributionPerYear>*{
     opacity: 1;
     transform: scale(1);
+    backdrop-filter: blur(10px);
 }
 
 
 .cursed_af_graph #CirclePacking{
-    transition: opacity 0.5s;
+    transition: 0.5s;
 }
 
 .cursed_af_graph.overlay #CirclePacking{
     opacity: 0.5;
+    filter: blur(3px);
     pointer-events: none;
 }

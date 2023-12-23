@@ -1356,7 +1356,7 @@ header .tag .bottom_line .t_value{
 .parallel_quest .content h1{
     font-size: 3em;
     line-height: 1.2;
-    max-width: 300px;
+    max-width: 400px;
 }
 
 .parallel_quest .content h2{
@@ -1373,7 +1373,14 @@ header .tag .bottom_line .t_value{
     display: flex;
     gap: 0.75em;
     color: rgba(0,0,0,0.4);
+    margin: 0.5em 0;
 }
+
+.parallel_quest .content .minimizer h3{
+    margin: 0;
+    color: black;
+}
+
 
 .parallel_quest .content h2::before{
     content: '';
@@ -1390,6 +1397,11 @@ header .tag .bottom_line .t_value{
     border-radius: 3px;
     flex-shrink: 0;
 }
+
+.parallel_quest .content .minimizer h3::before{
+    background-color: var(--primary);
+}
+
 
 .parallel_quest .content p{
     margin: 0;
@@ -1445,6 +1457,42 @@ header .tag .bottom_line .t_value{
     border-radius: 1px;
     width: 100%;
 }
+
+.parallel_quest .graph{
+    display: grid;
+    gap: 0.25em;
+}
+
+.parallel_quest .graph .tile{
+    font-weight: bold;
+    font-size: 0.8em;
+    margin-left: 3em;
+    display: flex;
+    gap: 0.5em;
+    margin-bottom: 1em;
+}
+
+.parallel_quest .graph .tile::before{
+    content: '';
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 100%;
+    background-color: var(--primary);
+    flex-shrink: 0;
+    margin-top: 0.5em;
+}
+
+.parallel_quest .inline{
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+}
+
+.parallel_quest .inline img{
+    height: 1em;
+    width: auto;
+}
+
 
 /* Footer */
 footer{
