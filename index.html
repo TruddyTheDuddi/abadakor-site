@@ -512,10 +512,73 @@
             </div>
 
             <div class="section">
-                <h2>Question 3</h2>
-                <iframe src="plots/q3/q3_average_magnitude_influence_matching.html" style="width:100%; height:500px; border:none;"></iframe>
+                <h2>3: What's the effect of movie's popularity on baby naming?</h2>
+
+                <h3>Matching on gender, character order, movie genre and year.</h3>
+
+                <p>
+                    We are exploring how the popularity of a film influences baby naming trends, considering various factors such as gender, character order, movie genre, and year of release. This comprehensive approach helps isolate the true impact of a film's popularity.
+                </p>
+
+                <b>Step 1: Establishing Dataframe</b>
+                <p>
+                    Our initial step involves setting up a comprehensive dataframe that includes all the required movie characteristics, forming the foundation of our analysis.
+                </p>
+
+                <b>Step 2: Creating Treatment and Control Groups</b>
+                <p>
+                    We then divide the data into treatment and control groups, distinguishing them based on the number of votes a film has received. Through this, we separe for isolating the effects of a film's popularity.
+                </p>
+            
+                <b>Step 3: Matching</b>
+                <p>
+                    The matching process is where we pair films from the control and treatment groups. We ensure a balanced comparison while focusing on the variable of interest: the number of votes.
+                </p>
+            
+                <b>Step 4: Analyzing Variations in Naming Trends</b>
+                <p>
+                    Finally, after matching, we analyze the yearly variations in the proportion of names influenced by movies.
+                </p>
+
+                <h3>Further discrimining the unpopular movies.</h3>
+                <p>
+                    We can try to modify the threshold of votes that determines the popularity. We always keep a threshold given by the distribution of the dataset, namely the 25th, 75th and 90th percentiles.
+                </p>
+                <p>
+                    By doing so, we increase the size difference between the control and the treatment group, thus decrease the possible number of pairs, but we allow to better capture the effect popularity related to a movie and its effect on the influence on baby naming.
+                </p>
+
                 <iframe src="plots/q3/q3_prop_signi_matching.html" style="width:100%; height:500px; border:none;"></iframe>
+
+                <h3>Does matching on year is relevant?</h3>
+                <p>
+                    So far we have performed perfect matching on 3 movies caracteristics as well as on the year of release. But is it really that important to match on the year ? Let's explore this question with another matching with same threshold on the popularity but no requirement for year equivalency in pairs between control and treatment group.
+                </p>
+                <p>
+                    The result are displayed in the point-plot below and as we can clearly see:
+                </p>
                 <iframe src="plots/q3/q3_prop_signi_no_matching_year.html" style="width:100%; height:500px; border:none;"></iframe>
+                <p>
+                    We get quite an interesting result looking at this pointplot, especially that we cannot say that the difference in proportion of significantly influenced name between the popular and unpopular movies (median threshold) is significant anymore since the confidence interval do overlap!
+                </p>
+
+                <h3>What about the qualitative effect obtained with matching ?</h3>
+                <p>
+                    The previous analysis were performed on the proportion of significantly influenced names betweeen the control group of unpopular movies and the treated group of popular film to try to assess whether there was a statistically difference between the two after performing exact matching. We are now interested at the qualitative effect that could bring out this perfect matching, namely the difference in magnitude influence between the control and treated group. 
+                </p>
+
+                <p>
+                    Computation for several popularity threshold were made (25th, median, 75th, 90th percentile) and the first matching was performed considering only the significantly influenced names and matching on same order, movie genre, gender and year of release.
+                </p>
+
+                <p>
+                    The results of difference in difference analysis is summarized in the dynamic pointplot below:
+                </p>
+                <iframe src="plots/q3/q3_average_magnitude_influence_matching.html" style="width:100%; height:500px; border:none;"></iframe>
+                <p>
+                    From that summary of difference in difference analysis through dynamic pointplot, we can observe that after matching on various popularity threshold, we cannot say that there is a statistically significant change in magnitude influence between popular and unpopular movies.
+                </p>
+
             </div>
 
             <div class="section">
@@ -658,12 +721,12 @@
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto facilis odio, ut obcaecati, aliquid totam deserunt quaerat amet cumque provident eligendi eum alias recusandae dolore laudantium doloribus quod quis ipsam ratione, laborum iste vero vel. Totam, reprehenderit eligendi obcaecati eaque fugiat deserunt magnam recusandae, tenetur id ratione cupiditate assumenda vel. Deserunt excepturi minima cupiditate reiciendis quis quae beatae, dolorem officiis corporis perspiciatis quidem delectus incidunt autem odio provident explicabo eligendi recusandae voluptate. Nesciunt, sed tempora rerum molestias tempore quidem ipsa reprehenderit eum excepturi laborum, ratione architecto libero obcaecati eius vero pariatur minus amet necessitatibus nostrum exercitationem deserunt! Quae, quis fugit.</p>
             </div>
 
-            <hr>
+            <!-- <hr> -->
 
-            <div class="section conclusion">
+            <!-- <div class="section conclusion">
                 <h2>To conlude</h2>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore maiores veritatis ullam similique quas qui ut laudantium placeat, reiciendis sint quidem asperiores sunt laborum officiis eius natus nulla. Corrupti, dolore!</p>
-            </div>
+            </div> -->
         
         </div>
     </div>
