@@ -4,7 +4,7 @@ var height = 600;
 
 const DESC = {
     avg_slope_change_significant: {
-        title: "Average influence yileded by genres",
+        title: "Average influence yielded by genres",
         desc: "Measuring the mean impact of a film genre on baby names (value in convexity factor).",
         yLabel: "Average slope change"
     },
@@ -15,7 +15,7 @@ const DESC = {
     },
     prop_signif_per_genre: {
         title: "Proportion of influenced names by genres",
-        desc: "Proportion of significantly impacted names in a given movie genre (values in percentage).",
+        desc: "Proportion of significantly impacted names in a given movie genre. Genres with more than 10,000 movies on the left.",
         yLabel: "Proportion of significantly impacted names"
     }
 }
