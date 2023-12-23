@@ -430,15 +430,24 @@
                 <p>
                     <strong>Baby birth rates</strong> are <b>higher in the summer</b> than in the winter, which is due to higher conception rates in the autumn and winter periods <a href="https://rightasrain.uwmedicine.org/life/parenthood/winter-baby-conception-trend">(source)</a>. Let's find out if this fact implies that the movies released in this period affect more the name given to babies.
                 </p>
-                <iframe src="plots/q1/q1_proportion_seasons.html" style="width:100%; height:500px; border:none;"></iframe>
+                <div class="graph">
+                    <iframe src="plots/q1/q1_proportion_seasons.html" style="width:100%; height:500px; border:none;"></iframe>
+                    <div class="tile">Proportion of Significant Values with 95% Confidence Intervals by Season.</div>
+                </div>
                 <p>
                     To tackle this question, we look at the <b>proportion of character</b> names related to a <b>significant slope increase</b> for their respective name. We can see that it is in fact <strong>in fall and winter</strong> that we have more significant names, which seems to contradict the premise of the study and our hypothesis. We note that the "region of influence" is unknown, i.e. maybe there exists a 6-month delay in the influence of names on baby names.
                 </p>
-                <iframe src="plots/q1/q1_magnitude_per_month.html" style="width:100%; height:500px; border:none;"></iframe>
+                <div class="graph">
+                    <iframe src="plots/q1/q1_magnitude_per_month.html" style="width:100%; height:500px; border:none;"></iframe>
+                    <div class="tile">Average general influence of films per month.</div>
+                </div>
                 <p>
                     When looking with respect to the <b>months</b> instead of the seasons, the difference between fall and winter period is even less clear. The <b>confidence interval is also large</b> which indicates we can't really conclude that there is a significant variation.
                 </p>
-                <iframe src="plots/q1/q1_proportion_per_season.html" style="width:100%; height:500px; border:none;"></iframe>
+                <div class="graph">
+                    <iframe src="plots/q1/q1_proportion_per_season.html" style="width:100%; height:500px; border:none;"></iframe>
+                    <div class="tile">Proportion of Significance by Season Over Years.</div>
+                </div>
                 <p>
                     We remark here that in the 15 last years of the dataset, the proportion of significant movie releases is more or less 25% each, and stays consistent over the years. This is a first indication that we cannot reject H<sub>0</sub>, the data does not seem to show a significant difference of influence by movie character names over the seasons. There are more variations in older years, but this might be because there were less movies released then and thus the variance is higher.
                 </p>
@@ -485,7 +494,10 @@
 
             <div class="section">
                 <h2>4: Does characters' name impact differently depending on the status they have in the movie?</h2>
-                <iframe src="plots/q4/q4_impact_char_importance.html" style="width:100%; height:500px; border:none;"></iframe>
+                <div class="graph">
+                    <iframe src="plots/q4/q4_impact_char_importance.html" style="width:100%; height:500px; border:none;"></iframe>
+                    <div class="tile">Significant impact relative to character importance.</div>
+                </div>
                 <p>
                     With this first inspection, we can see that the <strong>greater the importance of characters</strong> in the film (i.e. small order, a main character), the greater the number of characters <b>having a significant impact</b> on the names given to newborns. 
                 </p>
@@ -493,7 +505,10 @@
                     This result is in line with what we might intuitively expect, that characters make more of an impression on the viewer than characters who appear only infrequently in the film.
                 </p>
                 
-                <iframe src="plots/q4/q4_signi_percent_per_order.html" style="width:100%; height:500px; border:none;"></iframe>
+                <div class="graph">
+                    <iframe src="plots/q4/q4_signi_percent_per_order.html" style="width:100%; height:500px; border:none;"></iframe>
+                    <div class="tile">Character name impact per order.</div>
+                </div>
 
                 <p>
                     Looking at the <b>percentage of characters with a significant impact</b> within each character order allows us to identify which role type has the greatest number of character names influencing the names of newborns. Here the difference between the influence of the first and second role is too small to say for sure which role has the most influence (the overlap in CI is too large), but it is quite clear from the first 6 bars that character name influence on baby names <b>decreases</b> as the importance of the character decreases.
@@ -505,11 +520,17 @@
 
                 <h3>Study the sign of the influence.</h3>
 
-                <iframe src="plots/q4/q4_slope_change_pos_neg.html" style="width:100%; height:500px; border:none;"></iframe>
+                <div class="graph">
+                    <iframe src="plots/q4/q4_slope_change_pos_neg.html" style="width:100%; height:500px; border:none;"></iframe>
+                    <div class="tile">Mean Negative and Positive Slope Change by Order.</div>
+                </div>
                 <p>
                     We note that the average slope change per order for negative impacts has a greater magnitude than for positive impacts. However, the proportion of <b>negatively impacting</b> character names represents less than a quarter of all significant slope change.
                 </p>
-                <iframe src="plots/q4/q4_slope_change_pos_neg_prop.html" style="width:100%; height:350px; border:none;"></iframe>
+                <div class="graph">
+                    <iframe src="plots/q4/q4_slope_change_pos_neg_prop.html" style="width:100%; height:350px; border:none;"></iframe>
+                    <div class="tile">Proportion of Negative and Positive Slope Change by Order.</div>
+                </div>
                 <p>
                     For positive slope changes (as noted in the previous sub-question), we see that for the <b>first 5 orders</b> the influence tends to diminish the less important the character's role.
                 </p>
@@ -517,13 +538,19 @@
                 <p>
                     This could be intuitively explained by the fact that the <b>less important</b> a character is, the <b>less he or she will impact</b> the audience.
                 </p>
-                <iframe src="plots/q4/q4_total_slop_change_per_order.html" style="width:100%; height:500px; border:none;"></iframe>
+                <div class="graph">
+                    <iframe src="plots/q4/q4_total_slop_change_per_order.html" style="width:100%; height:500px; border:none;"></iframe>
+                    <div class="tile">Magnitude of Slope Change per Order.</div>
+                </div>
                 <p>
                     The <strong>magnitude of the slope change</strong> tends to <b>decrease</b> for the first 5 orders. This reflects the trend of positive slope changes, which are proportionally in the majority for each order.
                 </p>
 
                 <h3>Does the order of a name influence differently according to gender?</h3>
-                <iframe src="plots/q4/q4_slope_change_gender_per_order.html" style="width:100%; height:500px; border:none;"></iframe>
+                <div class="graph">
+                    <iframe src="plots/q4/q4_slope_change_gender_per_order.html" style="width:100%; height:500px; border:none;"></iframe>
+                    <div class="tile">Proportion of Slope Change per Order and Gender.</div>
+                </div>
                 <p>
                     By looking at magnitude slope change <strong>per order and gender</strong> we notice that except for the first role and the 4th, it seems that for most roles <b>female character</b> names seem to influence more than male ones.
                 </p>
@@ -546,13 +573,19 @@
                     In this section, we will explore whether <strong></strong>gender</strong> plays a role in influencing baby names.
                 </p>
 
-                <iframe src="plots/q5/q5_gender_slope_change_per_year.html" style="width:100%; height:500px; border:none;"></iframe>
+                <div class="graph">
+                    <iframe src="plots/q5/q5_gender_slope_change_per_year.html" style="width:100%; height:500px; border:none;"></iframe>
+                    <div class="tile">Average Magnitude of Significant Slope Change for year order and each Gender.</div>
+                </div>
 
                 <p>
                     If we look at the magnitude of influence over the years, <b>differentiating male and female,</b> we can see a greater overall influence of <strong>female character</strong> names than male ones.
                 </p>
 
-                <iframe src="plots/q5/q5_slope_change_per_gender.html" style="width:100%; height:400px; border:none;"></iframe>
+                <div class="graph">
+                    <iframe src="plots/q5/q5_slope_change_per_gender.html" style="width:100%; height:400px; border:none;"></iframe>
+                    <div class="tile">Variation magnitude per gender.</div>
+                </div> 
 
                 <p>
                     We can see that on average <b>over all years,</b> female character names have a greater influence on baby names than male character names.

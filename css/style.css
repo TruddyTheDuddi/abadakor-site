@@ -1458,6 +1458,30 @@ header .tag .bottom_line .t_value{
     width: 100%;
 }
 
+.parallel_quest .graph{
+    display: grid;
+    gap: 0.25em;
+}
+
+.parallel_quest .graph .tile{
+    font-weight: bold;
+    font-size: 0.8em;
+    margin-left: 3em;
+    display: flex;
+    gap: 0.5em;
+    margin-bottom: 1em;
+}
+
+.parallel_quest .graph .tile::before{
+    content: '';
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 100%;
+    background-color: var(--primary);
+    flex-shrink: 0;
+    margin-top: 0.5em;
+}
+
 /* Footer */
 footer{
     font-size: 0.9em;
