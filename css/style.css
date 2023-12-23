@@ -1356,7 +1356,7 @@ header .tag .bottom_line .t_value{
 .parallel_quest .content h1{
     font-size: 3em;
     line-height: 1.2;
-    max-width: 300px;
+    max-width: 400px;
 }
 
 .parallel_quest .content h2{
@@ -1376,6 +1376,12 @@ header .tag .bottom_line .t_value{
     margin: 0.5em 0;
 }
 
+.parallel_quest .content .minimizer h3{
+    margin: 0;
+    color: black;
+}
+
+
 .parallel_quest .content h2::before{
     content: '';
     width: 5.5px;
@@ -1391,6 +1397,11 @@ header .tag .bottom_line .t_value{
     border-radius: 3px;
     flex-shrink: 0;
 }
+
+.parallel_quest .content .minimizer h3::before{
+    background-color: var(--primary);
+}
+
 
 .parallel_quest .content p{
     margin: 0;
