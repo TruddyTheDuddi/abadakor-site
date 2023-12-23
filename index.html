@@ -534,71 +534,97 @@
 
             <div class="section">
                 <h2>3: What's the effect of movie's popularity on baby naming?</h2>
-
-                <h3>Matching on gender, character order, movie genre and year.</h3>
-
                 <p>
-                    Since capturing the effect of the popularity of a film can be quite challenging looking only at the variable sepresenting the <code>number of votes</code>, we try to isolate its true effect by discarding all potential effect of other observed variables possibly problematic. To do so, we perform <strong>exact matching</strong> on <b>the gender</b> (as people might relate more to a female in a given situational role in a movie genre rather than a man, or vice versa), <b>character order</b> (by intuition, the headliners in a film are often the ones that would impact the public the most by their large screen time), <b>movie genre</b> (as romance film might possible have wider impact than drama) and <b>year of release.</b>
+                    We expect that <strong>popular movies</strong> have a stronger influence on the given names, and well rated movies might have a positive influence compared to badly rated movies which might have a negative one.
                 </p>
 
                 <p>
-                    We create a <b>control</b> and a <b>treatment</b> group. This manoeuvre is set up in order to try to better isolate the effect of a treatment wihtout possibly confounding its effect with the one of other confounders if not balancing and matchiing the two groups. This is based on the number of votes given a threshold: we use the median of the data to tell which movie is "popular" or not.
+                    We focus on the popularity in this section, but we quickly realize that it is not straightforward to get satisfying results for this study question.
+                </p>
+
+                <h3>Overview: Matching on gender, order, movie genre and year.</h3>
+
+                <p>
+                    Since capturing the effect of the popularity of a film can be quite challenging looking only at the variable representing the <code>number_of_votes</code>, we try to isolate its true effect by discarding all potential effect of other observed variables possibly problematic. To do so, we perform <strong>exact matching</strong> on <b>the gender</b> (as people might relate more to a female in a given situational role in a movie genre rather than a man, or vice versa), <b>character order</b> (by intuition, the headliners in a film are often the ones that would impact the public the most by their large screen time), <b>movie genre</b> (as romance film might possible have wider impact than drama) and <b>year of release.</b>
+                </p>
+
+
+                <h3>Which movie is popular? Which one is not?</h3>
+
+                <p>
+                    We create a <b>control</b> and a <b>treatment</b> group. This manoeuvre is set up in order to try to better isolate the effect of a treatment wihtout possibly confounding its effect with the one of other confounders if not balancing and matching the two groups. This is based on the number of votes given a threshold.
                 </p>
 
                 <p>
-                    We investigate if changing the threshold alters the results. For this, we apply the 25th, 75th, and 90th percentiles as the thresholds.
+                    This <strong>threshold</strong> is by default the <b>median.</b> However we can try to modify the threshold of votes that determines the popularity. We always keep a threshold given by the distribution of the dataset, namely the <b>25th, 75th</b> and <b>90th percentiles.</b>
                 </p>
 
-            
-                <b>Step 3: Matching</b>
                 <p>
-                    The matching process is where we pair films from the control and treatment groups. We ensure a balanced comparison while focusing on the variable of interest: the number of votes.
-                </p>
-            
-                <b>Step 4: Analyzing Variations in Naming Trends</b>
-                <p>
-                    Finally, after matching, we analyze the yearly variations in the proportion of names influenced by movies.
-                </p>
-
-                <h3>Further discrimining the unpopular movies.</h3>
-                <p>
-                    We can try to modify the threshold of votes that determines the popularity. We always keep a threshold given by the distribution of the dataset, namely the 25th, 75th and 90th percentiles.
-                </p>
-                <p>
-                    By doing so, we increase the size difference between the control and the treatment group, thus decrease the possible number of pairs, but we allow to better capture the effect popularity related to a movie and its effect on the influence on baby naming.
+                    Even if this increases the size difference between the control and the treatment groups — thus decreases the possible number of pairs — we try to better capture the effect popularity related to a movie and its effect on the influence on baby naming.
                 </p>
 
                 <iframe src="plots/q3/q3_prop_signi_matching.html" style="width:100%; height:500px; border:none;"></iframe>
 
-                <h3>Does matching on year is relevant?</h3>
+
+                <h3>Refining: Is matching on years relevant?</h3>
+
                 <p>
-                    So far we have performed perfect matching on 3 movies caracteristics as well as on the year of release. But is it really that important to match on the year ? Let's explore this question with another matching with same threshold on the popularity but no requirement for year equivalency in pairs between control and treatment group.
+                    So far we have performed perfect matching on <b>4 movies caracteristics.</b> But is it really that important to match on <strong>the year?</strong> Let's explore this question with another matching with the median thershold on the popularity, but <b>no requirement</b> for <b>year equivalency</b> in pairs between control and treatment group.
                 </p>
+
                 <p>
                     The result are displayed in the point-plot below and as we can clearly see:
                 </p>
+
                 <iframe src="plots/q3/q3_prop_signi_no_matching_year.html" style="width:100%; height:500px; border:none;"></iframe>
-                <p>
-                    We get quite an interesting result looking at this pointplot, especially that we cannot say that the difference in proportion of significantly influenced name between the popular and unpopular movies (median threshold) is significant anymore since the confidence interval do overlap!
-                </p>
-
-                <h3>What about the qualitative effect obtained with matching ?</h3>
-                <p>
-                    The previous analysis were performed on the proportion of significantly influenced names betweeen the control group of unpopular movies and the treated group of popular film to try to assess whether there was a statistically difference between the two after performing exact matching. We are now interested at the qualitative effect that could bring out this perfect matching, namely the difference in magnitude influence between the control and treated group. 
-                </p>
 
                 <p>
-                    Computation for several popularity threshold were made (25th, median, 75th, 90th percentile) and the first matching was performed considering only the significantly influenced names and matching on same order, movie genre, gender and year of release.
+                    We <b>cannot say</b> that the difference in proportions of significantly influenced name between the popular and unpopular movies (median threshold) is significant anymore since the confidence interval do overlap.
+                </p>
+
+
+                <h3>What about the qualitative effect obtained with matching?</h3>
+
+                <p>
+                    The previous analysis were performed on the proportion of significantly influenced names betweeen the control group of <b>unpopular movies</b> and the treated group of <b>popular films</b> to try to assess whether there was a statistically difference between the two after performing exact matching. We are now interested at the qualitative effect that could bring out this perfect matching, namely the <strong>difference in magnitude influence</strong> (absolute value) between the control and treated group. 
+                </p>
+
+                <p>
+                    Computation for several popularity threshold were made (25th, median, 75th, 90th percentile) and the first matching was performed considering only the <b>significantly influenced names</b> and matching on same order, movie genre, gender and year of release.
                 </p>
 
                 <p>
                     The results of difference in difference analysis is summarized in the dynamic pointplot below:
                 </p>
+
                 <iframe src="plots/q3/q3_average_magnitude_influence_matching.html" style="width:100%; height:500px; border:none;"></iframe>
+
                 <p>
-                    From that summary of difference in difference analysis through dynamic pointplot, we can observe that after matching on various popularity threshold, we cannot say that there is a statistically significant change in magnitude influence between popular and unpopular movies.
+                    From that summary of <b>difference in difference analysis</b> through dynamic pointplot, we can observe that after matching on various popularity threshold, we <strong>cannot say</strong> that there is a statistically significant change in magnitude influence between popular and unpopular movies.
                 </p>
 
+
+                <h3>Does the results drastically change with further matching on average rating?</h3>
+
+                <p>
+                    Since we didn't find any statistically significant changes so far, we tried to further match to possibly have better insight in the effect of movie popularity on the average magnitude influence. To do so, we perform matching on the 4 previous features and add another one, namely the <strong>average rating</strong> the movie got. 
+                </p>
+
+                <p>
+                    By doing so, we try to capture the possible cofounder that might exist between rating and popularity i.e., <b>high rating</b> movies with <b>low number of votes</b> might see their rating questionned compared to a <b>high rating</b> given to a movie with <b>high number of votes.</b> This measure of quality of a movie might possibly affect the outcome of average magnitude influence of movies.
+                </p>
+
+                <p>
+                    Unfortunately, once again we could not draw any statistically significant conclusions from this analysis since the confidence interval are overlapping. 
+                </p>
+
+                <div class="minimizer">
+                    <h3>Overall...</h3>
+                    <p>
+                        ... even though we controlled for the main caracteristics of a movie data entry, we were unable to draw <b>insightful conclusions</b> between popular and unpopular ones when looking at the average magnitude influence, compared to the interesting observations made on the proportion of influenced names. Maybe the threshold for popularity was wrongly chosen, or maybe <strong>there is indeed no influence?</strong>
+                    </p>
+                </div>
+ 
             </div>
 
             <div class="section">
